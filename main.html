@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게임기획 포트폴리오 메인</title>
-    <link rel="icon" href="favicon.png" type="image/png">
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>게임기획 포트폴리오 메인</title>
+<link href="favicon.png" rel="icon" type="image/png"/>
+<style>
         :root {
             --crimson: #DC143C;
             --ink: #141414;
@@ -95,20 +96,22 @@
 
         .project-banner-wrap {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(3, minmax(240px, 1fr));
             gap: 20px;
             margin-bottom: 44px;
+            align-items: stretch;
         }
 
         .project-banner {
-            min-height: 235px;
             position: relative;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
             gap: 10px;
-            padding: 26px;
+            min-height: 0;
+            aspect-ratio: 16 / 9;
+            padding: 24px;
             border-radius: 24px;
             text-decoration: none;
             color: #ffffff;
@@ -240,25 +243,27 @@
             padding: 0;
             margin: 20px 0 0;
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 10px;
+            grid-template-columns: 1fr;
+            gap: 16px;
         }
 
         .link-list a,
         .pdf-btn {
             display: flex;
             align-items: center;
-            justify-content: center;
-            min-height: 46px;
-            padding: 11px 14px;
+            justify-content: flex-start;
+            width: 100%;
+            min-height: 52px;
+            padding: 13px 16px;
             border-radius: 12px;
             border: 1px solid #d9dde5;
             background: #ffffff;
             color: #26323f;
             font-size: 0.92rem;
             font-weight: 800;
+            line-height: 1.45;
             text-decoration: none;
-            text-align: center;
+            text-align: left;
             transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
         }
 
@@ -283,10 +288,49 @@
             color: #333333;
         }
 
-        .button-grid {
+
+        #project-p .section-head {
+            margin-bottom: 18px;
+        }
+
+        #project-p > .sub-section {
+            margin-top: 0;
+        }
+
+        .doc-category-row {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 10px;
+            gap: 18px;
+            margin-top: 22px;
+            align-items: stretch;
+        }
+
+        .doc-category {
+            display: flex;
+            flex-direction: column;
+            margin-top: 0;
+            padding: 20px;
+            border: 1px solid #e5e8ee;
+            border-radius: 16px;
+            background: #ffffff;
+        }
+
+        .doc-category:first-of-type {
+            margin-top: 0;
+        }
+
+        .doc-category h4 {
+            margin: 0 0 16px;
+            color: #222222;
+            font-size: 1.02rem;
+            letter-spacing: -0.02em;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            align-content: start;
         }
 
         .pdf-btn.active {
@@ -417,10 +461,13 @@
             }
 
             .project-banner-wrap,
-            .link-list,
-            .button-grid,
+            .doc-category-row,
             .novel-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .project-banner {
+                aspect-ratio: 16 / 9;
             }
 
             .section-head {
@@ -435,220 +482,213 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <header class="hero">
-            <img src="banner_archfiend_books_games.png" alt="Archfiend Books &amp; Games 메인 배너" class="site-hero-banner">
-            <p class="hero-kicker">ARCHFIEND BOOKS &amp; GAMES</p>
-            <h1>박정호의 게임기획 포트폴리오</h1>
-            <p class="hero-subtitle">게임 크리에이터 / 웹소설 작가 / 버츄얼 유튜버</p>
-            <p class="hero-desc">
+<div class="container">
+<header class="hero">
+<img alt="Archfiend Books &amp; Games 메인 배너" class="site-hero-banner" src="banner_archfiend_books_games.png"/>
+<p class="hero-kicker">ARCHFIEND BOOKS &amp; GAMES</p>
+<h1>박정호의 게임기획 포트폴리오</h1>
+<p class="hero-subtitle">게임 크리에이터 / 웹소설 작가 / 버츄얼 유튜버</p>
+<p class="hero-desc">
                 원작 웹소설 IP(문피아) 기반 및 오리지널 게임 기획 프로젝트의 포트폴리오 모음 사이트입니다.
                 각 프로젝트는 기획 섹션 및 정해진 개별 항목에 따라 관련 문서들을 분리해 관리하고 있습니다.
             </p>
-        </header>
+</header>
+<section aria-label="프로젝트 선택 배너" class="project-banner-wrap">
+<a class="project-banner project-p-banner" href="#project-p">
+<p class="banner-order">1st Project</p>
+<h2>Project P / Patris</h2>
+<p>3인칭 오픈월드 캐릭터 수집형 액션 RPG</p>
+</a>
+<a class="project-banner project-cf-banner" href="#project-cf">
+<p class="banner-order">2nd Project</p>
+<h2>Project CF / Crimson Frequency</h2>
+<p>소개글 업데이트 예정</p>
+</a>
+<a class="project-banner project-3rd-banner" href="#project-3rd">
+<p class="banner-order">3RD PROJECT</p>
+<h2>명칭 미정</h2>
+<p>프로젝트명 업데이트 예정</p>
+</a>
+</section>
+<main>
+<section class="project-section" id="project-p">
+<div class="section-head">
+<img alt="PROJECT P / Patris 썸네일" class="section-thumb" src="thumb_patris.png"/>
+<div class="section-title-group">
+<span class="section-label">1ST PROJECT</span>
+<h2>Project P / Patris</h2>
+<p>프로젝트 한 줄 설명: 내용 업데이트 예정</p>
+</div>
+</div>
+<div class="sub-section">
+<h3 class="sub-section-title">Project P | 문서 및 자료</h3>
+<p class="project-note">새 텍스트 문서 기준으로 포트폴리오 섹션과 하위 항목을 재구성했습니다.</p>
+<div class="doc-category-row"><div class="doc-category">
+<h4>사전 기획 포트폴리오</h4>
+<div class="button-grid">
+<a class="pdf-btn active" href="proposal_patris.pdf" rel="noopener" target="_blank">🚧 개발 제안서(SWOT &amp; STP 포함 / 마일스톤, 소요비용 추산 항목 제외)</a>
+<span class="pdf-btn disabled">🧭 콘텐츠맵 SVG 웹페이지</span>
+<a class="pdf-btn active" href="pitch_patris.pdf" rel="noopener" target="_blank">📢 게임소개서</a>
+<a class="pdf-btn active" href="Project_P_GDD.pdf#page=1" rel="noopener" target="_blank">📄 GDD</a>
+<a class="pdf-btn active" href="https://www.notion.so/OSMU-Project-P-335ecdc71d17801f8f40fb98f9536237?source=copy_link" rel="noopener" target="_blank">🔗 Notion 포트폴리오 모음 사이트</a>
+</div>
+</div><div class="doc-category">
+<h4>콘셉트 기획 포트폴리오</h4>
+<div class="button-grid">
+<a class="pdf-btn active" href="game_story.pdf" rel="noopener" target="_blank">📖 게임 스토리(갈등 구조 이미지, 게임 세계관 설정 포함)</a>
+<span class="pdf-btn disabled">📜 게임 시나리오</span>
+<a class="pdf-btn active" href="storyboard-01.pdf" rel="noopener" target="_blank">🎬 스토리보드 (씬 구성 콘티)</a>
+<span class="pdf-btn disabled">🧑‍🎨 캐릭터 컨셉 기획서</span>
+<span class="pdf-btn disabled">🗺️ 배경 컨셉 기획서(월드 디자인 포함)</span>
+<span class="pdf-btn disabled">🎥 시네마틱 연출(유튜브 공식 채널 URL)</span>
+</div>
+</div><div class="doc-category">
+<h4>시스템 기획 포트폴리오</h4>
+<div class="button-grid">
+<span class="pdf-btn disabled">🎮 게임 메커닉스</span>
+<span class="pdf-btn disabled">🌐 체험 플레이 웹사이트 HTML URL 추가</span>
+<span class="pdf-btn disabled">🔁 프로세스 플로우(피쳐리스트 - 가능한 경우)</span>
+<span class="pdf-btn disabled">🧬 데이터 스키마</span>
+<span class="pdf-btn disabled">📊 통합 데이터테이블</span>
+<span class="pdf-btn disabled">🕸️ ERD</span>
+</div>
+</div></div>
 
-        <section class="project-banner-wrap" aria-label="프로젝트 선택 배너">
-            <a href="#project-p" class="project-banner project-p-banner">
-                <p class="banner-order">1st Project</p>
-                <h2>Project P / Patris</h2>
-                <p>3인칭 오픈월드 캐릭터 수집형 액션 RPG</p>
-            </a>
 
-            <a href="#project-cf" class="project-banner project-cf-banner">
-                <p class="banner-order">2nd Project</p>
-                <h2>Project CF / Crimson Frequency</h2>
-                <p>소개글 업데이트 예정</p>
-            </a>
+</div>
+</section>
+<section class="project-section" id="project-cf">
+<div class="section-head">
+<div class="section-title-group">
+<span class="section-label">2ND PROJECT</span>
+<h2>Project CF / Crimson Frequency</h2>
+<p>프로젝트 한 줄 설명: 내용 업데이트 예정</p>
+</div>
+</div>
+<div class="sub-section">
+<h3 class="sub-section-title">Project CF | 문서 및 자료</h3>
+<p class="project-note">새 텍스트 문서 기준으로 포트폴리오 섹션과 하위 항목을 재구성했습니다.</p>
+<div class="doc-category-row"><div class="doc-category">
+<h4>사전 기획 포트폴리오</h4>
+<div class="button-grid">
+<span class="pdf-btn disabled">🚧 개발 제안서(SWOT &amp; STP 포함 / 마일스톤, 소요비용 추산 항목 제외)</span>
+<span class="pdf-btn disabled">🧭 콘텐츠맵 SVG 웹페이지</span>
+<span class="pdf-btn disabled">📢 게임소개서</span>
+<span class="pdf-btn disabled">📄 GDD</span>
+<span class="pdf-btn disabled">🔗 Notion 포트폴리오 모음 사이트</span>
+</div>
+</div><div class="doc-category">
+<h4>콘셉트 기획 포트폴리오</h4>
+<div class="button-grid">
+<span class="pdf-btn disabled">📖 게임 스토리(갈등 구조 이미지, 게임 세계관 설정 포함)</span>
+<span class="pdf-btn disabled">📜 게임 시나리오</span>
+<span class="pdf-btn disabled">🎬 스토리보드 (씬 구성 콘티)</span>
+<span class="pdf-btn disabled">🧑‍🎨 캐릭터 컨셉 기획서</span>
+<span class="pdf-btn disabled">🗺️ 배경 컨셉 기획서(월드 디자인 포함)</span>
+<span class="pdf-btn disabled">🎥 시네마틱 연출(유튜브 공식 채널 URL)</span>
+</div>
+</div><div class="doc-category">
+<h4>시스템 기획 포트폴리오</h4>
+<div class="button-grid">
+<span class="pdf-btn disabled">🎮 게임 메커닉스</span>
+<span class="pdf-btn disabled">🌐 체험 플레이 웹사이트 HTML URL 추가</span>
+<span class="pdf-btn disabled">🔁 프로세스 플로우(피쳐리스트 - 가능한 경우)</span>
+<span class="pdf-btn disabled">🧬 데이터 스키마</span>
+<span class="pdf-btn disabled">📊 통합 데이터테이블</span>
+<span class="pdf-btn disabled">🕸️ ERD</span>
+</div>
+</div></div>
 
-            <a href="#project-3rd" class="project-banner project-3rd-banner">
-                <p class="banner-order">3RD PROJECT</p>
-                <h2>명칭 미정</h2>
-                <p>프로젝트명 업데이트 예정</p>
-            </a>
-        </section>
 
-        <main>
-            <section id="project-p" class="project-section">
-                <div class="section-head">
-                    <img src="thumb_patris.png" alt="PROJECT P / Patris 썸네일" class="section-thumb">
-                    <div class="section-title-group">
-                        <span class="section-label">1ST PROJECT</span>
-                        <h2>Project P / Patris</h2>
-                        <p>프로젝트 한 줄 설명: 내용 업데이트 예정</p>
-                    </div>
-                </div>
+</div>
+</section>
+<section class="project-section" id="project-3rd">
+<div class="section-head">
+<div class="section-title-group">
+<span class="section-label">3RD PROJECT</span>
+<h2>명칭 미정 <span style="font-size:0.72em; color:#777;">(프로젝트명 업데이트 예정)</span></h2>
+<p>프로젝트 한 줄 설명: 내용 업데이트 예정</p>
+</div>
+</div>
+<div class="sub-section">
+<h3 class="sub-section-title">3RD PROJECT | 문서 및 자료</h3>
+<p class="project-note">새 텍스트 문서 기준으로 포트폴리오 섹션과 하위 항목을 재구성했습니다.</p>
+<div class="doc-category-row"><div class="doc-category">
+<h4>사전 기획 포트폴리오</h4>
+<div class="button-grid">
+<span class="pdf-btn disabled">🚧 개발 제안서(SWOT &amp; STP 포함 / 마일스톤, 소요비용 추산 항목 제외)</span>
+<span class="pdf-btn disabled">🧭 콘텐츠맵 SVG 웹페이지</span>
+<span class="pdf-btn disabled">📢 게임소개서</span>
+<span class="pdf-btn disabled">📄 GDD</span>
+<span class="pdf-btn disabled">🔗 Notion 포트폴리오 모음 사이트</span>
+</div>
+</div><div class="doc-category">
+<h4>콘셉트 기획 포트폴리오</h4>
+<div class="button-grid">
+<span class="pdf-btn disabled">📖 게임 스토리(갈등 구조 이미지, 게임 세계관 설정 포함)</span>
+<span class="pdf-btn disabled">📜 게임 시나리오</span>
+<span class="pdf-btn disabled">🎬 스토리보드 (씬 구성 콘티)</span>
+<span class="pdf-btn disabled">🧑‍🎨 캐릭터 컨셉 기획서</span>
+<span class="pdf-btn disabled">🗺️ 배경 컨셉 기획서(월드 디자인 포함)</span>
+<span class="pdf-btn disabled">🎥 시네마틱 연출(유튜브 공식 채널 URL)</span>
+</div>
+</div><div class="doc-category">
+<h4>시스템 기획 포트폴리오</h4>
+<div class="button-grid">
+<span class="pdf-btn disabled">🎮 게임 메커닉스</span>
+<span class="pdf-btn disabled">🌐 체험 플레이 웹사이트 HTML URL 추가</span>
+<span class="pdf-btn disabled">🔁 프로세스 플로우(피쳐리스트 - 가능한 경우)</span>
+<span class="pdf-btn disabled">🧬 데이터 스키마</span>
+<span class="pdf-btn disabled">📊 통합 데이터테이블</span>
+<span class="pdf-btn disabled">🕸️ ERD</span>
+</div>
+</div></div>
 
-                <ul class="link-list">
-                    <li><a href="https://www.notion.so/OSMU-Project-P-335ecdc71d17801f8f40fb98f9536237?source=copy_link" target="_blank" rel="noopener">🔗 Project P Notion 기획 페이지</a></li>
-                    <li><a href="Project_P_GDD.pdf#page=1" target="_blank" rel="noopener">📄 GDD</a></li>
-                    <li><a href="proposal_patris.pdf" target="_blank" rel="noopener">🚧 개발 제안서</a></li>
-                    <li><a href="pitch_patris.pdf" target="_blank" rel="noopener">📢 Patris 게임 소개서</a></li>
-                </ul>
 
-                <div class="sub-section">
-                    <h3 class="sub-section-title">Project P | 문서 및 자료</h3>
-                    <p class="project-note">내용 업데이트 예정</p>
-
-                    <div class="doc-category">
-                        <h4>스토리 &amp; 연출</h4>
-                        <div class="button-grid">
-                            <a href="game_story.pdf" target="_blank" rel="noopener" class="pdf-btn active">📖 게임 스토리</a>
-                            <span class="pdf-btn disabled">📜 게임 시나리오</span>
-                            <a href="storyboard-01.pdf" target="_blank" rel="noopener" class="pdf-btn active">🎬 스토리보드(1부)</a>
-                            <span class="pdf-btn disabled">🎥 시네마틱 연출</span>
-                        </div>
-                    </div>
-
-                    <div class="doc-category">
-                        <h4>아트 &amp; 콘셉트</h4>
-                        <div class="button-grid">
-                            <span class="pdf-btn disabled">🧑‍🎨 캐릭터 컨셉 기획서</span>
-                            <span class="pdf-btn disabled">🗺️ 배경 컨셉 기획서</span>
-                        </div>
-                    </div>
-
-                    <div class="doc-category">
-                        <h4>시스템 기획 &amp; 데이터 테이블</h4>
-                        <div class="button-grid">
-                            <span class="pdf-btn disabled">🧾 시스템 기획서</span>
-                            <span class="pdf-btn disabled">🗺️ 월드 디자인</span>
-                            <span class="pdf-btn disabled">🌿 지역별 바이옴 / 랜드마크</span>
-                            <span class="pdf-btn disabled">🏛️ 지역별 관할 세력 / 적대 세력</span>
-                            <span class="pdf-btn disabled">⚔️ 캐릭터 스킬 / 계약 개체</span>
-                            <span class="pdf-btn disabled">📊 성장 / 보상</span>
-                            <span class="pdf-btn disabled">💰 재화 / 아이템 / 상점</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="project-cf" class="project-section">
-                <div class="section-head">
-                    <div class="section-title-group">
-                        <span class="section-label">2ND PROJECT</span>
-                        <h2>Project CF / Crimson Frequency</h2>
-                        <p>프로젝트 한 줄 설명: 내용 업데이트 예정</p>
-                    </div>
-                </div>
-
-                <div class="sub-section">
-                    <h3 class="sub-section-title">Project CF | 문서 및 자료</h3>
-                    <p class="project-note">내용 업데이트 예정</p>
-
-                    <div class="doc-category">
-                        <h4>기획서 / 스토리 / 연출</h4>
-                        <div class="button-grid">
-                            <span class="pdf-btn disabled">📄 GDD</span>
-                            <span class="pdf-btn disabled">📖 게임 스토리</span>
-                            <span class="pdf-btn disabled">📜 게임 시나리오</span>
-                            <span class="pdf-btn disabled">🎬 스토리보드</span>
-                            <span class="pdf-btn disabled">🧑‍🎨 캐릭터 컨셉 기획서</span>
-                            <span class="pdf-btn disabled">🗺️ 배경 컨셉 기획서</span>
-                        </div>
-                    </div>
-
-                    <div class="doc-category">
-                        <h4>시스템 기획 &amp; 데이터 테이블</h4>
-                        <div class="button-grid">
-                            <span class="pdf-btn disabled">🧾 시스템 기획서</span>
-                            <span class="pdf-btn disabled">🚪 게이트 / 탑 공략 구조</span>
-                            <span class="pdf-btn disabled">🦾 전투 시스템</span>
-                            <span class="pdf-btn disabled">📈 성장 / 강화</span>
-                            <span class="pdf-btn disabled">👹 적 / 보스 패턴</span>
-                            <span class="pdf-btn disabled">🎁 보상 / 드롭 / 장비 성장</span>
-                            <span class="pdf-btn disabled">🚩 스토리 진행</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="project-3rd" class="project-section">
-                <div class="section-head">
-                    <div class="section-title-group">
-                        <span class="section-label">3RD PROJECT</span>
-                        <h2>명칭 미정 <span style="font-size:0.72em; color:#777;">(프로젝트명 업데이트 예정)</span></h2>
-                        <p>프로젝트 한 줄 설명: 내용 업데이트 예정</p>
-                    </div>
-                </div>
-
-                <div class="sub-section">
-                    <h3 class="sub-section-title">3RD PROJECT | 문서 및 자료</h3>
-                    <p class="project-note">프로젝트명은 며칠 내 업데이트 예정입니다.</p>
-
-                    <div class="doc-category">
-                        <h4>【콘셉트 기획 포트폴리오】</h4>
-                        <div class="button-grid">
-                            <span class="pdf-btn disabled">📄 GDD</span>
-                            <span class="pdf-btn disabled">🗂️ 사건 파일 / 기믹</span>
-                            <span class="pdf-btn disabled">👁️ 괴이 설계</span>
-                            <span class="pdf-btn disabled">🔁 플레이 루프</span>
-                            <span class="pdf-btn disabled">🧑‍🎨 캐릭터 콘셉트</span>
-                            <span class="pdf-btn disabled">⚔️ 전투 시스템</span>
-                        </div>
-                    </div>
-
-                    <div class="doc-category">
-                        <h4>시스템 기획 &amp; 데이터 테이블</h4>
-                        <div class="button-grid">
-                            <span class="pdf-btn disabled">🧾 시스템 기획서</span>
-                            <span class="pdf-btn disabled">🗃️ 사건 파일 데이터</span>
-                            <span class="pdf-btn disabled">👁️ 괴이 / 이상현상 규칙</span>
-                            <span class="pdf-btn disabled">🧩 기믹 해결 조건</span>
-                            <span class="pdf-btn disabled">📡 조사 / 분석 / 기록 루프</span>
-                            <span class="pdf-btn disabled">🧿 전통 퇴마 도구 / 아이템</span>
-                            <span class="pdf-btn disabled">💳 크레딧 / 상점 / 파견 보상</span>
-                            <span class="pdf-btn disabled">⚔️ 퇴마 조건 / 전투 시스템</span>
-                            <span class="pdf-btn disabled">🎓 튜토리얼 플로우</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <section class="archive-section">
-            <h2>🔍 레퍼런스 게임 플레이 관련 네이버 공식 블로그</h2>
-            <div class="info-box">
-                <a href="https://blog.naver.com/baron-fiend_official" target="_blank" rel="noopener">🌐 바론핀드 네이버 공식 블로그</a>
-            </div>
-        </section>
-
-        <section class="novel-section">
-            <h2>📱 원작 웹소설 연재 정보</h2>
-            <div class="novel-grid">
-                <article class="novel-card">
-                    <h3><span class="novel-title">Project P (1부) 원작 웹소설 IP - 『강령명가의 악질분자로 살아남기』</span></h3>
-                    <div class="novel-tags">
-                        <span>문피아</span>
-                    </div>
-                    <div class="novel-actions">
-                        <a class="novel-link" href="https://novel.munpia.com/567348" target="_blank" rel="noopener">연재 페이지 보기 (문피아)</a>
-                        <a class="novel-link" href="about:blank" target="_blank" rel="noopener">연재 페이지 보기 (네이버 시리즈 또는 카카오페이지) (URL 업데이트 예정)</a>
-                    </div>
-                </article>
-
-                <article class="novel-card">
-                    <h3><span class="novel-title">Project P (2부) 원작 웹소설 IP - 『합법적 성물 도둑』</span></h3>
-                    <div class="novel-tags">
-                        <span>문피아</span>
-                    </div>
-                    <div class="novel-actions">
-                        <a class="novel-link" href="about:blank" target="_blank" rel="noopener">연재 페이지 보기 (문피아) (URL 업데이트 예정)</a>
-                        <a class="novel-link" href="about:blank" target="_blank" rel="noopener">연재 페이지 보기 (네이버 시리즈 또는 카카오페이지) (URL 업데이트 예정)</a>
-                    </div>
-                </article>
-
-                <article class="novel-card">
-                    <h3><span class="novel-title">Project CF 원작 웹소설 IP - 『미스터 헬 하운드의 스트리밍』</span></h3>
-                    <div class="novel-tags">
-                        <span>문피아</span>
-                    </div>
-                    <div class="novel-actions">
-                        <a class="novel-link" href="about:blank" target="_blank" rel="noopener">연재 페이지 보기 (문피아) (URL 업데이트 예정)</a>
-                        <a class="novel-link" href="about:blank" target="_blank" rel="noopener">연재 페이지 보기 (네이버 시리즈 또는 카카오페이지) (URL 업데이트 예정)</a>
-                    </div>
-                </article>
-            </div>
-        </section>
-    </div>
+</div>
+</section>
+</main>
+<section class="archive-section">
+<h2>🔍 레퍼런스 게임 플레이 관련 네이버 공식 블로그</h2>
+<div class="info-box">
+<a href="https://blog.naver.com/baron-fiend_official" rel="noopener" target="_blank">🌐 바론핀드 네이버 공식 블로그</a>
+</div>
+</section>
+<section class="novel-section">
+<h2>📱 원작 웹소설 연재 정보</h2>
+<div class="novel-grid">
+<article class="novel-card">
+<h3><span class="novel-title">Project P (1부) 원작 웹소설 IP - 『강령명가의 악질분자로 살아남기』</span></h3>
+<div class="novel-tags">
+<span>문피아</span>
+</div>
+<div class="novel-actions">
+<a class="novel-link" href="https://novel.munpia.com/567348" rel="noopener" target="_blank">연재 페이지 보기 (문피아)</a>
+<a class="novel-link" href="about:blank" rel="noopener" target="_blank">연재 페이지 보기 (네이버 시리즈 또는 카카오페이지) (URL 업데이트 예정)</a>
+</div>
+</article>
+<article class="novel-card">
+<h3><span class="novel-title">Project P (2부) 원작 웹소설 IP - 『합법적 성물 도둑』</span></h3>
+<div class="novel-tags">
+<span>문피아</span>
+</div>
+<div class="novel-actions">
+<a class="novel-link" href="about:blank" rel="noopener" target="_blank">연재 페이지 보기 (문피아) (URL 업데이트 예정)</a>
+<a class="novel-link" href="about:blank" rel="noopener" target="_blank">연재 페이지 보기 (네이버 시리즈 또는 카카오페이지) (URL 업데이트 예정)</a>
+</div>
+</article>
+<article class="novel-card">
+<h3><span class="novel-title">Project CF 원작 웹소설 IP - 『미스터 헬 하운드의 스트리밍』</span></h3>
+<div class="novel-tags">
+<span>문피아</span>
+</div>
+<div class="novel-actions">
+<a class="novel-link" href="about:blank" rel="noopener" target="_blank">연재 페이지 보기 (문피아) (URL 업데이트 예정)</a>
+<a class="novel-link" href="about:blank" rel="noopener" target="_blank">연재 페이지 보기 (네이버 시리즈 또는 카카오페이지) (URL 업데이트 예정)</a>
+</div>
+</article>
+</div>
+</section>
+</div>
 </body>
 </html>
