@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게임기획 포트폴리오 메인</title>
+    <link rel="icon" href="favicon.png" type="image/png">
+    <style>
+        :root {
+            --crimson: #DC143C;
+            --ink: #141414;
+            --muted: #666666;
+            --line: #e8e8e8;
+            --paper: #ffffff;
+            --soft: #f7f7f8;
+            --shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #ffffff;
+            color: var(--ink);
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.65;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .container {
+            width: min(1120px, 100%);
+            margin: 0 auto;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 42px;
+            padding: 44px 24px 38px;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            background:
+                radial-gradient(circle at top left, rgba(220, 20, 60, 0.12), transparent 28%),
+                linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+            box-shadow: var(--shadow);
+        }
+
+
+        .site-hero-banner {
+            display: block;
+            width: 100%;
+            max-width: 960px;
+            aspect-ratio: 3 / 2;
+            object-fit: cover;
+            margin: 0 auto 28px;
+            border-radius: 24px;
+            border: 1px solid rgba(20, 20, 20, 0.12);
+            box-shadow: 0 18px 46px rgba(0, 0, 0, 0.16);
+            background: #000000;
+        }
+
+        .hero-kicker {
+            margin: 0 0 8px;
+            color: var(--crimson);
+            font-size: 0.9rem;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+        }
+
+        h1 {
+            color: var(--ink);
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin: 0 0 12px;
+            letter-spacing: -0.04em;
+        }
+
+        .hero-subtitle {
+            margin: 0 auto 14px;
+            font-size: clamp(1rem, 2vw, 1.18rem);
+            font-weight: 800;
+            color: #2c2c2c;
+        }
+
+        .hero-desc {
+            max-width: 760px;
+            margin: 0 auto;
+            color: var(--muted);
+            font-size: 0.98rem;
+        }
+
+        .project-banner-wrap {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+            margin-bottom: 44px;
+        }
+
+        .project-banner {
+            min-height: 235px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 26px;
+            border-radius: 24px;
+            text-decoration: none;
+            color: #ffffff;
+            box-shadow: var(--shadow);
+            isolation: isolate;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .project-banner::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            opacity: 0.95;
+            transition: transform 0.25s ease;
+        }
+
+        .project-banner:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 20px 44px rgba(0, 0, 0, 0.18);
+        }
+
+        .project-banner:hover::before {
+            transform: scale(1.04);
+        }
+
+        /* 배너 이미지를 추가할 경우 파일명을 아래와 맞추면 바로 반영됩니다.
+           - banner_project_p.png
+           - banner_project_cf.png
+           - banner_project_3rd.png
+           현재 ZIP에는 해당 이미지가 없으므로 그라데이션 배너로 먼저 표시됩니다. */
+        .project-p-banner::before {
+            background:
+                linear-gradient(140deg, rgba(20, 22, 70, 0.92), rgba(108, 79, 214, 0.82)),
+                url("banner_project_p.png") center / cover no-repeat;
+        }
+
+        .project-cf-banner::before {
+            background:
+                linear-gradient(140deg, rgba(18, 6, 9, 0.95), rgba(155, 17, 30, 0.84)),
+                url("banner_project_cf.png") center / cover no-repeat;
+        }
+
+        .project-3rd-banner::before {
+            background:
+                linear-gradient(140deg, rgba(12, 12, 12, 0.95), rgba(25, 66, 58, 0.84)),
+                url("banner_project_3rd.png") center / cover no-repeat;
+        }
+
+        .banner-order {
+            margin: 0;
+            font-size: 0.78rem;
+            font-weight: 900;
+            letter-spacing: 0.18em;
+            opacity: 0.84;
+        }
+
+        .project-banner h2 {
+            margin: 0;
+            font-size: clamp(1.35rem, 2.5vw, 1.8rem);
+            line-height: 1.25;
+            letter-spacing: -0.04em;
+        }
+
+        .project-banner p:last-child {
+            margin: 0;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .project-section {
+            margin-bottom: 34px;
+            padding: 30px;
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            background: var(--paper);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.04);
+        }
+
+        .section-head {
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+            margin-bottom: 22px;
+        }
+
+        .section-thumb {
+            flex: 0 0 120px;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 18px;
+            border: 1px solid var(--line);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-title-group {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            margin-bottom: 10px;
+            border-radius: 999px;
+            background: #fff1f4;
+            color: var(--crimson);
+            font-size: 0.78rem;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+        }
+
+        .project-section h2 {
+            margin: 0 0 8px;
+            color: #222222;
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            letter-spacing: -0.04em;
+        }
+
+        .project-section p {
+            margin-top: 0;
+            color: var(--muted);
+        }
+
+        .link-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0 0;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .link-list a,
+        .pdf-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 46px;
+            padding: 11px 14px;
+            border-radius: 12px;
+            border: 1px solid #d9dde5;
+            background: #ffffff;
+            color: #26323f;
+            font-size: 0.92rem;
+            font-weight: 800;
+            text-decoration: none;
+            text-align: center;
+            transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+        }
+
+        .link-list a:hover,
+        .pdf-btn:hover {
+            transform: translateY(-2px);
+            border-color: var(--crimson);
+            background: #fff7f9;
+            color: var(--crimson);
+        }
+
+        .sub-section {
+            margin-top: 24px;
+            padding: 22px;
+            border-radius: 18px;
+            background: var(--soft);
+        }
+
+        .sub-section-title {
+            margin: 0 0 16px;
+            font-size: 1.05rem;
+            color: #333333;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .pdf-btn.active {
+            background: #26323f;
+            color: #ffffff;
+            border-color: #26323f;
+        }
+
+        .pdf-btn.active:hover {
+            background: #394b5f;
+            border-color: #394b5f;
+            color: #ffffff;
+        }
+
+        .pdf-btn.disabled {
+            background: #ededed;
+            color: #8a8a8a;
+            border-color: #e0e0e0;
+            cursor: not-allowed;
+            font-weight: 700;
+        }
+
+        .archive-section,
+        .novel-section {
+            margin-top: 34px;
+            padding: 26px;
+            border-radius: 22px;
+            background: #f7f7f8;
+            border: 1px solid var(--line);
+        }
+
+        .archive-section h2,
+        .novel-section h2 {
+            margin: 0 0 16px;
+            color: #333333;
+            font-size: 1.25rem;
+        }
+
+        .info-box,
+        .novel-card {
+            padding: 18px;
+            border: 1px solid #eeeeee;
+            border-radius: 16px;
+            background: #ffffff;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+        }
+
+        .info-box a,
+        .novel-card a {
+            color: #26323f;
+            font-weight: 900;
+            text-decoration: none;
+        }
+
+
+        .novel-title {
+            color: #26323f;
+            font-weight: 900;
+        }
+
+        .info-box a:hover,
+        .novel-card a:hover {
+            color: var(--crimson);
+            text-decoration: underline;
+        }
+
+        .novel-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .novel-card h3 {
+            margin: 0 0 12px;
+            font-size: 1rem;
+            line-height: 1.45;
+        }
+
+        .novel-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .novel-tags span {
+            display: inline-flex;
+            padding: 5px 9px;
+            border-radius: 999px;
+            background: #eef2f7;
+            color: #4b5a68;
+            font-size: 0.78rem;
+        }
+
+        .novel-actions {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .novel-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid #dfe5ec;
+            background: #f7f9fb;
+            color: #26323f;
+            font-weight: 900;
+            line-height: 1.35;
+            text-align: center;
+            text-decoration: none;
+            box-sizing: border-box;
+        }
+
+        .novel-link:hover {
+            border-color: #394b5f;
+            background: #26323f;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                padding: 24px 14px;
+            }
+
+            .project-banner-wrap,
+            .link-list,
+            .button-grid,
+            .novel-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-head {
+                flex-direction: column;
+            }
+
+            .section-thumb {
+                width: 100%;
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="hero">
+            <img src="banner_archfiend_books_games.png" alt="Archfiend Books &amp; Games 메인 배너" class="site-hero-banner">
+            <p class="hero-kicker">ARCHFIEND BOOKS &amp; GAMES</p>
+            <h1>박정호의 게임기획 포트폴리오</h1>
+            <p class="hero-subtitle">게임 크리에이터 / 웹소설 작가 / 버츄얼 유튜버</p>
+            <p class="hero-desc">
+                원작 웹소설 IP(문피아) 기반 및 오리지널 게임 기획 프로젝트의 포트폴리오 모음 사이트입니다.
+                각 프로젝트는 기획 섹션 및 정해진 개별 항목에 따라 관련 문서들을 분리해 관리하고 있습니다.
+            </p>
+        </header>
+
+        <section class="project-banner-wrap" aria-label="프로젝트 선택 배너">
+            <a href="#project-p" class="project-banner project-p-banner">
+                <p class="banner-order">1st Project</p>
+                <h2>Project P / Patris</h2>
+                <p>3인칭 오픈월드 캐릭터 수집형 액션 RPG</p>
+            </a>
+
+            <a href="#project-cf" class="project-banner project-cf-banner">
+                <p class="banner-order">2nd Project</p>
+                <h2>Project CF / Crimson Frequency</h2>
+                <p>소개글 업데이트 예정</p>
+            </a>
+
+            <a href="#project-3rd" class="project-banner project-3rd-banner">
+                <p class="banner-order">3RD PROJECT</p>
+                <h2>명칭 미정</h2>
+                <p>프로젝트명 업데이트 예정</p>
+            </a>
+        </section>
+
+        <main>
+            <section id="project-p" class="project-section">
+                <div class="section-head">
+                    <img src="thumb_patris.png" alt="PROJECT P / Patris 썸네일" class="section-thumb">
+                    <div class="section-title-group">
+                        <span class="section-label">1ST PROJECT</span>
+                        <h2>Project P / Patris</h2>
+                        <p>프로젝트 한 줄 설명: 내용 업데이트 예정</p>
+                    </div>
+                </div>
+
+                <ul class="link-list">
+                    <li><a href="https://www.notion.so/OSMU-Project-P-335ecdc71d17801f8f40fb98f9536237?source=copy_link" target="_blank" rel="noopener">🔗 Project P Notion 기획 페이지</a></li>
+                    <li><a href="Project_P_GDD.pdf#page=1" target="_blank" rel="noopener">📄 GDD 문서</a></li>
+                    <li><a href="proposal_patris.pdf" target="_blank" rel="noopener">🚧 개발 제안서</a></li>
+                    <li><a href="pitch_patris.pdf" target="_blank" rel="noopener">📢 Patris 게임 소개서</a></li>
+                </ul>
+
+                <div class="sub-section">
+                    <h3 class="sub-section-title">Project P | 문서 및 자료</h3>
+                    <p class="project-note">완성된 파일은 활성 링크로 연결하고, 아직 작성 중인 파일은 준비 중 상태로 표시합니다. 파일별 교체는 추후 개별 업데이트합니다.</p>
+
+                    <div class="doc-category">
+                        <h4>스토리 &amp; 연출</h4>
+                        <div class="button-grid">
+                            <a href="game_story.pdf" target="_blank" rel="noopener" class="pdf-btn active">📖 게임 스토리</a>
+                            <span class="pdf-btn disabled">📜 게임 시나리오 준비 중</span>
+                            <a href="storyboard-01.pdf" target="_blank" rel="noopener" class="pdf-btn active">🎬 스토리보드(1부)</a>
+                            <span class="pdf-btn disabled">🎥 시네마틱 연출 준비 중</span>
+                        </div>
+                    </div>
+
+                    <div class="doc-category">
+                        <h4>아트 &amp; 콘셉트</h4>
+                        <div class="button-grid">
+                            <span class="pdf-btn disabled">🧑‍🎨 캐릭터 컨셉 기획서 준비 중</span>
+                            <span class="pdf-btn disabled">🗺️ 배경 컨셉 기획서 준비 중</span>
+                        </div>
+                    </div>
+
+                    <div class="doc-category">
+                        <h4>시스템 기획 &amp; 데이터 테이블</h4>
+                        <div class="button-grid">
+                            <span class="pdf-btn disabled">🧾 시스템 기획서 DOCX 준비 중</span>
+                            <span class="pdf-btn disabled">🗺️ 월드맵 / 레벨 디자인 XLSX 준비 중</span>
+                            <span class="pdf-btn disabled">🌿 바이옴 / 랜드마크 XLSX 준비 중</span>
+                            <span class="pdf-btn disabled">🏛️ 관할 세력 / 적대 세력 XLSX 준비 중</span>
+                            <span class="pdf-btn disabled">⚔️ 캐릭터 스킬 / 계약 개체 XLSX 준비 중</span>
+                            <span class="pdf-btn disabled">📊 성장 / 보상 밸런스 XLSX 준비 중</span>
+                            <span class="pdf-btn disabled">💰 재화 / 아이템 / 상점 XLSX 준비 중</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="project-cf" class="project-section">
+                <div class="section-head">
+                    <div class="section-title-group">
+                        <span class="section-label">2ND PROJECT</span>
+                        <h2>Project CF / Crimson Frequency</h2>
+                        <p>프로젝트 한 줄 설명: 내용 업데이트 예정</p>
+                    </div>
+                </div>
+
+                <div class="sub-section">
+                    <h3 class="sub-section-title">Project CF | 문서 및 자료</h3>
+                    <p class="project-note">기존 구성은 유지하되, 아직 작성이 끝나지 않은 파일은 준비 중 상태로 둡니다. 완성 후 파일별로 교체합니다.</p>
+
+                    <div class="doc-category">
+                        <h4>기획서 / 스토리 / 연출</h4>
+                        <div class="button-grid">
+                            <span class="pdf-btn disabled">📄 GDD 문서 준비 중</span>
+                            <span class="pdf-btn disabled">📖 게임 스토리 준비 중</span>
+                            <span class="pdf-btn disabled">📜 게임 시나리오 준비 중</span>
+                            <span class="pdf-btn disabled">🎬 스토리보드 준비 중</span>
+                            <span class="pdf-btn disabled">🧑‍🎨 캐릭터 컨셉 기획서 준비 중</span>
+                            <span class="pdf-btn disabled">🗺️ 배경 컨셉 기획서 준비 중</span>
+                            <span class="pdf-btn disabled">🎥 시네마틱 연출 준비 중</span>
+                        </div>
+                    </div>
+
+                    <div class="doc-category">
+                        <h4>시스템 기획 &amp; 데이터 테이블</h4>
+                        <div class="button-grid">
+                            <span class="pdf-btn disabled">🧾 시스템 기획서 DOCX 준비 중</span>
+                            <span class="pdf-btn disabled">🚪 게이트 / 탑 공략 구조 XLSX 준비 중</span>
+                            <span class="pdf-btn disabled">🦾 카르나스 암즈 전투 시스템 DOCX 준비 중</span>
+                            <span class="pdf-btn disabled">📈 성장 / 강화 데이터 XLSX 준비 중</span>
+                            <span class="pdf-btn disabled">👹 적 / 보스 패턴 XLSX 준비 중</span>
+                            <span class="pdf-btn disabled">🎁 보상 / 드롭 / 장비 성장 XLSX 준비 중</span>
+                            <span class="pdf-btn disabled">🚩 스토리 진행 플래그 XLSX 준비 중</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="project-3rd" class="project-section">
+                <div class="section-head">
+                    <div class="section-title-group">
+                        <span class="section-label">3RD PROJECT</span>
+                        <h2>명칭 미정 <span style="font-size:0.72em; color:#777;">(프로젝트명 업데이트 예정)</span></h2>
+                        <p>프로젝트 한 줄 설명: 내용 업데이트 예정</p>
+                    </div>
+                </div>
+
+                <div class="sub-section">
+                    <h3 class="sub-section-title">3RD PROJECT | 문서 및 자료</h3>
+                    <p class="project-note">프로젝트명은 며칠 내 업데이트 예정입니다.</p>
+
+                    <div class="doc-category">
+                        <h4>기획서 / 사건 파일 / 전투</h4>
+                        <div class="button-grid">
+                            <span class="pdf-btn disabled">📄 GDD 또는 콘셉트 문서 준비 중</span>
+                            <span class="pdf-btn disabled">🗂️ 사건 파일 / 기믹 문서 준비 중</span>
+                            <span class="pdf-btn disabled">👁️ 괴이 설계 문서 준비 중</span>
+                            <span class="pdf-btn disabled">🔁 플레이 루프 문서 준비 중</span>
+                            <span class="pdf-btn disabled">🧑‍🎨 캐릭터 콘셉트 문서 준비 중</span>
+                            <span class="pdf-btn disabled">⚔️ 전투 시스템 문서 준비 중</span>
+                        </div>
+                    </div>
+
+                    <div class="doc-category">
+                        <h4>시스템 기획 &amp; 데이터 테이블</h4>
+                        <div class="button-grid">
+                            <span class="pdf-btn disabled">🧾 시스템 기획서 DOCX 준비 중</span>
+                            <span class="pdf-btn disabled">🗃️ 사건 파일 데이터 XLSX 준비 중</span>
+                            <span class="pdf-btn disabled">👁️ 괴이 / 이상현상 규칙 XLSX 준비 중</span>
+                            <span class="pdf-btn disabled">🧩 기믹 해결 조건 XLSX 준비 중</span>
+                            <span class="pdf-btn disabled">📡 조사 / 분석 / 기록 루프 DOCX 준비 중</span>
+                            <span class="pdf-btn disabled">🧿 전통 퇴마 도구 / 아이템 XLSX 준비 중</span>
+                            <span class="pdf-btn disabled">💳 크레딧 / 상점 / 파견 보상 XLSX 준비 중</span>
+                            <span class="pdf-btn disabled">⚔️ 퇴마 조건 / 전투 시스템 XLSX 준비 중</span>
+                            <span class="pdf-btn disabled">🎓 튜토리얼 플로우 DOCX 준비 중</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <section class="archive-section">
+            <h2>🔍 레퍼런스 게임 플레이 관련 네이버 공식 블로그</h2>
+            <div class="info-box">
+                <a href="https://blog.naver.com/baron-fiend_official" target="_blank" rel="noopener">🌐 바론핀드 네이버 공식 블로그</a>
+            </div>
+        </section>
+
+        <section class="novel-section">
+            <h2>📱 원작 웹소설 연재 정보</h2>
+            <div class="novel-grid">
+                <article class="novel-card">
+                    <h3><span class="novel-title">Project P (1부) 원작 웹소설 IP - 『강령명가의 악질분자로 살아남기』</span></h3>
+                    <div class="novel-tags">
+                        <span>문피아</span>
+                    </div>
+                    <div class="novel-actions">
+                        <a class="novel-link" href="https://novel.munpia.com/567348" target="_blank" rel="noopener">연재 페이지 보기 (문피아)</a>
+                        <a class="novel-link" href="about:blank" target="_blank" rel="noopener">연재 페이지 보기 (네이버 시리즈 또는 카카오페이지) (URL 업데이트 예정)</a>
+                    </div>
+                </article>
+
+                <article class="novel-card">
+                    <h3><span class="novel-title">Project P (2부) 원작 웹소설 IP - 『합법적 성물 도둑』</span></h3>
+                    <div class="novel-tags">
+                        <span>문피아</span>
+                    </div>
+                    <div class="novel-actions">
+                        <a class="novel-link" href="about:blank" target="_blank" rel="noopener">연재 페이지 보기 (문피아) (URL 업데이트 예정)</a>
+                        <a class="novel-link" href="about:blank" target="_blank" rel="noopener">연재 페이지 보기 (네이버 시리즈 또는 카카오페이지) (URL 업데이트 예정)</a>
+                    </div>
+                </article>
+
+                <article class="novel-card">
+                    <h3><span class="novel-title">Project CF 원작 웹소설 IP - 『미스터 헬 하운드의 스트리밍』</span></h3>
+                    <div class="novel-tags">
+                        <span>문피아</span>
+                    </div>
+                    <div class="novel-actions">
+                        <a class="novel-link" href="about:blank" target="_blank" rel="noopener">연재 페이지 보기 (문피아) (URL 업데이트 예정)</a>
+                        <a class="novel-link" href="about:blank" target="_blank" rel="noopener">연재 페이지 보기 (네이버 시리즈 또는 카카오페이지) (URL 업데이트 예정)</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
