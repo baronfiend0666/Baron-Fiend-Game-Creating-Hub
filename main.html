@@ -552,6 +552,58 @@
             line-height: 1.45;
         }
 
+
+
+        #project-3rd .doc-category-row {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .bgm-card {
+            display: block;
+            padding: 13px;
+            border: 1px solid #dfe5ec;
+            border-radius: 14px;
+            background: #f7f9fb;
+        }
+
+        .bgm-card strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #26323f;
+            font-size: 0.92rem;
+            line-height: 1.4;
+            letter-spacing: -0.02em;
+        }
+
+        .bgm-card small {
+            display: block;
+            margin-bottom: 10px;
+            color: #6b7280;
+            font-size: 0.78rem;
+            line-height: 1.35;
+        }
+
+        .bgm-card audio {
+            display: block;
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .bgm-download {
+            display: inline-flex;
+            width: fit-content;
+            margin-top: 10px;
+            color: #26323f;
+            font-size: 0.8rem;
+            font-weight: 900;
+            text-decoration: none;
+        }
+
+        .bgm-download:hover {
+            color: var(--crimson);
+            text-decoration: underline;
+        }
+
         @media (max-width: 900px) {
             body {
                 padding: 24px 14px;
@@ -749,6 +801,28 @@
 <a class="pdf-btn active" href="worklog_2026_06_week_03.html">🗓️ 6월 3주차 | 06-15 ~ 06-19</a>
 <a class="pdf-btn active" href="worklog_2026_06_week_04.html">🗓️ 6월 4주차 | 06-22 ~ 06-26</a>
 <a class="pdf-btn active" href="worklog_2026_06_week_05.html">🗓️ 6월 5주차 | 06-29 ~ 06-30</a>
+</div>
+</div><div class="doc-category bgm-category">
+<h4>Anomaly Record | Game BGM</h4>
+<div class="button-grid">
+<article class="bgm-card">
+<strong>Main Theme BGM | Lantern District</strong>
+<small>메인 테마 / 랜턴 디스트릭트 분위기</small>
+<audio controls preload="none" src="Main-Theme-BGM_Lantern-District.wav"></audio>
+<a class="bgm-download" href="Main-Theme-BGM_Lantern-District.wav" download>파일 다운로드</a>
+</article>
+<article class="bgm-card">
+<strong>Case File Room | Midnight Casefile</strong>
+<small>사건 파일실 / 심야 케이스파일 분위기</small>
+<audio controls preload="none" src="Case-File-Room_Midnight-Casefile.wav"></audio>
+<a class="bgm-download" href="Case-File-Room_Midnight-Casefile.wav" download>파일 다운로드</a>
+</article>
+<article class="bgm-card">
+<strong>Midnight Fieldwork | Neon Anomaly</strong>
+<small>현장 조사 / 네온 아노말리 분위기</small>
+<audio controls preload="none" src="Midnight-Fieldwork_Neon-Anomaly.wav"></audio>
+<a class="bgm-download" href="Midnight-Fieldwork_Neon-Anomaly.wav" download>파일 다운로드</a>
+</article>
 </div>
 </div></div>
 </div>

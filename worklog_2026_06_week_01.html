@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Project AR 업무 일지 | 2026년 6월 1주차</title>
+<style>
+    :root {
+        --crimson: #DC143C;
+        --ink: #141414;
+        --muted: #666666;
+        --line: #e8e8e8;
+        --paper: #ffffff;
+        --soft: #f7f7f8;
+        --dark: #26323f;
+        --shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #ffffff;
+        color: var(--ink);
+        font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+        line-height: 1.65;
+    }
+
+    a { color: inherit; }
+
+    .container {
+        width: min(1080px, 100%);
+        margin: 0 auto;
+    }
+
+    .page-head {
+        margin-bottom: 28px;
+        padding: 34px 28px;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background:
+            radial-gradient(circle at top left, rgba(220, 20, 60, 0.10), transparent 30%),
+            linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+        box-shadow: var(--shadow);
+    }
+
+    .kicker {
+        margin: 0 0 8px;
+        color: var(--crimson);
+        font-size: 0.82rem;
+        font-weight: 900;
+        letter-spacing: 0.14em;
+    }
+
+    h1 {
+        margin: 0 0 10px;
+        color: #222222;
+        font-size: clamp(1.75rem, 4vw, 2.55rem);
+        line-height: 1.25;
+        letter-spacing: -0.04em;
+    }
+
+    .page-desc {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.98rem;
+    }
+
+    .nav-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 22px;
+    }
+
+    .nav-btn,
+    .open-pdf-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 10px 16px;
+        border-radius: 12px;
+        border: 1px solid #d9dde5;
+        background: #ffffff;
+        color: #26323f;
+        font-weight: 900;
+        text-decoration: none;
+        transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+    }
+
+    .nav-btn:hover,
+    .open-pdf-btn:hover {
+        transform: translateY(-2px);
+        border-color: var(--crimson);
+        background: #fff7f9;
+        color: var(--crimson);
+    }
+
+    .worklog-section,
+    .pdf-viewer-section {
+        padding: 26px;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: var(--paper);
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.04);
+    }
+
+    .pdf-viewer-section { margin-top: 22px; }
+
+    .section-title {
+        margin: 0 0 18px;
+        color: #333333;
+        font-size: 1.25rem;
+        letter-spacing: -0.03em;
+    }
+
+    .day-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .day-card {
+        display: flex;
+        min-height: 150px;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 18px;
+        border-radius: 18px;
+        border: 1px solid #dfe5ec;
+        background: #ffffff;
+        color: #26323f;
+        text-decoration: none;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.045);
+        transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .day-card.active:hover {
+        transform: translateY(-4px);
+        border-color: var(--crimson);
+        background: #fff7f9;
+        box-shadow: 0 12px 26px rgba(0, 0, 0, 0.09);
+    }
+
+    .day-card.disabled {
+        background: #f0f0f1;
+        color: #8a8a8a;
+        border-color: #e0e0e0;
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+
+    .day-date {
+        color: #111827;
+        font-size: 1.05rem;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+    }
+
+    .disabled .day-date { color: #777777; }
+
+    .day-desc {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 0.86rem;
+        line-height: 1.45;
+    }
+
+    .day-status {
+        display: inline-flex;
+        width: fit-content;
+        margin-top: 16px;
+        padding: 5px 9px;
+        border-radius: 999px;
+        background: #eef2f7;
+        color: #4b5a68;
+        font-size: 0.76rem;
+        font-weight: 900;
+    }
+
+    .active .day-status { background: #26323f; color: #ffffff; }
+    .disabled .day-status { background: #e2e2e2; color: #888888; }
+
+    .notice {
+        margin: 18px 0 0;
+        padding: 14px 16px;
+        border-radius: 14px;
+        background: var(--soft);
+        color: var(--muted);
+        font-size: 0.9rem;
+    }
+
+    .pdf-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .pdf-frame {
+        display: block;
+        width: 100%;
+        min-height: 900px;
+        border: 1px solid #d9dde5;
+        border-radius: 16px;
+        background: #f4f4f5;
+    }
+
+    @media (max-width: 900px) {
+        body { padding: 24px 14px; }
+        .day-grid { grid-template-columns: 1fr; }
+        .pdf-frame { min-height: 720px; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <header class="page-head">
+        <p class="kicker">PROJECT AR / ANOMALY RECORD</p>
+        <h1>업무 일지(2026-06) | 6월 1주차</h1>
+        <p class="page-desc">06-01부터 06-05까지의 일자별 업무 일지 PDF를 확인하는 세부 페이지입니다.</p>
+        <div class="nav-row">
+            <a class="nav-btn" href="main.html#project-3rd">← 메인 업무 일지 항목으로 돌아가기</a>
+        </div>
+    </header>
+
+    <main class="worklog-section">
+        <h2 class="section-title">6월 1주차 | 06-01 ~ 06-05</h2>
+        <div class="day-grid">
+            <a class="day-card active" href="#worklog-2026-06-01">
+                <div>
+                    <div class="day-date">06-01 (월)</div>
+                    <div class="day-desc">Project AR / Anomaly Record 06-01 업무 일지 PDF</div>
+                </div>
+                <span class="day-status">페이지 내 열람</span>
+            </a>
+            <span class="day-card disabled" aria-disabled="true">
+                <div>
+                    <div class="day-date">06-02 (화)</div>
+                    <div class="day-desc">업무 일지 PDF 추가 예정</div>
+                </div>
+                <span class="day-status">준비 중</span>
+            </span>
+            <span class="day-card disabled" aria-disabled="true">
+                <div>
+                    <div class="day-date">06-03 (수)</div>
+                    <div class="day-desc">업무 일지 PDF 추가 예정</div>
+                </div>
+                <span class="day-status">준비 중</span>
+            </span>
+            <span class="day-card disabled" aria-disabled="true">
+                <div>
+                    <div class="day-date">06-04 (목)</div>
+                    <div class="day-desc">업무 일지 PDF 추가 예정</div>
+                </div>
+                <span class="day-status">준비 중</span>
+            </span>
+            <span class="day-card disabled" aria-disabled="true">
+                <div>
+                    <div class="day-date">06-05 (금)</div>
+                    <div class="day-desc">업무 일지 PDF 추가 예정</div>
+                </div>
+                <span class="day-status">준비 중</span>
+            </span>
+        </div>
+        <p class="notice">06-02 ~ 06-05 PDF를 추가할 경우 같은 폴더에 PDF 파일을 넣은 뒤, 각 날짜 카드와 PDF 뷰어 섹션을 해당 파일명으로 추가하면 됩니다.</p>
+    </main>
+
+    <section class="pdf-viewer-section" id="worklog-2026-06-01">
+        <h2 class="section-title">06-01 업무 일지 PDF 열람</h2>
+        <div class="pdf-actions">
+            <a class="open-pdf-btn" href="./anomaly_record_worklog_2026-06-01.pdf" target="_blank" rel="noopener">새 탭에서 PDF 열기</a>
+            <a class="open-pdf-btn" href="./anomaly_record_worklog_2026-06-01.pdf" download>PDF 다운로드</a>
+        </div>
+        <iframe class="pdf-frame" src="./anomaly_record_worklog_2026-06-01.pdf" title="Project AR Anomaly Record 2026-06-01 업무 일지 PDF"></iframe>
+        <p class="notice">PDF가 표시되지 않으면 위의 ‘새 탭에서 PDF 열기’를 사용하세요. Vercel에는 이 HTML 파일과 <code>anomaly_record_worklog_2026-06-01.pdf</code>가 같은 경로에 있어야 합니다.</p>
+    </section>
+</div>
+</body>
+</html>
