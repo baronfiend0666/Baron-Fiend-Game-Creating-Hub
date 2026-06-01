@@ -98,8 +98,7 @@
         color: var(--crimson);
     }
 
-    .worklog-section,
-    .pdf-viewer-section {
+    .worklog-section {
         padding: 26px;
         border: 1px solid var(--line);
         border-radius: 22px;
@@ -107,7 +106,6 @@
         box-shadow: 0 8px 22px rgba(0, 0, 0, 0.04);
     }
 
-    .pdf-viewer-section { margin-top: 22px; }
 
     .section-title {
         margin: 0 0 18px;
@@ -192,26 +190,11 @@
         font-size: 0.9rem;
     }
 
-    .pdf-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-bottom: 16px;
-    }
 
-    .pdf-frame {
-        display: block;
-        width: 100%;
-        min-height: 900px;
-        border: 1px solid #d9dde5;
-        border-radius: 16px;
-        background: #f4f4f5;
-    }
 
     @media (max-width: 900px) {
         body { padding: 24px 14px; }
         .day-grid { grid-template-columns: 1fr; }
-        .pdf-frame { min-height: 720px; }
     }
 </style>
 </head>
@@ -229,12 +212,12 @@
     <main class="worklog-section">
         <h2 class="section-title">6월 1주차 | 06-01 ~ 06-05</h2>
         <div class="day-grid">
-            <a class="day-card active" href="#worklog-2026-06-01">
+            <a class="day-card active" href="./anomaly_record_worklog_2026-06-01.pdf" target="_blank" rel="noopener">
                 <div>
                     <div class="day-date">06-01 (월)</div>
                     <div class="day-desc">Project AR / Anomaly Record 06-01 업무 일지 PDF</div>
                 </div>
-                <span class="day-status">페이지 내 열람</span>
+                <span class="day-status">PDF 바로 열기</span>
             </a>
             <span class="day-card disabled" aria-disabled="true">
                 <div>
@@ -265,18 +248,7 @@
                 <span class="day-status">준비 중</span>
             </span>
         </div>
-        <p class="notice">06-02 ~ 06-05 PDF를 추가할 경우 같은 폴더에 PDF 파일을 넣은 뒤, 각 날짜 카드와 PDF 뷰어 섹션을 해당 파일명으로 추가하면 됩니다.</p>
+        <p class="notice">각 날짜 카드가 해당 일자의 PDF 파일을 직접 여는 구조입니다. 06-02 ~ 06-05 PDF를 추가할 경우 같은 폴더에 <code>anomaly_record_worklog_2026-06-02.pdf</code> 형식으로 파일을 넣고 해당 날짜 카드를 활성화하면 됩니다.</p>
     </main>
-
-    <section class="pdf-viewer-section" id="worklog-2026-06-01">
-        <h2 class="section-title">06-01 업무 일지 PDF 열람</h2>
-        <div class="pdf-actions">
-            <a class="open-pdf-btn" href="./anomaly_record_worklog_2026-06-01.pdf" target="_blank" rel="noopener">새 탭에서 PDF 열기</a>
-            <a class="open-pdf-btn" href="./anomaly_record_worklog_2026-06-01.pdf" download>PDF 다운로드</a>
-        </div>
-        <iframe class="pdf-frame" src="./anomaly_record_worklog_2026-06-01.pdf" title="Project AR Anomaly Record 2026-06-01 업무 일지 PDF"></iframe>
-        <p class="notice">PDF가 표시되지 않으면 위의 ‘새 탭에서 PDF 열기’를 사용하세요. Vercel에는 이 HTML 파일과 <code>anomaly_record_worklog_2026-06-01.pdf</code>가 같은 경로에 있어야 합니다.</p>
-    </section>
 </div>
-</body>
-</html>
+</body></html>
