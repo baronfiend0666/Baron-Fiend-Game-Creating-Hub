@@ -552,6 +552,216 @@
             line-height: 1.45;
         }
 
+
+
+        .worklog-category {
+            border-color: rgba(37, 73, 112, 0.22);
+            background:
+                radial-gradient(circle at top left, rgba(42, 96, 143, 0.08), transparent 32%),
+                #ffffff;
+        }
+
+        .worklog-feature-card {
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: minmax(0, 1.02fr) minmax(280px, 0.98fr);
+            gap: 18px;
+            padding: 20px;
+            border-radius: 18px;
+            border: 1px solid rgba(23, 35, 52, 0.16);
+            background:
+                radial-gradient(circle at top right, rgba(31, 91, 130, 0.14), transparent 34%),
+                linear-gradient(135deg, #ffffff 0%, #f4f8fb 100%);
+            box-shadow: 0 12px 28px rgba(19, 34, 49, 0.08);
+        }
+
+        .worklog-feature-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(90deg, rgba(220, 20, 60, 0.08), transparent 34%),
+                repeating-linear-gradient(135deg, rgba(20, 20, 20, 0.028) 0 1px, transparent 1px 12px);
+        }
+
+        .worklog-feature-copy,
+        .worklog-preview-panel {
+            position: relative;
+            z-index: 1;
+        }
+
+        .worklog-status-badge {
+            display: inline-flex;
+            width: fit-content;
+            margin-bottom: 12px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #172334;
+            color: #ffffff;
+            font-size: 0.76rem;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+        }
+
+        .worklog-feature-card h5 {
+            margin: 0 0 10px;
+            color: #142033;
+            font-size: 1.08rem;
+            line-height: 1.38;
+            letter-spacing: -0.03em;
+        }
+
+        .worklog-feature-card p {
+            margin: 0 0 16px;
+            color: #536170;
+            font-size: 0.92rem;
+            line-height: 1.65;
+        }
+
+        .worklog-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .worklog-meta-grid span {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(23, 35, 52, 0.09);
+            background: rgba(255, 255, 255, 0.78);
+            color: #687888;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        .worklog-meta-grid strong {
+            color: #172334;
+            font-size: 0.88rem;
+            line-height: 1.35;
+        }
+
+        .worklog-actions-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .worklog-actions-grid .pdf-btn {
+            justify-content: center;
+            min-height: 48px;
+            text-align: center;
+        }
+
+        .worklog-ghost-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(23, 35, 52, 0.18);
+            background: rgba(255, 255, 255, 0.82);
+            color: #26323f;
+            font-size: 0.88rem;
+            font-weight: 900;
+            line-height: 1.35;
+            text-align: center;
+            text-decoration: none;
+            transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+        }
+
+        .worklog-ghost-btn:hover {
+            transform: translateY(-2px);
+            border-color: var(--crimson);
+            background: #fff7f9;
+            color: var(--crimson);
+        }
+
+        .worklog-preview-panel {
+            display: flex;
+            flex-direction: column;
+            min-height: 420px;
+            overflow: hidden;
+            border-radius: 16px;
+            border: 1px solid rgba(23, 35, 52, 0.16);
+            background: #111827;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .worklog-preview-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 44px;
+            padding: 10px 14px;
+            background: #172334;
+            color: #ffffff;
+            font-size: 0.82rem;
+            font-weight: 900;
+            letter-spacing: 0.04em;
+        }
+
+        .worklog-preview-frame {
+            width: 100%;
+            flex: 1;
+            min-height: 376px;
+            border: 0;
+            background: #ffffff;
+        }
+
+        .worklog-preview-frame p {
+            padding: 18px;
+            color: #ffffff;
+        }
+
+        .worklog-day-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 2px;
+        }
+
+        .worklog-day-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid #dfe5ec;
+            background: #ffffff;
+            color: #26323f;
+            font-size: 0.82rem;
+            font-weight: 900;
+            line-height: 1.35;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .worklog-day-link.active {
+            border-color: #172334;
+            background: #172334;
+            color: #ffffff;
+        }
+
+        .worklog-day-link.active:hover {
+            transform: translateY(-2px);
+            background: #26323f;
+        }
+
+        .worklog-day-link.disabled {
+            border-color: #e0e0e0;
+            background: #ededed;
+            color: #8a8a8a;
+            cursor: not-allowed;
+        }
+
         @media (max-width: 900px) {
             body {
                 padding: 24px 14px;
@@ -563,6 +773,22 @@
             .novel-grid,
             .novel-actions {
                 grid-template-columns: 1fr;
+            }
+
+
+
+            .worklog-feature-card,
+            .worklog-meta-grid,
+            .worklog-day-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .worklog-preview-panel {
+                min-height: 360px;
+            }
+
+            .worklog-preview-frame {
+                min-height: 316px;
             }
 
             .project-banner {
@@ -705,7 +931,7 @@
 <div class="section-head">
 <div class="section-title-group">
 <span class="section-label">3RD PROJECT</span>
-<h2>Project AR / Anomaly Record</span></h2>
+<h2>Project AR / Anomaly Record</h2>
 <p>프로젝트 한 줄 설명: 내용 업데이트 예정</p>
 </div>
 </div>
@@ -749,6 +975,36 @@
 <a class="pdf-btn active" href="worklog_2026_06_week_03.html">🗓️ 6월 3주차 | 06-15 ~ 06-19</a>
 <a class="pdf-btn active" href="worklog_2026_06_week_04.html">🗓️ 6월 4주차 | 06-22 ~ 06-26</a>
 <a class="pdf-btn active" href="worklog_2026_06_week_05.html">🗓️ 6월 5주차 | 06-29 ~ 06-30</a>
+<div class="worklog-feature-card" id="worklog-2026-06-01">
+<div class="worklog-feature-copy">
+<span class="worklog-status-badge">06-01 PDF 반영 완료</span>
+<h5>06-01 업무 일지 | Project AR - Anomaly Record</h5>
+<p>장르 확정, 한시우/류세린 선택형 플레이어블 구조, 불가사리(불가살이) 최종 보스 설정, 레퍼런스 웹소설 3종 선정 및 이미지 산출물 기록을 당일 업무일지 PDF로 연결했습니다.</p>
+<div class="worklog-meta-grid">
+<span>작성일<strong>2026-06-01</strong></span>
+<span>주차<strong>6월 1주차</strong></span>
+<span>문서 형식<strong>PDF / 8 Pages</strong></span>
+<span>프로젝트<strong>Project AR</strong></span>
+</div>
+<div class="worklog-actions-grid">
+<a class="pdf-btn active" href="Anomaly_Record_업무일지_2026-06-01.pdf" rel="noopener" target="_blank">📄 06-01 업무일지 PDF 열람</a>
+<a class="worklog-ghost-btn" href="Anomaly_Record_업무일지_2026-06-01.pdf#page=3" rel="noopener" target="_blank">🖼️ 대표 이미지 수록 페이지 보기</a>
+</div>
+</div>
+<div aria-label="06-01 업무일지 PDF 미리보기" class="worklog-preview-panel">
+<div class="worklog-preview-head">PDF 미리보기 <span>06-01</span></div>
+<object class="worklog-preview-frame" data="Anomaly_Record_업무일지_2026-06-01.pdf#page=1&amp;view=FitH" type="application/pdf">
+<p>브라우저에서 PDF 미리보기를 지원하지 않는 경우, 왼쪽의 PDF 열람 버튼을 사용하세요.</p>
+</object>
+</div>
+</div>
+<div aria-label="6월 1주차 일별 업무일지" class="worklog-day-grid">
+<a class="worklog-day-link active" href="Anomaly_Record_업무일지_2026-06-01.pdf" rel="noopener" target="_blank">06-01 | PDF</a>
+<span class="worklog-day-link disabled">06-02 | 준비중</span>
+<span class="worklog-day-link disabled">06-03 | 준비중</span>
+<span class="worklog-day-link disabled">06-04 | 준비중</span>
+<span class="worklog-day-link disabled">06-05 | 준비중</span>
+</div>
 </div>
 </div></div>
 </div>
