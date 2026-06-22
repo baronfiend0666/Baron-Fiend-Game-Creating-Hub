@@ -31,6 +31,199 @@
   <link rel="icon" type="image/x-icon" href="assets/icons/favicon-avatar-profile.ico?v=3" />
   <link rel="icon" type="image/png" href="assets/icons/favicon-avatar-profile.png?v=3" />
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon-avatar-profile.png?v=3" />
+  <style>
+    /* Project file detail page enhancement: HTML-only override */
+    #documents .filter-tabs .tab {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+
+    .project-detail-page {
+      margin: 28px 0 32px;
+      scroll-margin-top: calc(var(--header-height) + 18px);
+      animation: projectDetailFadeIn 260ms ease both;
+    }
+
+    .project-detail-page[hidden] {
+      display: none !important;
+    }
+
+    .project-detail-shell {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(170, 190, 255, 0.26);
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(135deg, rgba(122, 162, 255, 0.16), rgba(165, 117, 255, 0.08) 42%, rgba(255, 255, 255, 0.035)),
+        var(--panel-strong);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      padding: clamp(22px, 3vw, 34px);
+    }
+
+    .project-detail-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 16% 10%, rgba(122, 162, 255, 0.22), transparent 28rem),
+        radial-gradient(circle at 92% 2%, rgba(255, 68, 95, 0.10), transparent 24rem);
+      pointer-events: none;
+    }
+
+    .project-detail-shell > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .project-detail-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 22px;
+      align-items: start;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .project-detail-title-wrap {
+      min-width: 0;
+    }
+
+    .project-detail-label {
+      display: inline-flex;
+      margin-bottom: 12px;
+      color: var(--primary);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .project-detail-title-wrap h3 {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+    }
+
+    .project-detail-title-wrap p {
+      max-width: 860px;
+      margin: 12px 0 0;
+      color: var(--muted);
+    }
+
+    .project-detail-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .project-detail-actions .btn {
+      white-space: nowrap;
+    }
+
+    .project-detail-meta {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 22px 0 0;
+    }
+
+    .project-detail-meta-card {
+      min-height: 92px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .project-detail-meta-card span {
+      display: block;
+      color: var(--muted-2);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .project-detail-meta-card strong {
+      display: block;
+      margin-top: 8px;
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.42;
+    }
+
+    .project-detail-index {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .project-detail-index-card {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.04);
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .project-detail-index-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.34);
+      background: rgba(255, 255, 255, 0.065);
+    }
+
+    .project-detail-index-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1.04rem;
+    }
+
+    .project-detail-index-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .project-detail-note {
+      margin: 18px 0 0;
+      color: var(--muted-2);
+      font-size: 0.92rem;
+    }
+
+    body.is-project-detail-mode .document-grid {
+      gap: 28px;
+    }
+
+    body.is-project-detail-mode .project-document-block:not(.is-hidden) {
+      animation: projectDetailFadeIn 260ms ease both;
+    }
+
+    @keyframes projectDetailFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .project-detail-top,
+      .project-detail-meta,
+      .project-detail-index {
+        grid-template-columns: 1fr;
+      }
+
+      .project-detail-actions {
+        justify-content: flex-start;
+      }
+    }
+  </style>
 </head>
 <body>
   <!-- 접근성용 바로가기 링크 -->
@@ -104,11 +297,13 @@
         </div>
 
         <div class="filter-tabs" role="tablist" aria-label="프로젝트별 문서 필터">
-          <button class="tab is-active" type="button" data-filter="all">전체</button>
-          <button class="tab" type="button" data-filter="patris">Patris</button>
-          <button class="tab" type="button" data-filter="crimson-frequency">Crimson Frequency</button>
-          <button class="tab" type="button" data-filter="anomaly-record">Anomaly Record</button>
+          <a class="tab is-active" href="main.html#documents" data-filter="all" role="tab" aria-selected="true">전체</a>
+          <a class="tab" href="main.html?project=patris#project-file-detail" data-filter="patris" role="tab" aria-selected="false">Patris</a>
+          <a class="tab" href="main.html?project=crimson-frequency#project-file-detail" data-filter="crimson-frequency" role="tab" aria-selected="false">Crimson Frequency</a>
+          <a class="tab" href="main.html?project=anomaly-record#project-file-detail" data-filter="anomaly-record" role="tab" aria-selected="false">Anomaly Record</a>
         </div>
+
+        <section id="project-file-detail" class="project-detail-page" data-project-detail-page hidden aria-live="polite"></section>
 
         <div class="document-grid" data-document-grid></div>
       </div>
@@ -158,5 +353,180 @@
       <a href="#top">Back to top</a>
     </div>
   </footer>
+  <script>
+    /*
+      Project detail routing enhancement
+      - Keeps the existing All list.
+      - Turns Patris / Crimson Frequency / Anomaly Record tabs into project-detail navigation.
+      - Does not require changes to assets/js/main.js or data/projects.js.
+    */
+    (() => {
+      const PROJECT_FOLDER_MAP = {
+        "patris": "patris",
+        "crimson-frequency": "crimson-frequency",
+        "anomaly-record": "anomaly-record",
+      };
+
+      const SECTION_FOLDER_MAP = {
+        "pre-production": "01_pre_production_portfolio",
+        "concept": "02_concept_planning_portfolio",
+        "system": "03_system_planning_portfolio",
+      };
+
+      const BASE_PAGE = "main.html";
+
+      const getData = () => window.PORTFOLIO_DATA ?? { projects: [], portfolioSections: [] };
+      const getProjectPrefix = (project) => project.name.replaceAll(" ", "_");
+      const getFilePath = (project, section, item) => {
+        const projectFolder = PROJECT_FOLDER_MAP[project.id];
+        const sectionFolder = SECTION_FOLDER_MAP[section.id];
+        return `assets/docs/${projectFolder}/${sectionFolder}/${getProjectPrefix(project)}_${item.slug}.${item.ext}`;
+      };
+
+      const getProjectFromUrl = () => {
+        const data = getData();
+        const params = new URLSearchParams(window.location.search);
+        const projectId = params.get("project");
+        return data.projects.some((project) => project.id === projectId) ? projectId : null;
+      };
+
+      const getProjectFileCount = (data) => {
+        return data.portfolioSections.reduce((count, section) => count + section.items.length, 0);
+      };
+
+      const setActiveTab = (projectId) => {
+        document.querySelectorAll("#documents [data-filter]").forEach((tab) => {
+          const filter = tab.dataset.filter;
+          const active = projectId ? filter === projectId : filter === "all";
+          tab.classList.toggle("is-active", active);
+          tab.setAttribute("aria-selected", String(active));
+        });
+      };
+
+      const renderDetailPage = (projectId) => {
+        const data = getData();
+        const detail = document.querySelector("[data-project-detail-page]");
+        const project = data.projects.find((item) => item.id === projectId);
+        if (!detail || !project) return;
+
+        const fileCount = getProjectFileCount(data);
+        const sectionIndex = data.portfolioSections.map((section) => {
+          const firstFile = section.items[0] ? getFilePath(project, section, section.items[0]) : "#";
+          return `
+            <a class="project-detail-index-card" href="#portfolio-${project.id}" data-project-section-jump="${section.id}">
+              <strong>${section.order}. ${section.title}</strong>
+              <span>${section.items.length}개 파일 · 첫 파일: ${firstFile}</span>
+            </a>
+          `;
+        }).join("");
+
+        const tags = (project.tags ?? []).map((tag) => `<span class="badge">${tag}</span>`).join("");
+
+        detail.innerHTML = `
+          <div class="project-detail-shell">
+            <div class="project-detail-top">
+              <div class="project-detail-title-wrap">
+                <span class="project-detail-label">Project File Detail Page</span>
+                <h3>${project.videoTitle || project.name}</h3>
+                <p>${project.summary}</p>
+              </div>
+              <div class="project-detail-actions">
+                <a class="btn btn-primary" href="#portfolio-${project.id}">파일 세트 바로가기</a>
+                <a class="btn btn-ghost" href="${BASE_PAGE}#documents" data-project-detail-all>전체 목록으로 돌아가기</a>
+              </div>
+            </div>
+
+            <div class="project-detail-meta" aria-label="${project.name} 프로젝트 파일 세트 요약">
+              <div class="project-detail-meta-card"><span>Project</span><strong>${project.nameKo} / ${project.name}</strong></div>
+              <div class="project-detail-meta-card"><span>Genre</span><strong>${project.genre}</strong></div>
+              <div class="project-detail-meta-card"><span>Engine</span><strong>${project.engine}</strong></div>
+              <div class="project-detail-meta-card"><span>File Set</span><strong>${data.portfolioSections.length}개 분류 · ${fileCount}개 예정 파일</strong></div>
+            </div>
+
+            <div class="project-meta" aria-label="${project.name} 프로젝트 태그">
+              ${tags}
+            </div>
+
+            <div class="project-detail-index" aria-label="${project.name} 포트폴리오 분류 바로가기">
+              ${sectionIndex}
+            </div>
+            <p class="project-detail-note">아래에는 선택한 프로젝트의 사전 기획, 콘셉트 기획, 시스템 기획 파일 세트만 표시됩니다. 각 파일의 <strong>열기</strong> 버튼을 누르면 저장소의 해당 문서를 새 창으로 확인할 수 있습니다.</p>
+          </div>
+        `;
+      };
+
+      const applyProjectView = (projectId, shouldScroll = false) => {
+        const detail = document.querySelector("[data-project-detail-page]");
+        const cards = document.querySelectorAll(".project-document-block");
+
+        setActiveTab(projectId);
+        document.body.classList.toggle("is-project-detail-mode", Boolean(projectId));
+
+        if (!projectId) {
+          if (detail) {
+            detail.hidden = true;
+            detail.innerHTML = "";
+          }
+          cards.forEach((card) => card.classList.remove("is-hidden"));
+          return;
+        }
+
+        renderDetailPage(projectId);
+        if (detail) detail.hidden = false;
+        cards.forEach((card) => {
+          card.classList.toggle("is-hidden", card.dataset.project !== projectId);
+        });
+
+        if (shouldScroll) {
+          const target = document.getElementById("project-file-detail") || document.getElementById("documents");
+          target?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      };
+
+      const bindProjectDetailTabs = () => {
+        document.querySelectorAll("#documents [data-filter]").forEach((tab) => {
+          const filter = tab.dataset.filter;
+          if (filter === "all") {
+            tab.setAttribute("href", `${BASE_PAGE}#documents`);
+            tab.setAttribute("role", "tab");
+            tab.addEventListener("click", (event) => {
+              event.preventDefault();
+              event.stopImmediatePropagation();
+              history.pushState(null, "", `${BASE_PAGE}#documents`);
+              applyProjectView(null, true);
+            }, true);
+            return;
+          }
+
+          tab.setAttribute("href", `${BASE_PAGE}?project=${filter}#project-file-detail`);
+          tab.setAttribute("role", "tab");
+          tab.setAttribute("aria-controls", "project-file-detail");
+          tab.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            history.pushState(null, "", `${BASE_PAGE}?project=${filter}#project-file-detail`);
+            applyProjectView(filter, true);
+          }, true);
+        });
+
+        document.addEventListener("click", (event) => {
+          const allLink = event.target.closest("[data-project-detail-all]");
+          if (!allLink) return;
+          event.preventDefault();
+          history.pushState(null, "", `${BASE_PAGE}#documents`);
+          applyProjectView(null, true);
+        });
+      };
+
+      window.addEventListener("DOMContentLoaded", () => {
+        bindProjectDetailTabs();
+        applyProjectView(getProjectFromUrl(), window.location.hash === "#project-file-detail");
+      });
+
+      window.addEventListener("popstate", () => {
+        applyProjectView(getProjectFromUrl(), false);
+      });
+    })();
+  </script>
 </body>
 </html>
