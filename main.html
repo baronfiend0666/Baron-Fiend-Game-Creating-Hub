@@ -297,7 +297,6 @@
         </div>
 
         <div class="filter-tabs" role="tablist" aria-label="프로젝트별 문서 필터">
-          <a class="tab is-active" href="main.html#documents" data-filter="all" role="tab" aria-selected="true">전체</a>
           <a class="tab" href="main.html?project=patris#project-file-detail" data-filter="patris" role="tab" aria-selected="false">Patris</a>
           <a class="tab" href="main.html?project=crimson-frequency#project-file-detail" data-filter="crimson-frequency" role="tab" aria-selected="false">Crimson Frequency</a>
           <a class="tab" href="main.html?project=anomaly-record#project-file-detail" data-filter="anomaly-record" role="tab" aria-selected="false">Anomaly Record</a>
@@ -356,7 +355,7 @@
   <script>
     /*
       Project detail routing enhancement
-      - Keeps the existing All list.
+      - Removes the visible All tab from the project file menu.
       - Turns Patris / Crimson Frequency / Anomaly Record tabs into project-detail navigation.
       - Does not require changes to assets/js/main.js or data/projects.js.
     */
