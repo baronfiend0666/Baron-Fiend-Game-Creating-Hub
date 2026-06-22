@@ -354,7 +354,7 @@
     }
 
     body.is-project-detail-mode .document-grid {
-      gap: 28px;
+      display: none !important;
     }
 
     body.is-project-detail-mode .project-document-block:not(.is-hidden) {
@@ -363,6 +363,56 @@
 
     body.is-file-set-detail-mode .document-grid {
       display: none !important;
+    }
+
+
+    /* Project detail page: remove the large project-name/banner block and keep only uniform file-set menus. */
+    .project-detail-shell {
+      overflow: visible;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      backdrop-filter: none;
+      padding: 0;
+    }
+
+    .project-detail-shell::before {
+      display: none;
+    }
+
+    .project-detail-index {
+      width: 100%;
+      margin-top: 0;
+      gap: clamp(14px, 1.8vw, 20px);
+      align-items: stretch;
+    }
+
+    .project-detail-index-card {
+      min-height: 168px;
+      height: 100%;
+      padding: clamp(18px, 2.2vw, 24px);
+    }
+
+    .project-detail-index-card > span:first-child {
+      color: var(--primary);
+      font-size: 0.88rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+
+    .project-detail-index-card strong {
+      margin: 10px 0 8px;
+      line-height: 1.35;
+    }
+
+    .project-detail-index-card span,
+    .project-detail-index-card strong {
+      min-width: 0;
+    }
+
+    .project-detail-index-card em {
+      margin-top: auto;
     }
 
     @keyframes projectDetailFadeIn {
@@ -470,7 +520,7 @@
         <div class="section-head">
           <p class="eyebrow">Planning Documents</p>
           <h2>프로젝트 분류에 따른 개별 파일 모음</h2>
-          <p>프로젝트 이미지를 선택하거나 아래 프로젝트 버튼을 누르면 프로젝트별 파일 세트 페이지로 이동합니다.</p>
+          <p>PDF 파일은 <code>assets/docs/프로젝트명/</code> 폴더에 같은 파일명으로 넣으면 바로 연결됩니다.</p>
         </div>
 
         <div class="filter-tabs" role="tablist" aria-label="프로젝트별 문서 필터">
@@ -632,8 +682,8 @@
             <a class="project-detail-index-card" href="${sectionDetailUrl(project.id, section.id)}" data-project-section-jump="${section.id}">
               <span>${section.order}</span>
               <strong>${section.title}</strong>
-              <span>${section.items.length}개 파일 구성 · ${project.name} 전용 ${section.title} 세트</span>
-              <em>파일 세트 열기</em>
+              <span>${section.items.length}개 파일 · ${section.title} 세부 열람</span>
+              <em>세부 페이지 열기</em>
             </a>
           `;
         }).join("");
@@ -641,34 +691,10 @@
         const tags = (project.tags ?? []).map((tag) => `<span class="badge">${tag}</span>`).join("");
 
         detail.innerHTML = `
-          <div class="project-detail-shell">
-            <div class="project-detail-top">
-              <div class="project-detail-title-wrap">
-                <span class="project-detail-label">Project File Detail Page</span>
-                <h3>${project.videoTitle || project.name}</h3>
-                <p>${project.summary}</p>
-              </div>
-              <div class="project-detail-actions">
-                <a class="btn btn-ghost" href="#projects">프로젝트 3종으로 이동</a>
-                <a class="btn btn-ghost" href="#documents">프로젝트 버튼으로 이동</a>
-              </div>
-            </div>
-
-            <div class="project-detail-meta" aria-label="${project.name} 프로젝트 파일 세트 요약">
-              <div class="project-detail-meta-card"><span>Project</span><strong>${project.nameKo} / ${project.name}</strong></div>
-              <div class="project-detail-meta-card"><span>Genre</span><strong>${project.genre}</strong></div>
-              <div class="project-detail-meta-card"><span>Engine</span><strong>${project.engine}</strong></div>
-              <div class="project-detail-meta-card"><span>File Set</span><strong>${data.portfolioSections.length}개 분류 · ${fileCount}개 예정 파일</strong></div>
-            </div>
-
-            <div class="project-meta" aria-label="${project.name} 프로젝트 태그">
-              ${tags}
-            </div>
-
+          <div class="project-detail-shell" aria-label="${project.name} 포트폴리오 파일 세트 바로가기">
             <div class="project-detail-index" aria-label="${project.name} 포트폴리오 분류 바로가기">
               ${sectionIndex}
             </div>
-            <p class="project-detail-note">위의 파일 세트 버튼을 누르면 선택한 프로젝트의 사전 기획, 콘셉트 기획, 시스템 기획 포트폴리오별 세부 파일 페이지로 이동합니다. 화면에는 파일명과 열람 버튼만 표시되며 저장소 경로 문자열은 노출하지 않습니다.</p>
           </div>
         `;
       };
