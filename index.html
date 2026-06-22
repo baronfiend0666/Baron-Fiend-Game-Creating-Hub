@@ -472,10 +472,22 @@
     }
 
     .portfolio-file-set-intro {
-      margin: 0 0 18px;
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.65;
+      margin: 0 0 20px;
+      padding: clamp(18px, 2.1vw, 24px);
+      border: 1px solid rgba(170, 190, 255, 0.28);
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(13, 18, 32, 0.94), rgba(24, 33, 58, 0.90));
+      color: var(--text);
+      font-size: 0.96rem;
+      font-weight: 700;
+      line-height: 1.72;
+      box-shadow: 0 18px 54px rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(16px);
+    }
+
+    .portfolio-file-set-intro strong {
+      color: #ffffff;
+      font-weight: 900;
     }
 
     .portfolio-set-layout {
