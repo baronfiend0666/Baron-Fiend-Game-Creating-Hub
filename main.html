@@ -1338,6 +1338,30 @@
 
   <script>
     (() => {
+      const PATRIS_PART_1_RELEASE_TEXT = "(2026.07~)";
+
+      const appendPatrisPart1ReleaseText = () => {
+        const novelCards = [...document.querySelectorAll(".novel-card")];
+        const targetCard = novelCards.find((card) => {
+          const text = card.textContent || "";
+          return text.includes("파트리스(Patris) (1부)") && text.includes("강령명가의 악질분자로 살아남기");
+        });
+
+        if (!targetCard) return;
+
+        const titleLine = targetCard.querySelector(".novel-title-line");
+        if (!titleLine || titleLine.textContent.includes(PATRIS_PART_1_RELEASE_TEXT)) return;
+
+        titleLine.append(` ${PATRIS_PART_1_RELEASE_TEXT}`);
+      };
+
+      window.addEventListener("DOMContentLoaded", appendPatrisPart1ReleaseText);
+    })();
+  </script>
+
+
+  <script>
+    (() => {
       const REMOVED_DOCUMENT_BUTTON_LABELS = new Set(["보기", "PDF 열기", "ZIP 다운로드", "준비 중"]);
       const normalizeButtonText = (value) => (value || "").replace(/\s+/g, " ").trim();
 
