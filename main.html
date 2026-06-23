@@ -10,9 +10,9 @@
   <meta name="keywords" content="게임기획 포트폴리오, Patris, Crimson Frequency, Anomaly Record, 게임 시스템 기획서, 레벨 디자인, UI 디자인, 게임 서비스 기획" />
   <meta name="author" content="Park Jeong-ho" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://baronfiend0666.github.io/Baron-Fiend-Game-Creating-Hub/" />
+  <link rel="canonical" href="https://my-game-portfolio-tau.vercel.app/" />
 
-  <!-- SNS / 검색 결과 미리보기 이미지: 배포 후 절대 URL로 교체 권장 -->
+  <!-- SNS / 검색 결과 미리보기 이미지 -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Baron Fiend Game Creating Hub" />
   <meta property="og:description" content="Patris · Crimson Frequency · Anomaly Record 개인 게임기획 프로젝트 모음" />
@@ -23,594 +23,14 @@
   <meta name="twitter:description" content="3개의 개인 게임기획 프로젝트와 PDF 문서, 프로토타입 영상을 정리한 포트폴리오 사이트" />
   <meta name="twitter:image" content="assets/images/archfiend-books-games-main.png" />
 
-
-
-<link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
   <script defer src="data/projects.js"></script>
   <script defer src="assets/js/main.js"></script>
   <link rel="icon" type="image/x-icon" href="assets/icons/favicon-avatar-profile.ico?v=3" />
   <link rel="icon" type="image/png" href="assets/icons/favicon-avatar-profile.png?v=3" />
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon-avatar-profile.png?v=3" />
+
   <style>
-    /* Project file detail page enhancement: HTML-only override */
-    #documents .filter-tabs .tab {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-    }
-
-    .project-visual-wrap {
-      position: relative;
-    }
-
-    .project-visual-link {
-      position: relative;
-      display: block;
-      color: inherit;
-      text-decoration: none;
-      border-radius: inherit;
-      overflow: hidden;
-      cursor: pointer;
-    }
-
-    .project-visual-link .project-visual {
-      display: block;
-      width: 100%;
-      transition: transform 220ms ease, filter 220ms ease;
-    }
-
-    .project-visual-link:hover .project-visual,
-    .project-visual-link:focus-visible .project-visual {
-      transform: scale(1.035);
-      filter: brightness(1.08) contrast(1.03);
-    }
-
-    .project-visual-link:focus-visible {
-      outline: 2px solid var(--primary);
-      outline-offset: 4px;
-    }
-
-    .project-visual-cta {
-      position: absolute;
-      left: 16px;
-      right: 16px;
-      bottom: 16px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 42px;
-      padding: 10px 14px;
-      border: 1px solid rgba(255, 255, 255, 0.28);
-      border-radius: 999px;
-      background: rgba(10, 14, 30, 0.72);
-      color: var(--text);
-      font-size: 0.86rem;
-      font-weight: 900;
-      letter-spacing: 0.02em;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 180ms ease, transform 180ms ease;
-      backdrop-filter: blur(10px);
-    }
-
-    .project-visual-link:hover .project-visual-cta,
-    .project-visual-link:focus-visible .project-visual-cta {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .project-detail-page {
-      margin: 28px 0 32px;
-      scroll-margin-top: calc(var(--header-height) + 18px);
-      animation: projectDetailFadeIn 260ms ease both;
-    }
-
-    .project-detail-page[hidden] {
-      display: none !important;
-    }
-
-    .project-detail-shell {
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(170, 190, 255, 0.26);
-      border-radius: var(--radius-lg);
-      background:
-        linear-gradient(135deg, rgba(122, 162, 255, 0.16), rgba(165, 117, 255, 0.08) 42%, rgba(255, 255, 255, 0.035)),
-        var(--panel-strong);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
-      padding: clamp(22px, 3vw, 34px);
-    }
-
-    .project-detail-shell::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 16% 10%, rgba(122, 162, 255, 0.22), transparent 28rem),
-        radial-gradient(circle at 92% 2%, rgba(255, 68, 95, 0.10), transparent 24rem);
-      pointer-events: none;
-    }
-
-    .project-detail-shell > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .project-detail-top {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 22px;
-      align-items: start;
-      padding-bottom: 22px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .project-detail-title-wrap {
-      min-width: 0;
-    }
-
-    .project-detail-label {
-      display: inline-flex;
-      margin-bottom: 12px;
-      color: var(--primary);
-      font-size: 0.78rem;
-      font-weight: 900;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-    }
-
-    .project-detail-title-wrap h3 h3 {
-      font-size: clamp(1.8rem, 4vw, 3rem);
-    }
-
-    .project-detail-title-wrap p p {
-      max-width: 860px;
-      margin: 12px 0 0;
-      color: var(--muted);
-    }
-
-    .project-detail-actions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-
-    .project-detail-actions .btn .btn {
-      white-space: nowrap;
-    }
-
-    .project-detail-meta {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      margin: 22px 0 0;
-    }
-
-    .project-detail-meta-card {
-      min-height: 92px;
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.045);
-    }
-
-    .project-detail-meta-card span {
-      display: block;
-      color: var(--muted-2);
-      font-size: 0.78rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .project-detail-meta-card strong {
-      display: block;
-      margin-top: 8px;
-      color: var(--text);
-      font-size: 1rem;
-      line-height: 1.42;
-      overflow-wrap: anywhere;
-    }
-
-    .project-detail-index {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 22px;
-    }
-
-    .project-detail-index-card {
-      display: flex;
-      min-height: 148px;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 20px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.04);
-      color: inherit;
-      text-decoration: none;
-      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
-    }
-
-    .project-detail-index-card:hover,
-    .project-detail-index-card:focus-visible {
-      transform: translateY(-2px);
-      border-color: rgba(255, 255, 255, 0.34);
-      background: rgba(255, 255, 255, 0.065);
-    }
-
-    .project-detail-index-card:focus-visible {
-      outline: 2px solid var(--primary);
-      outline-offset: 3px;
-    }
-
-    .project-detail-index-card strong {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 1.04rem;
-    }
-
-    .project-detail-index-card span {
-      display: block;
-      color: var(--muted);
-      font-size: 0.9rem;
-      line-height: 1.5;
-      overflow-wrap: break-word;
-    }
-
-    .project-detail-index-card em {
-      display: inline-flex;
-      width: fit-content;
-      margin-top: 18px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(122, 162, 255, 0.16);
-      color: var(--text);
-      font-size: 0.82rem;
-      font-style: normal;
-      font-weight: 900;
-    }
-
-    .project-detail-note,
-    .file-set-detail-note {
-      margin: 18px 0 0;
-      color: var(--muted-2);
-      font-size: 0.92rem;
-    }
-
-    .file-set-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 22px;
-    }
-
-    .file-set-card {
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr) auto;
-      align-items: center;
-      gap: 14px;
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.045);
-    }
-
-    .file-set-card-order {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 42px;
-      height: 42px;
-      border-radius: 999px;
-      background: rgba(122, 162, 255, 0.16);
-      color: var(--text);
-      font-size: 0.85rem;
-      font-weight: 900;
-    }
-
-    .file-set-card-body {
-      min-width: 0;
-    }
-
-    .file-set-card-body strong {
-      display: block;
-      color: var(--text);
-      font-size: 1rem;
-      line-height: 1.38;
-      overflow-wrap: break-word;
-    }
-
-    .file-set-card-body span {
-      display: block;
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 0.88rem;
-    }
-
-
-
-    /* Project detail page: remove the large project-name/banner block and keep only uniform file-set menus. */
-    .project-detail-shell {
-      overflow: visible;
-      border: 0;
-      border-radius: 0;
-      background: transparent;
-      box-shadow: none;
-      backdrop-filter: none;
-      padding: 0;
-    }
-
-    .project-detail-shell::before {
-      display: none;
-    }
-
-    .project-detail-index {
-      width: 100%;
-      margin-top: 0;
-      gap: clamp(14px, 1.8vw, 20px);
-      align-items: stretch;
-    }
-
-    .project-detail-index-card {
-      min-height: 168px;
-      height: 100%;
-      padding: clamp(18px, 2.2vw, 24px);
-    }
-
-    .project-detail-index-card > span:first-child {
-      color: var(--primary);
-      font-size: 0.88rem;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-    }
-
-    .project-detail-index-card strong {
-      margin: 10px 0 8px;
-      line-height: 1.35;
-    }
-
-    .project-detail-index-card span,
-    .project-detail-index-card strong {
-      min-width: 0;
-    }
-
-    .project-detail-index-card em {
-      margin-top: auto;
-    }
-
-
-    /* Original web novel IP keyword badges: Patris part 1. */
-    .novel-keyword-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 14px 0 16px;
-      padding: 0;
-      list-style: none;
-    }
-
-    .novel-keyword {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 34px;
-      padding: 7px 12px;
-      border: 1px solid rgba(170, 190, 255, 0.28);
-      border-radius: 999px;
-      background: linear-gradient(135deg, rgba(12, 21, 43, 0.96), rgba(18, 42, 82, 0.92));
-      color: #f5f8ff;
-      font-size: 0.84rem;
-      font-weight: 900;
-      letter-spacing: 0.01em;
-      line-height: 1.2;
-      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-      white-space: nowrap;
-    }
-
-    @keyframes projectDetailFadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @media (max-width: 980px) {
-      .project-detail-top,
-      .file-set-detail-top,
-      .project-detail-meta,
-      .project-detail-index,
-      .file-set-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .project-detail-actions,
-      .file-set-detail-actions {
-        justify-content: flex-start;
-      }
-
-      .file-set-card {
-        grid-template-columns: auto minmax(0, 1fr);
-      }
-
-      .file-set-card .file-link {
-        grid-column: 1 / -1;
-        justify-self: start;
-      }
-    }
-
-
-    /* Portfolio File Set Page: project button click opens file banners directly. */
-    .portfolio-file-set-page {
-      overflow: visible !important;
-      border: 0 !important;
-      border-radius: 0 !important;
-      background: transparent !important;
-      box-shadow: none !important;
-      backdrop-filter: none !important;
-      padding: 0 !important;
-    }
-
-    .portfolio-file-set-page::before {
-      display: none !important;
-    }
-
-    .portfolio-file-set-page > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .portfolio-file-set-intro {
-      margin: 0 0 20px;
-      padding: clamp(18px, 2.1vw, 24px);
-      border: 1px solid rgba(170, 190, 255, 0.28);
-      border-radius: var(--radius-md);
-      background: linear-gradient(135deg, rgba(13, 18, 32, 0.94), rgba(24, 33, 58, 0.90));
-      color: var(--text);
-      font-size: 0.96rem;
-      font-weight: 700;
-      line-height: 1.72;
-      box-shadow: 0 18px 54px rgba(0, 0, 0, 0.28);
-      backdrop-filter: blur(16px);
-    }
-
-    .portfolio-file-set-intro strong {
-      color: #ffffff;
-      font-weight: 900;
-    }
-
-    .portfolio-set-layout {
-      display: grid;
-      gap: 18px;
-      margin-top: 18px;
-    }
-
-    .portfolio-set-panel {
-      overflow: hidden;
-      padding: clamp(18px, 2.2vw, 24px);
-      border: 1px solid rgba(170, 190, 255, 0.24);
-      border-radius: var(--radius-md);
-      background: rgba(13, 18, 32, 0.86);
-      box-shadow: 0 18px 54px rgba(0, 0, 0, 0.24);
-    }
-
-    .portfolio-set-panel-head {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 16px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid rgba(170, 190, 255, 0.18);
-    }
-
-    .portfolio-set-title-pill {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 42px;
-      padding: 0 18px;
-      border: 1px solid rgba(255, 255, 255, 0.92);
-      border-radius: 999px;
-      background: #ffffff;
-      color: #050914;
-      text-shadow: none;
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
-      font-weight: 900;
-      letter-spacing: -0.01em;
-    }
-
-    .portfolio-set-count {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 34px;
-      padding: 0 12px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      border-radius: 999px;
-      color: var(--muted);
-      font-size: 0.84rem;
-      font-weight: 800;
-    }
-
-    .portfolio-set-file-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .portfolio-set-file-card {
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr) auto;
-      align-items: center;
-      gap: 14px;
-      min-width: 0;
-      padding: 15px;
-      border: 1px solid rgba(170, 190, 255, 0.20);
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.055);
-    }
-
-    .portfolio-set-file-order {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 999px;
-      background: rgba(122, 162, 255, 0.18);
-      color: var(--text);
-      font-size: 0.82rem;
-      font-weight: 900;
-      flex: 0 0 auto;
-    }
-
-    .portfolio-set-file-body {
-      min-width: 0;
-    }
-
-    .portfolio-set-file-body strong {
-      display: block;
-      color: var(--text);
-      font-size: 0.98rem;
-      line-height: 1.38;
-      overflow-wrap: anywhere;
-      word-break: keep-all;
-    }
-
-    .portfolio-set-file-body span {
-      display: block;
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 0.84rem;
-      overflow-wrap: anywhere;
-    }
-
-    @media (max-width: 820px) {
-      .portfolio-set-file-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .portfolio-set-file-card {
-        grid-template-columns: auto minmax(0, 1fr);
-      }
-
-      .portfolio-set-file-card .file-link {
-        grid-column: 1 / -1;
-        justify-self: start;
-      }
-    }
-
-
     /* About Creator profile layout/theme enhancement */
     .about-creator-section {
       position: relative;
@@ -641,7 +61,7 @@
       gap: clamp(20px, 3vw, 34px);
       overflow: hidden;
       border: 1px solid rgba(170, 190, 255, 0.28);
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-lg, 28px);
       background:
         linear-gradient(135deg, rgba(122, 162, 255, 0.16), rgba(165, 117, 255, 0.09) 44%, rgba(255, 68, 95, 0.055)),
         linear-gradient(180deg, rgba(13, 18, 32, 0.94), rgba(7, 9, 18, 0.90));
@@ -662,16 +82,6 @@
       pointer-events: none;
     }
 
-    .about-creator-card::after {
-      content: "";
-      position: absolute;
-      inset: 1px;
-      z-index: 0;
-      border-radius: calc(var(--radius-lg) - 1px);
-      border: 1px solid rgba(255, 255, 255, 0.035);
-      pointer-events: none;
-    }
-
     .about-creator-card > * {
       position: relative;
       z-index: 1;
@@ -680,15 +90,6 @@
     .about-creator-copy {
       width: 100%;
       min-width: 0;
-    }
-
-    .about-creator-copy .eyebrow {
-      color: var(--primary);
-      text-shadow: 0 0 24px rgba(122, 162, 255, 0.32);
-    }
-
-    .about-creator-copy h2 {
-      letter-spacing: -0.04em;
     }
 
     .creator-profile-list {
@@ -763,7 +164,7 @@
       border: 1px solid rgba(255, 255, 255, 0.085);
       background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.032));
-      color: var(--text);
+      color: var(--text, #f5f8ff);
       font-size: 0.95rem;
       font-weight: 800;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -784,12 +185,27 @@
       outline: none;
     }
 
-    .about-creator-card .btn {
-      border-color: rgba(122, 162, 255, 0.42);
-      background:
-        linear-gradient(135deg, rgba(122, 162, 255, 0.92), rgba(165, 117, 255, 0.84));
-      color: #061022;
-      box-shadow: 0 16px 38px rgba(79, 124, 255, 0.28);
+    .blog-link-list {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .blog-link-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 36px;
+    }
+
+    .blog-link-icon {
+      width: 26px;
+      height: 26px;
+      flex: 0 0 26px;
+      object-fit: contain;
+      border-radius: 6px;
     }
 
     @media (max-width: 720px) {
@@ -805,129 +221,7 @@
         min-height: 48px;
       }
     }
-
-
-    /* Footer visibility enhancement: prevent footer copyright text from blending into the background image */
-    .site-footer .footer-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-
-    .site-footer .footer-copy {
-      display: inline-flex;
-      flex-direction: column;
-      gap: 6px;
-      max-width: min(100%, 760px);
-      padding: 14px 18px;
-      border: 1px solid rgba(170, 190, 255, 0.28);
-      border-radius: 18px;
-      background:
-        linear-gradient(135deg, rgba(14, 20, 42, 0.94), rgba(22, 28, 56, 0.88)),
-        rgba(8, 12, 28, 0.92);
-      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.32);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-    }
-
-    .site-footer .footer-copy p {
-      margin: 0;
-      color: var(--text);
-      font-size: 0.92rem;
-      font-weight: 700;
-      line-height: 1.45;
-      letter-spacing: 0.01em;
-      text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
-    }
-
-    .site-footer .footer-copy p + p {
-      color: rgba(235, 241, 255, 0.82);
-      font-size: 0.86rem;
-      font-weight: 600;
-    }
-
-    @media (max-width: 720px) {
-      .site-footer .footer-inner {
-        align-items: stretch;
-      }
-
-      .site-footer .footer-copy {
-        width: 100%;
-      }
-    }
-
-
-    /* Back to top visibility enhancement */
-    .site-footer .footer-inner > a[href="#top"] {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 44px;
-      padding: 11px 18px;
-      border: 1px solid rgba(170, 190, 255, 0.34);
-      border-radius: 999px;
-      background:
-        linear-gradient(135deg, rgba(16, 28, 68, 0.96), rgba(20, 42, 92, 0.92)),
-        rgba(8, 16, 42, 0.94);
-      color: var(--text);
-      font-size: 0.9rem;
-      font-weight: 900;
-      letter-spacing: 0.02em;
-      text-decoration: none;
-      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.30);
-      text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
-    }
-
-    .site-footer .footer-inner > a[href="#top"]:hover,
-    .site-footer .footer-inner > a[href="#top"]:focus-visible {
-      transform: translateY(-2px);
-      border-color: rgba(200, 215, 255, 0.58);
-      background:
-        linear-gradient(135deg, rgba(22, 42, 96, 0.98), rgba(28, 58, 122, 0.94)),
-        rgba(10, 22, 54, 0.96);
-      outline: none;
-    }
-
-    @media (max-width: 720px) {
-      .site-footer .footer-inner > a[href="#top"] {
-        width: 100%;
-      }
-    }
-
-
-    /* Project file-set detail menu refinement */
-    .portfolio-set-menu {
-      margin: 0 0 20px;
-      padding: clamp(14px, 1.8vw, 18px);
-      border: 1px solid rgba(170, 190, 255, 0.22);
-      border-radius: var(--radius-md);
-      background: rgba(13, 18, 32, 0.70);
-      backdrop-filter: blur(14px);
-    }
-
-    .portfolio-set-menu .tab {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-    }
-
-    .portfolio-set-description {
-      margin: -4px 0 16px;
-      color: var(--muted);
-      font-size: 0.92rem;
-      font-weight: 700;
-      line-height: 1.62;
-      word-break: keep-all;
-    }
-
   </style>
-
 </head>
 <body>
   <!-- 접근성용 바로가기 링크 -->
@@ -981,7 +275,8 @@
         </aside>
       </div>
     </section>
-<section id="projects" class="section projects-section">
+
+    <section id="projects" class="section projects-section">
       <div class="container">
         <div class="section-head">
           <p class="eyebrow">Project Line-up</p>
@@ -999,14 +294,15 @@
           <h2>프로젝트 분류에 따른 개별 파일 모음</h2>
           <p>PDF 파일은 <code>assets/docs/프로젝트명/</code> 폴더에 같은 파일명으로 넣으면 바로 연결됩니다.</p>
         </div>
-
-        <div class="filter-tabs" role="tablist" aria-label="프로젝트별 문서 필터">
-          <a class="tab" href="main.html?project=patris#project-file-detail" data-filter="patris" role="tab" aria-selected="false">Patris</a>
-          <a class="tab" href="main.html?project=crimson-frequency#project-file-detail" data-filter="crimson-frequency" role="tab" aria-selected="false">Crimson Frequency</a>
-          <a class="tab" href="main.html?project=anomaly-record#project-file-detail" data-filter="anomaly-record" role="tab" aria-selected="false">Anomaly Record</a>
+        <div class="filter-tabs" role="tablist" aria-label="프로젝트 문서 필터">
+          <button class="tab is-active" type="button" data-filter="all" aria-selected="true">All</button>
+          <button class="tab" type="button" data-filter="patris" aria-selected="false">Patris</button>
+          <button class="tab" type="button" data-filter="crimson-frequency" aria-selected="false">Crimson Frequency</button>
+          <button class="tab" type="button" data-filter="anomaly-record" aria-selected="false">Anomaly Record</button>
         </div>
-
         <section id="project-file-detail" class="project-detail-page" data-project-detail-page hidden aria-live="polite"></section>
+        <section id="portfolio-file-set-detail" class="file-set-detail-page" data-file-set-detail-page hidden aria-live="polite"></section>
+        <div class="document-grid" data-document-grid></div>
       </div>
     </section>
 
@@ -1031,7 +327,6 @@
         <div class="novel-grid" data-novel-grid></div>
       </div>
     </section>
-
 
     <section id="about-creator" class="section about-creator-section">
       <div class="container contact-card about-creator-card">
@@ -1068,6 +363,21 @@
               <dd><a href="mailto:jeonghopark2026@gmail.com">jeonghopark2026@gmail.com</a></dd>
             </div>
             <div class="creator-profile-row">
+              <dt>블로그</dt>
+              <dd>
+                <div class="blog-link-list" aria-label="공식 블로그 링크">
+                  <a class="blog-link-item" href="https://blog.naver.com/baron-fiend_official" target="_blank" rel="noopener noreferrer" aria-label="Naver official blog KR 새 창으로 열기">
+                    <img class="blog-link-icon" src="assets/images/Naver_Blog.png" alt="" aria-hidden="true" />
+                    <span>Naver (KR)</span>
+                  </a>
+                  <a class="blog-link-item" href="https://baronfiend0666ofcl.blogspot.com/?m=1" target="_blank" rel="noopener noreferrer" aria-label="Google Blogger official global 새 창으로 열기">
+                    <img class="blog-link-icon" src="assets/images/Google_Blogger.png" alt="" aria-hidden="true" />
+                    <span>Google Blogger (GLOBAL)</span>
+                  </a>
+                </div>
+              </dd>
+            </div>
+            <div class="creator-profile-row">
               <dt>한 줄 소개</dt>
               <dd>게임 크리에이터이자 웹소설 작가의 비전을 이루기 위해 노력하고 있습니다.</dd>
             </div>
@@ -1087,514 +397,5 @@
       <a href="#top">Back to top</a>
     </div>
   </footer>
-  <script>
-    /*
-      Project file-set routing enhancement
-      - 1차 메뉴: Patris / Crimson Frequency / Anomaly Record
-      - 2차 메뉴: 선택 프로젝트별 파일 세트 상세 메뉴
-      - 선택된 파일 세트의 파일 카드만 개별 열람하도록 렌더링합니다.
-    */
-    (() => {
-      const PROJECT_FOLDER_MAP = {
-        "patris": "patris",
-        "crimson-frequency": "crimson-frequency",
-        "anomaly-record": "anomaly-record",
-      };
-
-      const BASE_PAGE = "main.html";
-
-      const COMMON_FILE_SETS = {
-        "pre-production": {
-          order: "01",
-          title: "사전 기획 포트폴리오",
-          menuLabel: "사전 기획",
-          folder: "01_pre_production_portfolio",
-          description: "개발 방향, 콘텐츠 범위, 핵심 제안 구조를 확인하는 사전 기획 파일 세트입니다.",
-          items: [
-            { title: "개발 제안서", ext: "docx", slug: "Development_Proposal" },
-            { title: "콘텐츠맵", ext: "svg", slug: "Content_Map" },
-            { title: "게임 소개서", ext: "docx", slug: "Game_Introduction_Document" },
-            { title: "GDD", ext: "docx", slug: "GDD" },
-          ],
-        },
-        "concept": {
-          order: "02",
-          title: "콘셉트 기획 포트폴리오",
-          menuLabel: "콘셉트 기획",
-          folder: "02_concept_planning_portfolio",
-          description: "스토리, 시나리오, 스토리보드, 캐릭터와 배경 콘셉트를 확인하는 파일 세트입니다.",
-          items: [
-            { title: "게임 스토리", ext: "docx", slug: "Game_Story" },
-            { title: "게임 시나리오", ext: "docx", slug: "Game_Scenario" },
-            { title: "스토리 보드", ext: "docx", slug: "Storyboard" },
-            { title: "캐릭터 컨셉 기획서", ext: "docx", slug: "Character_Concept_Document" },
-            { title: "배경 컨셉 기획서", ext: "docx", slug: "Background_Concept_Document" },
-          ],
-        },
-        "system": {
-          order: "03",
-          title: "시스템 기획 포트폴리오",
-          menuLabel: "시스템 기획",
-          folder: "03_system_planning_portfolio",
-          description: "게임 메커닉스, 플로우, ERD, 데이터 스키마와 프로젝트별 데이터 테이블을 확인하는 파일 세트입니다.",
-          items: [
-            { title: "게임 메커닉스", ext: "docx", slug: "Game_Mechanics" },
-            { title: "프로세스 플로우", ext: "svg", slug: "Process_Flow" },
-            { title: "ERD", ext: "svg", slug: "ERD" },
-            { title: "데이터 스키마", ext: "docx", slug: "Data_Schema" },
-            { title: "통합 데이터 테이블", ext: "docx", slug: "Integrated_Data_Table" },
-            { title: "캐릭터 테이블", ext: "xlsx", slug: "Character_Table" },
-            { title: "아이템 테이블", ext: "xlsx", slug: "Item_Table" },
-            { title: "스킬 테이블", ext: "xlsx", slug: "Skill_Table" },
-            { title: "다이얼로그 테이블", ext: "xlsx", slug: "Dialogue_Table" },
-            { title: "퀘스트 테이블", ext: "xlsx", slug: "Quest_Table" },
-            { title: "시나리오 테이블", ext: "xlsx", slug: "Scenario_Table" },
-          ],
-        },
-        "level": {
-          order: "04",
-          title: "레벨 기획 포트폴리오",
-          menuLabel: "레벨 기획",
-          folder: "04_level_planning_portfolio",
-          description: "레벨 콘셉트, 레벨 디자인, 테스트 시나리오, 분석 보고서를 확인하는 파일 세트입니다.",
-          items: [
-            { title: "레벨 컨셉 문서", ext: "docx", slug: "Level_Concept_Document" },
-            { title: "레벨 디자인 문서", ext: "docx", slug: "Level_Design_Document" },
-            { title: "테스트 시나리오", ext: "docx", slug: "Test_Scenario" },
-            { title: "분석 보고서", ext: "docx", slug: "Analysis_Report" },
-          ],
-        },
-        "original-ip": {
-          order: "05",
-          title: "원작 웹소설 IP",
-          menuLabel: "원작 IP",
-          description: "프로젝트와 연결되는 원작 웹소설 IP 정보를 확인하는 세트입니다.",
-          isOriginalIp: true,
-          items: [],
-        },
-      };
-
-      const PROJECT_FILE_SET_ORDER = {
-        "patris": ["pre-production", "concept", "system", "level", "original-ip"],
-        "crimson-frequency": ["pre-production", "concept", "system", "level", "original-ip"],
-        "anomaly-record": ["pre-production", "concept", "system", "level"],
-      };
-
-      const PROJECT_SPECIFIC_SYSTEM_ITEMS = {
-        "patris": [
-          { title: "몬스터 & 오포넌트 테이블", ext: "xlsx", slug: "Monster_And_Opponent_Table" },
-          { title: "월드맵 DB", ext: "xlsx", slug: "World_Map_DB" },
-        ],
-        "crimson-frequency": [
-          { title: "몬스터 테이블", ext: "xlsx", slug: "Monster_Table" },
-        ],
-        "anomaly-record": [
-          { title: "괴이 테이블", ext: "xlsx", slug: "Kaii_Table" },
-        ],
-      };
-
-      const getData = () => window.PORTFOLIO_DATA ?? { projects: [], novelIPs: [] };
-      const getProjectPrefix = (project) => project.name.replaceAll(" ", "_");
-      const cloneSet = (fileSet) => ({ ...fileSet, items: [...(fileSet.items ?? [])] });
-
-      const getProjectFileSets = (projectId) => {
-        const order = PROJECT_FILE_SET_ORDER[projectId] ?? [];
-        return order.map((setId) => {
-          const fileSet = cloneSet(COMMON_FILE_SETS[setId]);
-          if (setId === "system") {
-            fileSet.items = [...fileSet.items, ...(PROJECT_SPECIFIC_SYSTEM_ITEMS[projectId] ?? [])];
-          }
-          return { id: setId, ...fileSet };
-        });
-      };
-
-      const getProject = (projectId) => getData().projects.find((project) => project.id === projectId) ?? null;
-      const getDefaultSetId = (projectId) => getProjectFileSets(projectId)[0]?.id ?? null;
-
-      const getFilePath = (project, fileSet, item) => {
-        const projectFolder = PROJECT_FOLDER_MAP[project.id];
-        const fileName = `${getProjectPrefix(project)}_${item.slug}.${item.ext}`;
-        return `assets/docs/${projectFolder}/${fileSet.folder}/${fileName}`;
-      };
-
-      const projectDetailUrl = (projectId, setId = null) => {
-        const params = new URLSearchParams({ project: projectId });
-        if (setId) params.set("set", setId);
-        return `${BASE_PAGE}?${params.toString()}#project-file-detail`;
-      };
-
-      const getRouteFromUrl = () => {
-        const params = new URLSearchParams(window.location.search);
-        const projectId = params.get("project");
-        const project = getProject(projectId);
-        if (!project) return { projectId: null, setId: null };
-
-        const requestedSetId = params.get("set");
-        const sets = getProjectFileSets(projectId);
-        const setId = sets.some((fileSet) => fileSet.id === requestedSetId)
-          ? requestedSetId
-          : getDefaultSetId(projectId);
-
-        return { projectId, setId };
-      };
-
-      const setActiveProjectTab = (projectId) => {
-        document.querySelectorAll("#documents [data-filter]").forEach((tab) => {
-          const active = Boolean(projectId) && tab.dataset.filter === projectId;
-          tab.classList.toggle("is-active", active);
-          tab.setAttribute("aria-selected", String(active));
-        });
-      };
-
-      const bindProjectImageLinks = () => {
-        const data = getData();
-        const cards = [...document.querySelectorAll("[data-project-grid] .project-card")];
-        cards.forEach((card, index) => {
-          const project = data.projects[index];
-          const visualWrap = card.querySelector(".project-visual-wrap");
-          if (!project || !visualWrap || visualWrap.querySelector(".project-visual-link")) return;
-
-          const defaultSetId = getDefaultSetId(project.id);
-          card.dataset.project = project.id;
-          const originalContent = visualWrap.innerHTML;
-          visualWrap.innerHTML = `
-            <a class="project-visual-link" href="${projectDetailUrl(project.id, defaultSetId)}" data-project-image-link="${project.id}" aria-label="${project.name} 파일 세트 상세 메뉴 열기">
-              ${originalContent}
-              <span class="project-visual-cta">파일 세트 상세 메뉴 열기</span>
-            </a>
-          `;
-        });
-      };
-
-      const getProjectOriginalIps = (project) => {
-        const projectName = project.name;
-        return (getData().novelIPs ?? []).filter((novel) => novel.project === projectName);
-      };
-
-      const renderFileCards = (project, fileSet) => {
-        if (fileSet.isOriginalIp) {
-          const novels = getProjectOriginalIps(project);
-          if (novels.length === 0) {
-            return `
-              <article class="portfolio-set-file-card">
-                <span class="portfolio-set-file-order">--</span>
-                <div class="portfolio-set-file-body">
-                  <strong>${project.name} · 원작 웹소설 IP</strong>
-                  <span>현재 등록된 원작 웹소설 IP 정보가 없습니다.</span>
-                </div>
-                <a class="file-link is-disabled" href="#" aria-disabled="true">대기</a>
-              </article>
-            `;
-          }
-
-          return novels.map((novel, index) => {
-            const urlReadyCount = (novel.platforms ?? []).filter((platform) => platform.url && platform.url.trim().length > 0).length;
-            const platformCount = (novel.platforms ?? []).length;
-            return `
-              <article class="portfolio-set-file-card">
-                <span class="portfolio-set-file-order">${String(index + 1).padStart(2, "0")}</span>
-                <div class="portfolio-set-file-body">
-                  <strong>${novel.label} · 『${novel.title}』</strong>
-                  <span>원작 웹소설 IP · 연재 URL ${urlReadyCount}/${platformCount}개 등록</span>
-                </div>
-                <a class="file-link" href="#novel-ip">정보 보기</a>
-              </article>
-            `;
-          }).join("");
-        }
-
-        return fileSet.items.map((item, index) => {
-          const href = getFilePath(project, fileSet, item);
-          return `
-            <article class="portfolio-set-file-card">
-              <span class="portfolio-set-file-order">${String(index + 1).padStart(2, "0")}</span>
-              <div class="portfolio-set-file-body">
-                <strong>${project.name} · ${item.title}</strong>
-                <span>${item.ext.toUpperCase()} 파일 · ${fileSet.title}</span>
-              </div>
-              <a class="file-link" href="${href}" target="_blank" rel="noopener">열기</a>
-            </article>
-          `;
-        }).join("");
-      };
-
-      const renderProjectFileSetPage = (projectId, setId) => {
-        const detail = document.querySelector("[data-project-detail-page]");
-        const project = getProject(projectId);
-        if (!detail || !project) return;
-
-
-        const fileSets = getProjectFileSets(projectId);
-        const activeSet = fileSets.find((fileSet) => fileSet.id === setId) ?? fileSets[0];
-        const menu = fileSets.map((fileSet) => {
-          const active = fileSet.id === activeSet.id;
-          return `
-            <a class="tab ${active ? "is-active" : ""}" href="${projectDetailUrl(project.id, fileSet.id)}" data-file-set-link="${fileSet.id}" data-project-id="${project.id}" role="tab" aria-selected="${String(active)}">
-              ${fileSet.menuLabel}
-            </a>
-          `;
-        }).join("");
-
-        const fileCards = renderFileCards(project, activeSet);
-        const fileCount = activeSet.isOriginalIp ? getProjectOriginalIps(project).length : activeSet.items.length;
-
-        detail.innerHTML = `
-          <div class="project-detail-shell portfolio-file-set-page" aria-label="${project.name} 파일 세트 상세 메뉴">
-            <p class="portfolio-file-set-intro">
-              <strong>${project.videoTitle || project.name}</strong> 프로젝트의 파일 세트를 개별 열람할 수 있습니다. 아래 상세 메뉴에서 사전 기획, 콘셉트 기획, 시스템 기획, 레벨 기획${project.id === "anomaly-record" ? "" : ", 원작 IP"} 중 하나를 선택하십시오.
-            </p>
-
-            <div class="filter-tabs portfolio-set-menu" role="tablist" aria-label="${project.name} 파일 세트 상세 메뉴">
-              ${menu}
-            </div>
-
-            <div class="portfolio-set-layout">
-              <section class="portfolio-set-panel" aria-label="${project.name} ${activeSet.title} 파일 목록">
-                <div class="portfolio-set-panel-head">
-                  <span class="portfolio-set-title-pill">${activeSet.order}. ${activeSet.title}</span>
-                  <span class="portfolio-set-count">${fileCount}개 항목</span>
-                </div>
-                <p class="portfolio-set-description">${activeSet.description}</p>
-                <div class="portfolio-set-file-grid">
-                  ${fileCards}
-                </div>
-              </section>
-            </div>
-          </div>
-        `;
-      };
-
-      const applyProjectView = (projectId, setId = null, shouldScroll = false) => {
-        const detail = document.querySelector("[data-project-detail-page]");
-        const project = getProject(projectId);
-
-        setActiveProjectTab(projectId);
-        document.body.classList.toggle("is-project-detail-mode", Boolean(project));
-
-
-        if (!project) {
-          if (detail) {
-            detail.hidden = true;
-            detail.innerHTML = "";
-          }
-          return;
-        }
-
-        const resolvedSetId = getProjectFileSets(project.id).some((fileSet) => fileSet.id === setId)
-          ? setId
-          : getDefaultSetId(project.id);
-
-        renderProjectFileSetPage(project.id, resolvedSetId);
-        if (detail) detail.hidden = false;
-
-
-        if (shouldScroll) {
-          const target = document.getElementById("project-file-detail") || document.getElementById("documents");
-          target?.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-      };
-
-      const setProjectUrl = (projectId, setId = null) => {
-        history.pushState(null, "", projectDetailUrl(projectId, setId ?? getDefaultSetId(projectId)));
-      };
-
-      const bindProjectDetailTabs = () => {
-        document.querySelectorAll("#documents [data-filter]").forEach((tab) => {
-          const projectId = tab.dataset.filter;
-          const defaultSetId = getDefaultSetId(projectId);
-          tab.setAttribute("href", projectDetailUrl(projectId, defaultSetId));
-          tab.setAttribute("role", "tab");
-          tab.setAttribute("aria-controls", "project-file-detail");
-          tab.addEventListener("click", (event) => {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            setProjectUrl(projectId, defaultSetId);
-            applyProjectView(projectId, defaultSetId, true);
-          }, true);
-        });
-      };
-
-      const bindProjectImageNavigation = () => {
-        document.addEventListener("click", (event) => {
-          const link = event.target.closest("[data-project-image-link]");
-          if (!link) return;
-          const projectId = link.dataset.projectImageLink;
-          const defaultSetId = getDefaultSetId(projectId);
-          event.preventDefault();
-          setProjectUrl(projectId, defaultSetId);
-          applyProjectView(projectId, defaultSetId, true);
-        });
-      };
-
-      const bindFileSetNavigation = () => {
-        document.addEventListener("click", (event) => {
-          const link = event.target.closest("[data-file-set-link]");
-          if (!link) return;
-          const projectId = link.dataset.projectId;
-          const setId = link.dataset.fileSetLink;
-          event.preventDefault();
-          setProjectUrl(projectId, setId);
-          applyProjectView(projectId, setId, false);
-        }, true);
-      };
-
-      window.addEventListener("DOMContentLoaded", () => {
-        bindProjectImageLinks();
-        bindProjectDetailTabs();
-        bindProjectImageNavigation();
-        bindFileSetNavigation();
-        const route = getRouteFromUrl();
-        applyProjectView(route.projectId, route.setId, window.location.hash === "#project-file-detail");
-      });
-
-      window.addEventListener("popstate", () => {
-        const route = getRouteFromUrl();
-        applyProjectView(route.projectId, route.setId, false);
-      });
-    })();
-  </script>
-
-
-
-  <script>
-    (() => {
-      const PATRIS_PART_1_KEYWORDS = ["판타지", "퓨전", "게임시스템", "빙의", "네크로맨서", "망나니", "먼치킨"];
-
-      const renderPatrisPart1Keywords = () => {
-        const novelCards = [...document.querySelectorAll(".novel-card")];
-        const targetCard = novelCards.find((card) => {
-          const text = card.textContent || "";
-          return text.includes("파트리스(Patris) (1부)") && text.includes("강령명가의 악질분자로 살아남기");
-        });
-
-        if (!targetCard || targetCard.querySelector(".novel-keyword-list")) return;
-
-        const titleBlock = targetCard.querySelector("h3");
-        if (!titleBlock) return;
-
-        const keywordList = document.createElement("ul");
-        keywordList.className = "novel-keyword-list";
-        keywordList.setAttribute("aria-label", "강령명가의 악질분자로 살아남기 키워드");
-        keywordList.innerHTML = PATRIS_PART_1_KEYWORDS
-          .map((keyword) => `<li class="novel-keyword">${keyword}</li>`)
-          .join("");
-
-        titleBlock.insertAdjacentElement("afterend", keywordList);
-      };
-
-      window.addEventListener("DOMContentLoaded", renderPatrisPart1Keywords);
-    })();
-  </script>
-
-
-
-  <script>
-    (() => {
-      const CRIMSON_FREQUENCY_KEYWORDS = ["복수", "사이다", "시스템", "인터넷방송", "헌터", "고인물", "먼치킨", "상태창", "스트리머", "탑등반물"];
-
-      const renderCrimsonFrequencyKeywords = () => {
-        const novelCards = [...document.querySelectorAll(".novel-card")];
-        const targetCard = novelCards.find((card) => {
-          const text = card.textContent || "";
-          return text.includes("크림슨 프리퀀시(Crimson Frequency)") && text.includes("미스터 헬 하운드의 스트리밍");
-        });
-
-        if (!targetCard || targetCard.querySelector(".novel-keyword-list")) return;
-
-        const titleBlock = targetCard.querySelector("h3");
-        if (!titleBlock) return;
-
-        const keywordList = document.createElement("ul");
-        keywordList.className = "novel-keyword-list";
-        keywordList.setAttribute("aria-label", "미스터 헬 하운드의 스트리밍 키워드");
-        keywordList.innerHTML = CRIMSON_FREQUENCY_KEYWORDS
-          .map((keyword) => `<li class="novel-keyword">${keyword}</li>`)
-          .join("");
-
-        titleBlock.insertAdjacentElement("afterend", keywordList);
-      };
-
-      window.addEventListener("DOMContentLoaded", renderCrimsonFrequencyKeywords);
-    })();
-  </script>
-
-  <script>
-    (() => {
-      const PATRIS_PART_1_RELEASE_TEXT = "(2026.07~)";
-
-      const appendPatrisPart1ReleaseText = () => {
-        const novelCards = [...document.querySelectorAll(".novel-card")];
-        const targetCard = novelCards.find((card) => {
-          const text = card.textContent || "";
-          return text.includes("파트리스(Patris) (1부)") && text.includes("강령명가의 악질분자로 살아남기");
-        });
-
-        if (!targetCard) return;
-
-        const titleLine = targetCard.querySelector(".novel-title-line");
-        if (!titleLine || titleLine.textContent.includes(PATRIS_PART_1_RELEASE_TEXT)) return;
-
-        titleLine.append(` ${PATRIS_PART_1_RELEASE_TEXT}`);
-      };
-
-      window.addEventListener("DOMContentLoaded", appendPatrisPart1ReleaseText);
-    })();
-  </script>
-
-
-
-
-  <script>
-    (() => {
-      const CRIMSON_FREQUENCY_RELEASE_TEXT = "(2027.08~)";
-
-      const appendCrimsonFrequencyReleaseText = () => {
-        const novelCards = [...document.querySelectorAll(".novel-card")];
-        const targetCard = novelCards.find((card) => {
-          const text = card.textContent || "";
-          return text.includes("크림슨 프리퀀시(Crimson Frequency)") && text.includes("미스터 헬 하운드의 스트리밍");
-        });
-
-        if (!targetCard) return;
-
-        const titleLine = targetCard.querySelector(".novel-title-line");
-        if (!titleLine || titleLine.textContent.includes(CRIMSON_FREQUENCY_RELEASE_TEXT)) return;
-
-        titleLine.append(` ${CRIMSON_FREQUENCY_RELEASE_TEXT}`);
-      };
-
-      window.addEventListener("DOMContentLoaded", appendCrimsonFrequencyReleaseText);
-    })();
-  </script>
-
-  <script>
-    (() => {
-      const REMOVED_DOCUMENT_BUTTON_LABELS = new Set(["보기", "PDF 열기", "ZIP 다운로드", "준비 중"]);
-      const normalizeButtonText = (value) => (value || "").replace(/\s+/g, " ").trim();
-
-      const removeDocumentMenuActionButtons = () => {
-        const documentsSection = document.getElementById("documents");
-        if (!documentsSection) return;
-
-        documentsSection.querySelectorAll("a, button").forEach((element) => {
-          const label = normalizeButtonText(element.textContent);
-          if (REMOVED_DOCUMENT_BUTTON_LABELS.has(label)) {
-            element.remove();
-          }
-        });
-      };
-
-      window.addEventListener("DOMContentLoaded", () => {
-        removeDocumentMenuActionButtons();
-
-        const documentsSection = document.getElementById("documents");
-        if (!documentsSection || !window.MutationObserver) return;
-
-        const observer = new MutationObserver(removeDocumentMenuActionButtons);
-        observer.observe(documentsSection, { childList: true, subtree: true });
-      });
-    })();
-  </script>
-
 </body>
 </html>
