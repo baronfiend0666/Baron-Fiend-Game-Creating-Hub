@@ -1052,32 +1052,86 @@
         "service": "06_service_planning_portfolio",
       };
 
-      const PATRIS_CONCEPT_GALLERIES = [
-        {
-          id: "character-concept-art",
-          order: "CA",
-          title: "캐릭터 컨셉 아트 갤러리",
-          shortTitle: "캐릭터 컨셉 아트",
-          description: "Patris 캐릭터 컨셉 아트 이미지를 집단별 하위 폴더 기준으로 열람합니다.",
-          basePath: "assets/images/patris/concept/character-concept-art",
-        },
-        {
-          id: "background-concept-art",
-          order: "BG",
-          title: "배경 컨셉 아트 갤러리",
-          shortTitle: "배경 컨셉 아트",
-          description: "Patris 지역, 이동 루트, 배경 콘셉트 이미지를 분류별로 열람합니다.",
-          basePath: "assets/images/patris/concept/background-concept-art",
-        },
-        {
-          id: "emblem",
-          order: "EM",
-          title: "엠블럼 이미지 갤러리",
-          shortTitle: "엠블럼 이미지",
-          description: "Patris 지역, 시즌, 세력, 포인트 엠블럼 이미지를 분류별로 열람합니다.",
-          basePath: "assets/images/patris/concept/emblem",
-        },
-      ];
+      const PROJECT_CONCEPT_GALLERIES = {
+        "patris": [
+          {
+            id: "character-concept-art",
+            order: "CA",
+            title: "캐릭터 컨셉 아트 갤러리",
+            shortTitle: "캐릭터 컨셉 아트",
+            description: "Patris 캐릭터 컨셉 아트 이미지를 집단별 하위 폴더 기준으로 열람합니다.",
+            basePath: "assets/images/patris/concept/character-concept-art",
+          },
+          {
+            id: "background-concept-art",
+            order: "BG",
+            title: "배경 컨셉 아트 갤러리",
+            shortTitle: "배경 컨셉 아트",
+            description: "Patris 지역, 이동 루트, 배경 콘셉트 이미지를 분류별로 열람합니다.",
+            basePath: "assets/images/patris/concept/background-concept-art",
+          },
+          {
+            id: "emblem",
+            order: "EM",
+            title: "엠블럼 이미지 갤러리",
+            shortTitle: "엠블럼 이미지",
+            description: "Patris 지역, 시즌, 세력, 포인트 엠블럼 이미지를 분류별로 열람합니다.",
+            basePath: "assets/images/patris/concept/emblem",
+          },
+        ],
+        "crimson-frequency": [
+          {
+            id: "character-concept-art",
+            order: "CA",
+            title: "캐릭터 컨셉 아트 갤러리",
+            shortTitle: "캐릭터 컨셉 아트",
+            description: "Crimson Frequency 캐릭터 컨셉 아트 이미지를 분류별로 열람합니다.",
+            basePath: "assets/images/crimson-frequency/concept/character-concept-art",
+          },
+          {
+            id: "background-concept-art",
+            order: "BG",
+            title: "배경 컨셉 아트 갤러리",
+            shortTitle: "배경 컨셉 아트",
+            description: "Crimson Frequency 배경, 탑, 현대 도시 콘셉트 이미지를 분류별로 열람합니다.",
+            basePath: "assets/images/crimson-frequency/concept/background-concept-art",
+          },
+          {
+            id: "emblem",
+            order: "EM",
+            title: "엠블럼 이미지 갤러리",
+            shortTitle: "엠블럼 이미지",
+            description: "Crimson Frequency 세력, 시스템, 시즌 관련 엠블럼 이미지를 분류별로 열람합니다.",
+            basePath: "assets/images/crimson-frequency/concept/emblem",
+          },
+        ],
+        "anomaly-record": [
+          {
+            id: "character-concept-art",
+            order: "CA",
+            title: "캐릭터 컨셉 아트 갤러리",
+            shortTitle: "캐릭터 컨셉 아트",
+            description: "Anomaly Record 캐릭터 컨셉 아트 이미지를 분류별로 열람합니다.",
+            basePath: "assets/images/anomaly-record/concept/character-concept-art",
+          },
+          {
+            id: "background-concept-art",
+            order: "BG",
+            title: "배경 컨셉 아트 갤러리",
+            shortTitle: "배경 컨셉 아트",
+            description: "Anomaly Record 사건 현장, 도시 배경, 괴이 영향권 콘셉트 이미지를 분류별로 열람합니다.",
+            basePath: "assets/images/anomaly-record/concept/background-concept-art",
+          },
+          {
+            id: "emblem",
+            order: "EM",
+            title: "엠블럼 이미지 갤러리",
+            shortTitle: "엠블럼 이미지",
+            description: "Anomaly Record 기관, 괴이, 케이스 관련 엠블럼 이미지를 분류별로 열람합니다.",
+            basePath: "assets/images/anomaly-record/concept/emblem",
+          },
+        ],
+      };
 
       const PATRIS_REGIONAL_VILLAIN_PARENT = "04-지역별 빌런 집단";
       const PATRIS_REGIONAL_VILLAIN_GROUPS = [
@@ -1132,8 +1186,9 @@
       const getItemSlug = (item) => item.slug || item.fileSlug || item.id || String(item.title || item.name || "document").replaceAll(" ", "_");
       const getItemTitle = (item) => item.title || item.name || item.label || getItemSlug(item);
       const getCurrentPage = () => window.location.pathname.endsWith("index.html") ? "index.html" : "main.html";
-      const getGallery = (galleryId) => PATRIS_CONCEPT_GALLERIES.find((gallery) => gallery.id === galleryId);
-      const isPatrisConceptGallery = (projectId, sectionId, galleryId) => projectId === "patris" && sectionId === "concept" && Boolean(getGallery(galleryId));
+      const getGalleries = (projectId) => PROJECT_CONCEPT_GALLERIES[projectId] || [];
+      const getGallery = (projectId, galleryId) => getGalleries(projectId).find((gallery) => gallery.id === galleryId);
+      const isConceptGallery = (projectId, sectionId, galleryId) => sectionId === "concept" && Boolean(getGallery(projectId, galleryId));
       const escapeHtml = (value) => String(value ?? "").replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char]));
       const encodePathForUrl = (path) => String(path || "").split("/").map((part) => encodeURIComponent(part)).join("/");
       const stripImageExtension = (fileName) => String(fileName || "").replace(/\.(png|jpe?g|webp|gif|svg)$/i, "");
@@ -1248,7 +1303,7 @@
         return {
           projectId: safeProjectId,
           sectionId: safeSectionId,
-          galleryId: isPatrisConceptGallery(safeProjectId, safeSectionId, galleryId) ? galleryId : null,
+          galleryId: isConceptGallery(safeProjectId, safeSectionId, galleryId) ? galleryId : null,
         };
       };
 
@@ -1343,10 +1398,12 @@
         detail.hidden = false;
       };
 
-      const createPatrisGalleryEntryCards = (project, section) => {
-        if (project.id !== "patris" || section.id !== "concept") return "";
+      const createConceptGalleryEntryCards = (project, section) => {
+        const galleries = getGalleries(project.id);
+        if (section.id !== "concept" || galleries.length < 1) return "";
 
-        const cards = PATRIS_CONCEPT_GALLERIES.map((gallery) => `
+        const projectLabel = getProjectPrefix(project);
+        const cards = galleries.map((gallery) => `
           <a class="concept-gallery-card" href="${projectDetailUrl(project.id, section.id, gallery.id)}" data-concept-gallery-jump="${gallery.id}">
             <span class="concept-gallery-card-order">${gallery.order}</span>
             <div class="concept-gallery-card-body">
@@ -1358,10 +1415,10 @@
         `).join("");
 
         return `
-          <section class="concept-gallery-entry-section" aria-label="Patris 콘셉트 아트 갤러리">
+          <section class="concept-gallery-entry-section" aria-label="${escapeHtml(project.name)} 콘셉트 아트 갤러리">
             <div class="concept-gallery-entry-head">
               <span class="file-set-detail-label">Visual Concept Gallery</span>
-              <h4>Patris_콘셉트 아트 갤러리</h4>
+              <h4>${escapeHtml(projectLabel)}_콘셉트 아트 갤러리</h4>
               <p>캐릭터 / 배경 / 엠블럼 이미지를 별도 세부 갤러리로 분리해서 열람합니다.</p>
             </div>
             <div class="concept-gallery-card-grid">
@@ -1396,7 +1453,7 @@
           `;
         }).join("");
 
-        const galleryEntries = createPatrisGalleryEntryCards(project, section);
+        const galleryEntries = createConceptGalleryEntryCards(project, section);
 
         detail.innerHTML = `
           <div class="file-set-detail-shell">
@@ -1483,7 +1540,7 @@
         const detail = document.querySelector("[data-file-set-detail-page]");
         const project = getProject(projectId);
         const section = data.portfolioSections.find((item) => item.id === sectionId);
-        const gallery = getGallery(galleryId);
+        const gallery = getGallery(projectId, galleryId);
         if (!detail || !project || !section || !gallery) return;
 
         const token = `${projectId}:${sectionId}:${galleryId}:${Date.now()}`;
@@ -1517,7 +1574,7 @@
         const fileSetDetail = document.querySelector("[data-file-set-detail-page]");
         const validProject = Boolean(projectId && getProject(projectId));
         const validSection = Boolean(validProject && sectionId && getData().portfolioSections.some((section) => section.id === sectionId));
-        const validGallery = Boolean(validSection && isPatrisConceptGallery(projectId, sectionId, galleryId));
+        const validGallery = Boolean(validSection && isConceptGallery(projectId, sectionId, galleryId));
 
         normalizeGeneratedDocumentCards();
         setActiveTab(projectId);
@@ -1573,7 +1630,7 @@
             const project = projectId || "patris";
             const section = sectionId || "concept";
             const galleryId = galleryLink.dataset.conceptGalleryJump;
-            if (!isPatrisConceptGallery(project, section, galleryId)) return;
+            if (!isConceptGallery(project, section, galleryId)) return;
             history.pushState({}, "", projectDetailUrl(project, section, galleryId));
             applyProjectView(project, section, galleryId, true);
             return;
