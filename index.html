@@ -593,6 +593,205 @@
       overflow-wrap: break-word;
     }
 
+    .concept-gallery-entry-section {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(170, 190, 255, 0.18);
+    }
+
+    .concept-gallery-entry-head {
+      max-width: 780px;
+      margin-bottom: 18px;
+    }
+
+    .concept-gallery-entry-head h4,
+    .gallery-group-head h4 {
+      margin: 8px 0 0;
+      color: var(--text, #f5f8ff);
+      font-size: 1.18rem;
+      letter-spacing: -0.03em;
+    }
+
+    .concept-gallery-entry-head p,
+    .gallery-path-note {
+      margin: 8px 0 0;
+      color: var(--muted, #b8c2d8);
+    }
+
+    .concept-gallery-card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .concept-gallery-card {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      min-height: 148px;
+      padding: 18px;
+      border: 1px solid rgba(170, 190, 255, 0.18);
+      border-radius: 22px;
+      background:
+        linear-gradient(135deg, rgba(122, 162, 255, 0.12), rgba(165, 117, 255, 0.06)),
+        rgba(255, 255, 255, 0.045);
+      color: inherit;
+      text-decoration: none;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .concept-gallery-card:hover,
+    .concept-gallery-card:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(122, 162, 255, 0.46);
+      background:
+        linear-gradient(135deg, rgba(122, 162, 255, 0.18), rgba(165, 117, 255, 0.09)),
+        rgba(255, 255, 255, 0.065);
+      outline: none;
+    }
+
+    .concept-gallery-card-order {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 46px;
+      border: 1px solid rgba(122, 162, 255, 0.38);
+      border-radius: 16px;
+      color: #dbe7ff;
+      font-size: 0.78rem;
+      font-weight: 1000;
+      background: rgba(122, 162, 255, 0.14);
+    }
+
+    .concept-gallery-card-body strong {
+      display: block;
+      color: var(--text, #f5f8ff);
+      line-height: 1.35;
+    }
+
+    .concept-gallery-card-body span,
+    .concept-gallery-card em {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted, #b8c2d8);
+      font-size: 0.88rem;
+      font-style: normal;
+    }
+
+    .concept-gallery-card em {
+      grid-column: 1 / -1;
+      color: #dbe7ff;
+      font-weight: 900;
+    }
+
+    .concept-gallery-detail-shell {
+      min-height: 420px;
+    }
+
+    .gallery-detail-output {
+      margin-top: 26px;
+    }
+
+    .gallery-status {
+      margin: 0;
+      padding: 18px;
+      border: 1px solid rgba(170, 190, 255, 0.18);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.045);
+      color: var(--muted, #b8c2d8);
+      font-weight: 800;
+    }
+
+    .gallery-status.is-ready {
+      color: #dbe7ff;
+      border-color: rgba(122, 162, 255, 0.32);
+      background: rgba(122, 162, 255, 0.08);
+    }
+
+    .gallery-status.is-error {
+      color: #ffd8de;
+      border-color: rgba(255, 68, 95, 0.38);
+      background: rgba(255, 68, 95, 0.08);
+    }
+
+    .gallery-group {
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(170, 190, 255, 0.16);
+    }
+
+    .gallery-group-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .gallery-group-head span {
+      color: var(--muted, #b8c2d8);
+      font-size: 0.88rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .gallery-image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    .gallery-image-card {
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid rgba(170, 190, 255, 0.16);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .gallery-image-card a {
+      display: block;
+      overflow: hidden;
+      border-radius: 14px;
+      background: rgba(7, 9, 18, 0.52);
+    }
+
+    .gallery-image-card img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: contain;
+      transition: transform 180ms ease, filter 180ms ease;
+    }
+
+    .gallery-image-card a:hover img,
+    .gallery-image-card a:focus-visible img {
+      transform: scale(1.035);
+      filter: brightness(1.08);
+    }
+
+    .gallery-image-card strong,
+    .gallery-image-card span {
+      display: block;
+      overflow-wrap: anywhere;
+    }
+
+    .gallery-image-card strong {
+      margin-top: 10px;
+      color: var(--text, #f5f8ff);
+      font-size: 0.92rem;
+      line-height: 1.35;
+    }
+
+    .gallery-image-card span {
+      margin-top: 4px;
+      color: var(--muted-2, rgba(216, 226, 255, 0.66));
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+
     body.is-project-detail-mode .document-grid,
     body.is-file-set-detail-mode .document-grid {
       display: none !important;
@@ -613,12 +812,19 @@
       .project-detail-hero,
       .file-set-detail-top,
       .project-detail-index,
-      .file-set-grid {
+      .file-set-grid,
+      .concept-gallery-card-grid {
         grid-template-columns: 1fr;
       }
 
-      .file-set-detail-actions {
+      .file-set-detail-actions,
+      .gallery-group-head {
         justify-content: flex-start;
+      }
+
+      .gallery-group-head {
+        align-items: flex-start;
+        flex-direction: column;
       }
 
       .file-set-card {
@@ -789,9 +995,9 @@
               <dt>블로그</dt>
               <dd>
                 <div class="blog-link-list" aria-label="공식 블로그 링크">
-                  <a class="blog-link-item" href="https://blog.naver.com/baron-fiend_official" target="_blank" rel="noopener noreferrer" aria-label="Naver official blog KR 새 창으로 열기">
+                  <a class="blog-link-item" href="https://blog.naver.com/baron-fiend_official" target="_blank" rel="noopener noreferrer" aria-label="Naver Blog official KR 새 창으로 열기">
                     <img class="blog-link-icon" src="assets/images/Naver_Blog.png" alt="" aria-hidden="true" />
-                    <span>Naver (KR)</span>
+                    <span>Naver Blog (KR)</span>
                   </a>
                   <a class="blog-link-item" href="https://baronfiend0666ofcl.blogspot.com/?m=1" target="_blank" rel="noopener noreferrer" aria-label="Google Blogger official global 새 창으로 열기">
                     <img class="blog-link-icon" src="assets/images/Google_Blogger.png" alt="" aria-hidden="true" />
@@ -839,6 +1045,39 @@
         "service": "06_service_planning_portfolio",
       };
 
+      const PATRIS_CONCEPT_GALLERIES = [
+        {
+          id: "character-concept-art",
+          order: "CA",
+          title: "캐릭터 컨셉 아트 갤러리",
+          shortTitle: "캐릭터 컨셉 아트",
+          description: "Patris 캐릭터 컨셉 아트 이미지를 집단별 하위 폴더 기준으로 열람합니다.",
+          basePath: "assets/images/patris/concept/character-concept-art",
+        },
+        {
+          id: "background-concept-art",
+          order: "BG",
+          title: "배경 컨셉 아트 갤러리",
+          shortTitle: "배경 컨셉 아트",
+          description: "Patris 지역, 이동 루트, 배경 콘셉트 이미지를 분류별로 열람합니다.",
+          basePath: "assets/images/patris/concept/background-concept-art",
+        },
+        {
+          id: "emblem",
+          order: "EM",
+          title: "엠블럼 이미지 갤러리",
+          shortTitle: "엠블럼 이미지",
+          description: "Patris 지역, 시즌, 세력, 포인트 엠블럼 이미지를 분류별로 열람합니다.",
+          basePath: "assets/images/patris/concept/emblem",
+        },
+      ];
+
+      const GITHUB_TREE_API = "https://api.github.com/repos/baronfiend0666/Baron-Fiend-Game-Creating-Hub/git/trees/main?recursive=1";
+      const GITHUB_RAW_ROOT = "https://raw.githubusercontent.com/baronfiend0666/Baron-Fiend-Game-Creating-Hub/main/";
+      const IMAGE_FILE_RE = /\.(png|jpe?g|webp|gif|svg)$/i;
+      const collator = new Intl.Collator("ko-KR", { numeric: true, sensitivity: "base" });
+      let githubTreePromise = null;
+
       const getData = () => window.PORTFOLIO_DATA ?? { projects: [], portfolioSections: [], novelIPs: [] };
       const getProject = (projectId) => getData().projects.find((project) => project.id === projectId);
       const getProjectPrefix = (project) => (project.filePrefix || project.name || "Project").replaceAll(" ", "_");
@@ -846,12 +1085,17 @@
       const getItemExtension = (item) => item.ext || item.extension || item.fileExtension || "pdf";
       const getItemSlug = (item) => item.slug || item.fileSlug || item.id || String(item.title || item.name || "document").replaceAll(" ", "_");
       const getItemTitle = (item) => item.title || item.name || item.label || getItemSlug(item);
-      const isExternalUrl = (value) => /^https?:\/\//i.test(value || "");
       const getCurrentPage = () => window.location.pathname.endsWith("index.html") ? "index.html" : "main.html";
+      const getGallery = (galleryId) => PATRIS_CONCEPT_GALLERIES.find((gallery) => gallery.id === galleryId);
+      const isPatrisConceptGallery = (projectId, sectionId, galleryId) => projectId === "patris" && sectionId === "concept" && Boolean(getGallery(galleryId));
+      const escapeHtml = (value) => String(value ?? "").replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char]));
+      const encodePathForUrl = (path) => String(path || "").split("/").map((part) => encodeURIComponent(part)).join("/");
+      const stripImageExtension = (fileName) => String(fileName || "").replace(/\.(png|jpe?g|webp|gif|svg)$/i, "");
 
-      const projectDetailUrl = (projectId, sectionId = null) => {
+      const projectDetailUrl = (projectId, sectionId = null, galleryId = null) => {
         const params = new URLSearchParams({ project: projectId });
         if (sectionId) params.set("section", sectionId);
+        if (galleryId) params.set("gallery", galleryId);
         return `${getCurrentPage()}?${params.toString()}#project-file-detail`;
       };
 
@@ -864,16 +1108,70 @@
         return `assets/docs/${projectFolder}/${getSectionFolder(section)}/${fileName}`;
       };
 
+      const getGithubTree = async () => {
+        if (!githubTreePromise) {
+          githubTreePromise = fetch(GITHUB_TREE_API, { headers: { Accept: "application/vnd.github+json" } })
+            .then((response) => {
+              if (!response.ok) throw new Error(`GitHub tree API request failed: ${response.status}`);
+              return response.json();
+            })
+            .then((payload) => Array.isArray(payload.tree) ? payload.tree : []);
+        }
+        return githubTreePromise;
+      };
+
+      const getGalleryImageGroups = async (gallery) => {
+        const basePath = gallery.basePath.replace(/\/$/, "");
+        const tree = await getGithubTree();
+        const groups = new Map();
+
+        tree
+          .filter((entry) => entry.type === "blob" && entry.path?.startsWith(`${basePath}/`) && IMAGE_FILE_RE.test(entry.path))
+          .forEach((entry) => {
+            const relativePath = entry.path.slice(basePath.length + 1);
+            const parts = relativePath.split("/").filter(Boolean);
+            const groupName = parts.length > 1 ? parts[0] : "이미지";
+            const groupKey = parts.length > 1 ? parts[0] : "_root";
+            const fileName = parts[parts.length - 1] || relativePath;
+
+            if (!groups.has(groupKey)) {
+              groups.set(groupKey, {
+                key: groupKey,
+                title: groupName,
+                images: [],
+              });
+            }
+
+            groups.get(groupKey).images.push({
+              name: fileName,
+              displayName: stripImageExtension(fileName),
+              path: entry.path,
+              src: `${GITHUB_RAW_ROOT}${encodePathForUrl(entry.path)}`,
+            });
+          });
+
+        return [...groups.values()]
+          .map((group) => ({
+            ...group,
+            images: group.images.sort((a, b) => collator.compare(a.path, b.path)),
+          }))
+          .sort((a, b) => collator.compare(a.title, b.title));
+      };
+
       const getRouteFromUrl = () => {
         const params = new URLSearchParams(window.location.search);
         const projectId = params.get("project");
         const sectionId = params.get("section");
+        const galleryId = params.get("gallery");
         const data = getData();
         const hasProject = data.projects.some((project) => project.id === projectId);
         const hasSection = data.portfolioSections.some((section) => section.id === sectionId);
+        const safeProjectId = hasProject ? projectId : null;
+        const safeSectionId = hasSection ? sectionId : null;
         return {
-          projectId: hasProject ? projectId : null,
-          sectionId: hasSection ? sectionId : null,
+          projectId: safeProjectId,
+          sectionId: safeSectionId,
+          galleryId: isPatrisConceptGallery(safeProjectId, safeSectionId, galleryId) ? galleryId : null,
         };
       };
 
@@ -928,44 +1226,72 @@
           fileSetDetail.innerHTML = "";
         }
 
-        const tags = (project.tags ?? []).map((tag) => `<span class="badge">${tag}</span>`).join("");
+        const tags = (project.tags ?? []).map((tag) => `<span class="badge">${escapeHtml(tag)}</span>`).join("");
         const visual = project.cardImage || project.background || "assets/images/archfiend-books-games-main.png";
         const sectionIndex = data.portfolioSections.map((section) => {
           const count = Array.isArray(section.items) ? section.items.length : 0;
           return `
             <a class="project-detail-index-card" href="${projectDetailUrl(project.id, section.id)}" data-project-section-jump="${section.id}">
               <span class="project-detail-index-order">${section.order || "FILE SET"}</span>
-              <strong>${section.title || section.name}</strong>
-              <span>${count}개 파일 · ${project.name} 전용 세부 섹션</span>
+              <strong>${escapeHtml(section.title || section.name)}</strong>
+              <span>${count}개 파일 · ${escapeHtml(project.name)} 전용 세부 섹션</span>
               <em>세부 파일 보기</em>
             </a>
           `;
         }).join("");
 
         detail.innerHTML = `
-          <div class="project-detail-shell" aria-label="${project.name} 프로젝트별 세부 배너 및 섹션">
+          <div class="project-detail-shell" aria-label="${escapeHtml(project.name)} 프로젝트별 세부 배너 및 섹션">
             <article class="project-detail-hero">
               <div class="project-detail-visual">
-                <img src="${visual}" alt="${project.name} 프로젝트 대표 이미지" loading="lazy" />
+                <img src="${escapeHtml(visual)}" alt="${escapeHtml(project.name)} 프로젝트 대표 이미지" loading="lazy" />
               </div>
               <div class="project-detail-copy">
                 <span class="project-detail-label">${project.order || "Project"} · Project File Detail Page</span>
-                <h3>${project.name}</h3>
-                <p>${project.projectDisplayLine || `${project.nameKo || project.name} · ${project.genre || "Game Planning Portfolio"}`}</p>
-                <p>${project.summary || "프로젝트별 포트폴리오 파일 세트를 세부 섹션 단위로 열람합니다."}</p>
+                <h3>${escapeHtml(project.name)}</h3>
+                <p>${escapeHtml(project.projectDisplayLine || `${project.nameKo || project.name} · ${project.genre || "Game Planning Portfolio"}`)}</p>
+                <p>${escapeHtml(project.summary || "프로젝트별 포트폴리오 파일 세트를 세부 섹션 단위로 열람합니다.")}</p>
                 <div class="project-detail-meta">
-                  ${project.engine ? `<span class="badge">${project.engine}</span>` : ""}
+                  ${project.engine ? `<span class="badge">${escapeHtml(project.engine)}</span>` : ""}
                   ${tags}
                 </div>
               </div>
             </article>
-            <div class="project-detail-index" aria-label="${project.name} 포트폴리오 세부 섹션 바로가기">
+            <div class="project-detail-index" aria-label="${escapeHtml(project.name)} 포트폴리오 세부 섹션 바로가기">
               ${sectionIndex}
             </div>
           </div>
         `;
 
         detail.hidden = false;
+      };
+
+      const createPatrisGalleryEntryCards = (project, section) => {
+        if (project.id !== "patris" || section.id !== "concept") return "";
+
+        const cards = PATRIS_CONCEPT_GALLERIES.map((gallery) => `
+          <a class="concept-gallery-card" href="${projectDetailUrl(project.id, section.id, gallery.id)}" data-concept-gallery-jump="${gallery.id}">
+            <span class="concept-gallery-card-order">${gallery.order}</span>
+            <div class="concept-gallery-card-body">
+              <strong>${escapeHtml(gallery.title)}</strong>
+              <span>${escapeHtml(gallery.description)}</span>
+            </div>
+            <em>갤러리 보기</em>
+          </a>
+        `).join("");
+
+        return `
+          <section class="concept-gallery-entry-section" aria-label="Patris 콘셉트 아트 갤러리">
+            <div class="concept-gallery-entry-head">
+              <span class="file-set-detail-label">Visual Concept Gallery</span>
+              <h4>Patris_콘셉트 아트 갤러리</h4>
+              <p>캐릭터 / 배경 / 엠블럼 이미지를 별도 세부 갤러리로 분리해서 열람합니다.</p>
+            </div>
+            <div class="concept-gallery-card-grid">
+              ${cards}
+            </div>
+          </section>
+        `;
       };
 
       const renderFileSetDetail = (projectId, sectionId) => {
@@ -985,30 +1311,33 @@
             <article class="file-set-card">
               <span class="file-set-card-order">${String(index + 1).padStart(2, "0")}</span>
               <div class="file-set-card-body">
-                <strong>${displayTitle}</strong>
-                <span>${ext} 파일 · ${section.title || section.name}</span>
+                <strong>${escapeHtml(displayTitle)}</strong>
+                <span>${escapeHtml(ext)} 파일 · ${escapeHtml(section.title || section.name)}</span>
               </div>
-              <a class="file-link ${hasUrl ? "" : "is-disabled"}" href="${hasUrl ? href : "#"}" ${hasUrl ? 'target="_blank" rel="noopener"' : 'aria-disabled="true"'}>${hasUrl ? "열기" : "대기"}</a>
+              <a class="file-link ${hasUrl ? "" : "is-disabled"}" href="${hasUrl ? escapeHtml(href) : "#"}" ${hasUrl ? 'target="_blank" rel="noopener"' : 'aria-disabled="true"'}>${hasUrl ? "열기" : "대기"}</a>
             </article>
           `;
         }).join("");
+
+        const galleryEntries = createPatrisGalleryEntryCards(project, section);
 
         detail.innerHTML = `
           <div class="file-set-detail-shell">
             <div class="file-set-detail-top">
               <div class="file-set-detail-title-wrap">
                 <span class="file-set-detail-label">Portfolio File Set Page</span>
-                <h3>${project.name}_${section.title || section.name}</h3>
-                <p>${project.nameKo || project.name} 프로젝트의 ${section.title || section.name} 파일만 분리해서 확인하는 세부 열람 섹션입니다.</p>
+                <h3>${escapeHtml(project.name)}_${escapeHtml(section.title || section.name)}</h3>
+                <p>${escapeHtml(project.nameKo || project.name)} 프로젝트의 ${escapeHtml(section.title || section.name)} 파일만 분리해서 확인하는 세부 열람 섹션입니다.</p>
               </div>
               <div class="file-set-detail-actions">
                 <a class="btn btn-primary" href="${projectDetailUrl(project.id)}" data-project-back-detail="${project.id}">Project File Detail Page로 돌아가기</a>
                 <a class="btn btn-ghost" href="#documents">프로젝트 버튼으로 이동</a>
               </div>
             </div>
-            <div class="file-set-grid" aria-label="${project.name} ${section.title || section.name} 파일 목록">
+            <div class="file-set-grid" aria-label="${escapeHtml(project.name)} ${escapeHtml(section.title || section.name)} 파일 목록">
               ${fileCards || '<p class="file-set-detail-note">현재 등록된 파일 항목이 없습니다.</p>'}
             </div>
+            ${galleryEntries}
             <p class="file-set-detail-note">각 파일의 <strong>열기</strong> 버튼을 누르면 연결된 문서가 새 창으로 열립니다. 파일 경로는 화면에 직접 노출하지 않습니다.</p>
           </div>
         `;
@@ -1016,16 +1345,106 @@
         detail.hidden = false;
       };
 
-      const applyProjectView = (projectId, sectionId = null, shouldScroll = false) => {
+      const renderGalleryGroups = (groups, gallery) => {
+        const imageCount = groups.reduce((total, group) => total + group.images.length, 0);
+        if (imageCount < 1) {
+          return `
+            <p class="gallery-status">
+              현재 <code>${escapeHtml(gallery.basePath)}</code> 경로에서 표시 가능한 이미지 파일을 찾지 못했습니다.
+              GitHub 저장소에 이미지 파일을 업로드한 뒤 다시 확인해 주세요.
+            </p>
+          `;
+        }
+
+        return `
+          <p class="gallery-status is-ready">${groups.length}개 분류 · ${imageCount}개 이미지가 연결되었습니다.</p>
+          ${groups.map((group) => `
+            <section class="gallery-group">
+              <div class="gallery-group-head">
+                <h4>${escapeHtml(group.title)}</h4>
+                <span>${group.images.length}개 이미지</span>
+              </div>
+              <div class="gallery-image-grid">
+                ${group.images.map((image) => `
+                  <article class="gallery-image-card">
+                    <a href="${escapeHtml(image.src)}" target="_blank" rel="noopener" aria-label="${escapeHtml(image.displayName)} 원본 이미지 열기">
+                      <img src="${escapeHtml(image.src)}" alt="${escapeHtml(image.displayName)}" loading="lazy" />
+                    </a>
+                    <strong>${escapeHtml(image.displayName)}</strong>
+                    <span>${escapeHtml(group.title)}</span>
+                  </article>
+                `).join("")}
+              </div>
+            </section>
+          `).join("")}
+        `;
+      };
+
+      const hydrateGalleryImages = async (gallery, token) => {
+        const detail = document.querySelector("[data-file-set-detail-page]");
+        const output = document.querySelector("[data-gallery-output]");
+        if (!detail || !output) return;
+
+        try {
+          const groups = await getGalleryImageGroups(gallery);
+          if (detail.dataset.galleryLoadToken !== token) return;
+          output.innerHTML = renderGalleryGroups(groups, gallery);
+        } catch (error) {
+          if (detail.dataset.galleryLoadToken !== token) return;
+          output.innerHTML = `
+            <p class="gallery-status is-error">
+              GitHub 저장소의 이미지 목록을 불러오지 못했습니다. 저장소 경로와 배포 상태를 확인해 주세요.
+            </p>
+          `;
+          console.error(error);
+        }
+      };
+
+      const renderConceptGalleryDetail = (projectId, sectionId, galleryId) => {
+        const data = getData();
+        const detail = document.querySelector("[data-file-set-detail-page]");
+        const project = getProject(projectId);
+        const section = data.portfolioSections.find((item) => item.id === sectionId);
+        const gallery = getGallery(galleryId);
+        if (!detail || !project || !section || !gallery) return;
+
+        const token = `${projectId}:${sectionId}:${galleryId}:${Date.now()}`;
+        detail.dataset.galleryLoadToken = token;
+        detail.innerHTML = `
+          <div class="file-set-detail-shell concept-gallery-detail-shell">
+            <div class="file-set-detail-top">
+              <div class="file-set-detail-title-wrap">
+                <span class="file-set-detail-label">Visual Concept Gallery</span>
+                <h3>${escapeHtml(project.name)}_${escapeHtml(gallery.title)}</h3>
+                <p>${escapeHtml(gallery.description)}</p>
+                <p class="gallery-path-note"><code>${escapeHtml(gallery.basePath)}/</code></p>
+              </div>
+              <div class="file-set-detail-actions">
+                <a class="btn btn-primary" href="${projectDetailUrl(project.id, section.id)}" data-project-section-jump="${section.id}">콘셉트 기획 포트폴리오로 돌아가기</a>
+                <a class="btn btn-ghost" href="${projectDetailUrl(project.id)}" data-project-back-detail="${project.id}">Project File Detail Page로 돌아가기</a>
+              </div>
+            </div>
+            <div class="gallery-detail-output" data-gallery-output>
+              <p class="gallery-status">GitHub 저장소의 이미지 목록을 불러오는 중입니다.</p>
+            </div>
+          </div>
+        `;
+
+        detail.hidden = false;
+        hydrateGalleryImages(gallery, token);
+      };
+
+      const applyProjectView = (projectId, sectionId = null, galleryId = null, shouldScroll = false) => {
         const detail = document.querySelector("[data-project-detail-page]");
         const fileSetDetail = document.querySelector("[data-file-set-detail-page]");
         const validProject = Boolean(projectId && getProject(projectId));
         const validSection = Boolean(validProject && sectionId && getData().portfolioSections.some((section) => section.id === sectionId));
+        const validGallery = Boolean(validSection && isPatrisConceptGallery(projectId, sectionId, galleryId));
 
         normalizeGeneratedDocumentCards();
         setActiveTab(projectId);
         document.body.classList.toggle("is-project-detail-mode", validProject);
-        document.body.classList.toggle("is-file-set-detail-mode", validSection);
+        document.body.classList.toggle("is-file-set-detail-mode", validSection || validGallery);
 
         if (!validProject) {
           if (detail) {
@@ -1040,10 +1459,11 @@
         }
 
         renderProjectDetail(projectId);
-        if (validSection) renderFileSetDetail(projectId, sectionId);
+        if (validGallery) renderConceptGalleryDetail(projectId, sectionId, galleryId);
+        else if (validSection) renderFileSetDetail(projectId, sectionId);
 
         if (shouldScroll) {
-          const target = validSection ? fileSetDetail : detail;
+          const target = validSection || validGallery ? fileSetDetail : detail;
           target?.scrollIntoView({ behavior: "smooth", block: "start" });
         }
       };
@@ -1055,19 +1475,32 @@
             if (!projectId || projectId === "all") {
               event.preventDefault();
               history.pushState({}, "", `${window.location.pathname}#documents`);
-              applyProjectView(null, null, true);
+              applyProjectView(null, null, null, true);
               return;
             }
 
             event.preventDefault();
             history.pushState({}, "", projectDetailUrl(projectId));
-            applyProjectView(projectId, null, true);
+            applyProjectView(projectId, null, null, true);
           });
         });
       };
 
       const bindDetailClicks = () => {
         document.addEventListener("click", (event) => {
+          const galleryLink = event.target.closest("[data-concept-gallery-jump]");
+          if (galleryLink) {
+            event.preventDefault();
+            const { projectId, sectionId } = getRouteFromUrl();
+            const project = projectId || "patris";
+            const section = sectionId || "concept";
+            const galleryId = galleryLink.dataset.conceptGalleryJump;
+            if (!isPatrisConceptGallery(project, section, galleryId)) return;
+            history.pushState({}, "", projectDetailUrl(project, section, galleryId));
+            applyProjectView(project, section, galleryId, true);
+            return;
+          }
+
           const sectionLink = event.target.closest("[data-project-section-jump]");
           if (sectionLink) {
             event.preventDefault();
@@ -1076,7 +1509,7 @@
             const sectionId = sectionLink.dataset.projectSectionJump;
             if (!project || !sectionId) return;
             history.pushState({}, "", projectDetailUrl(project, sectionId));
-            applyProjectView(project, sectionId, true);
+            applyProjectView(project, sectionId, null, true);
             return;
           }
 
@@ -1085,7 +1518,7 @@
             event.preventDefault();
             const projectId = projectImage.dataset.projectImageLink;
             history.pushState({}, "", projectDetailUrl(projectId));
-            applyProjectView(projectId, null, true);
+            applyProjectView(projectId, null, null, true);
             return;
           }
 
@@ -1094,7 +1527,7 @@
             event.preventDefault();
             const projectId = back.dataset.projectBackDetail;
             history.pushState({}, "", projectDetailUrl(projectId));
-            applyProjectView(projectId, null, true);
+            applyProjectView(projectId, null, null, true);
           }
         });
       };
@@ -1104,14 +1537,15 @@
       bindProjectImageLinks();
 
       const route = getRouteFromUrl();
-      applyProjectView(route.projectId, route.sectionId, false);
+      applyProjectView(route.projectId, route.sectionId, route.galleryId, false);
 
       window.addEventListener("popstate", () => {
         const nextRoute = getRouteFromUrl();
-        applyProjectView(nextRoute.projectId, nextRoute.sectionId, false);
+        applyProjectView(nextRoute.projectId, nextRoute.sectionId, nextRoute.galleryId, false);
       });
     });
   </script>
+
 
 </body>
 </html>
