@@ -643,6 +643,98 @@
     }
 
 
+    /* About Creator profile button-grid enhancement */
+    .about-creator-card {
+      align-items: flex-start;
+      gap: clamp(20px, 3vw, 34px);
+    }
+
+    .about-creator-copy {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .creator-profile-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      width: 100%;
+      margin: 22px 0 0;
+      padding: 0;
+    }
+
+    .creator-profile-list .creator-profile-row {
+      display: grid;
+      grid-template-columns: minmax(150px, 0.28fr) minmax(0, 1fr);
+      gap: 12px;
+      align-items: stretch;
+      min-height: 54px;
+    }
+
+    .creator-profile-list dt,
+    .creator-profile-list dd {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      min-height: 54px;
+      margin: 0;
+      padding: 12px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.92);
+      border-radius: 999px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(242, 246, 255, 0.94));
+      color: #07111f;
+      box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.24),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      text-shadow: none;
+      line-height: 1.45;
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+    }
+
+    .creator-profile-list dt {
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+
+    .creator-profile-list dd {
+      justify-content: flex-start;
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    .creator-profile-list a {
+      color: #07111f;
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    .creator-profile-list a:hover,
+    .creator-profile-list a:focus-visible {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      outline: none;
+    }
+
+    @media (max-width: 720px) {
+      .creator-profile-list .creator-profile-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .creator-profile-list dt,
+      .creator-profile-list dd {
+        border-radius: 18px;
+        justify-content: flex-start;
+        min-height: 48px;
+      }
+    }
+
+
     /* Footer visibility enhancement: prevent footer copyright text from blending into the background image */
     .site-footer .footer-inner {
       display: flex;
@@ -852,29 +944,33 @@
           <p class="eyebrow">About Creator</p>
           <h2>제작자 정보</h2>
           <dl class="creator-profile-list" aria-label="제작자 기본 정보">
-            <div>
+            <div class="creator-profile-row">
               <dt>이름</dt>
               <dd>박정호(Park Jeong-ho)</dd>
             </div>
-            <div>
+            <div class="creator-profile-row">
               <dt>필명</dt>
               <dd>바론핀드(Baron Fiend)</dd>
             </div>
-            <div>
+            <div class="creator-profile-row">
+              <dt>플랫폼</dt>
+              <dd>문피아 / 노벨피아</dd>
+            </div>
+            <div class="creator-profile-row">
               <dt>핵심 역량</dt>
               <dd>게임 스토리, 시나리오, 시스템 기획 및 데이터 테이블 설계</dd>
             </div>
-            <div>
+            <div class="creator-profile-row">
               <dt>포트폴리오 범위</dt>
               <dd>Patris / Crimson Frequency / Anomaly Record</dd>
             </div>
-            <div>
+            <div class="creator-profile-row">
               <dt>연락처</dt>
               <dd><a href="mailto:jeonghopark2026@gmail.com">jeonghopark2026@gmail.com</a></dd>
             </div>
-            <div>
+            <div class="creator-profile-row">
               <dt>한 줄 소개</dt>
-              <dd aria-label="한 줄 소개 공백">&nbsp;</dd>
+              <dd>게임 기획자 겸 웹소설 작가의 비전을 이루고자 합니다.</dd>
             </div>
           </dl>
         </div>
