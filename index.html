@@ -736,6 +736,64 @@
     }
 
 
+    .document-status-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .status-chip,
+    .novel-origin-type {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 6px 10px;
+      border: 1px solid rgba(170, 190, 255, 0.26);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.045);
+      color: var(--text);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+    }
+
+    .status-pending,
+    .file-link.is-disabled {
+      opacity: 0.72;
+      cursor: not-allowed;
+    }
+
+    .portfolio-file-set-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .portfolio-zip-link.is-disabled {
+      pointer-events: none;
+      opacity: 0.72;
+    }
+
+    .novel-card .novel-origin-type {
+      margin-left: 8px;
+    }
+
+    .novel-origin-desc {
+      margin: 12px 0 16px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .novel-platform-static .file-link.is-static {
+      cursor: default;
+      text-decoration: none;
+    }
+
+
   </style>
 
 </head>
@@ -785,7 +843,7 @@
               <div><dt>Project Count</dt><dd>3</dd></div>
               <div><dt>Document Type</dt><dd>PDF</dd></div>
               <div><dt>Prototype</dt><dd>YouTube Embed</dd></div>
-              <div><dt>Stack</dt><dd>HTML · CSS · Vanilla JS</dd></div>
+              <div><dt>Portfolio Type</dt><dd>Responsive Web Portfolio</dd></div>
             </dl>
           </div>
         </aside>
@@ -807,7 +865,13 @@
         <div class="section-head">
           <p class="eyebrow">Planning Documents</p>
           <h2>프로젝트 분류에 따른 개별 파일 모음</h2>
-          <p>PDF 파일은 <code>assets/docs/프로젝트명/</code> 폴더에 같은 파일명으로 넣으면 바로 연결됩니다.</p>
+          <p>프로젝트별 포트폴리오 문서를 사전 기획, 콘셉트 기획, 시스템 기획 파일 세트로 분류하고, 각 항목의 열람·다운로드 상태를 명확히 구분합니다.</p>
+          <div class="document-status-legend" aria-label="문서 링크 상태 안내">
+            <span class="status-chip status-view">보기</span>
+            <span class="status-chip status-pdf">PDF 열기</span>
+            <span class="status-chip status-zip">ZIP 다운로드</span>
+            <span class="status-chip status-pending">준비 중</span>
+          </div>
         </div>
 
         <div class="filter-tabs" role="tablist" aria-label="프로젝트별 문서 필터">
@@ -839,7 +903,7 @@
         <div class="section-head">
           <p class="eyebrow">Original Web Novel IP</p>
           <h2>원작 웹소설 연재 정보</h2>
-          <p>게임 프로젝트의 원작 웹소설 IP와 플랫폼별 연재 페이지 URL 삽입 영역입니다.</p>
+          <p>Patris와 Crimson Frequency는 원작 웹소설 IP 기반 게임화 기획으로, Anomaly Record는 별도 원작 웹소설 IP를 전제로 하지 않는 오리지널 게임 기획으로 구분합니다.</p>
         </div>
         <div class="novel-grid" data-novel-grid></div>
       </div>
@@ -850,10 +914,9 @@
       <div class="container contact-card">
         <div>
           <p class="eyebrow">Contact</p>
-          <h2>포트폴리오 업데이트 메모</h2>
+          <h2>지원용 포트폴리오 안내</h2>
           <p>
-            PDF 파일명, YouTube 영상 주소, 프로젝트 설명은 <code>data/projects.js</code>에서 수정합니다.
-            화면 구조와 스타일은 <code>index.html</code>, <code>assets/css/style.css</code>, <code>assets/js/main.js</code>에서 분리 관리합니다.
+            이 사이트는 게임기획 지원용 프로젝트 허브입니다. 각 프로젝트의 문서 세트, AI Anime 영상, 원작 IP 또는 오리지널 기획 여부를 한 화면에서 확인할 수 있도록 구성했습니다.
           </p>
         </div>
         <a class="btn btn-primary" href="#top">상단으로 이동</a>
@@ -865,19 +928,12 @@
     <div class="container footer-inner">
       <div class="footer-copy">
         <p>© 2026 Archfiend Books &amp; Games | Archfiend Game Studio. All rights reserved.</p>
-        <p>Game Planning Portfolio. Built with HTML, CSS, Vanilla JavaScript.</p>
+        <p>Game Planning Portfolio.</p>
       </div>
       <a href="#top">Back to top</a>
     </div>
   </footer>
   <script>
-    /*
-      Project document routing enhancement
-      - Project images and project buttons open the Portfolio File Set Page directly.
-      - The selected project's files are shown immediately with visible Open buttons.
-      - No raw asset URL/path is printed in the card body.
-      - Does not require changes to assets/js/main.js or data/projects.js.
-    */
     (() => {
       const PROJECT_FOLDER_MAP = {
         "patris": "patris",
@@ -893,7 +949,14 @@
 
       const BASE_PAGE = "main.html";
 
-      const getData = () => window.PORTFOLIO_DATA ?? { projects: [], portfolioSections: [] };
+      const STATUS_LABEL = {
+        view: "보기",
+        pdf: "PDF 열기",
+        zip: "ZIP 다운로드",
+        pending: "준비 중",
+      };
+
+      const getData = () => window.PORTFOLIO_DATA ?? { projects: [], portfolioSections: [], novelIPs: [] };
       const getProjectPrefix = (project) => project.name.replaceAll(" ", "_");
       const getFilePath = (project, section, item) => {
         const projectFolder = PROJECT_FOLDER_MAP[project.id];
@@ -910,6 +973,26 @@
 
       const projectDetailUrl = (projectId) => `${BASE_PAGE}?project=${projectId}#project-file-detail`;
 
+      const getFileActionLabel = (href = "") => {
+        const cleanHref = href.split("?")[0].split("#")[0].toLowerCase();
+        if (!href || href === "#") return STATUS_LABEL.pending;
+        if (cleanHref.endsWith(".pdf")) return STATUS_LABEL.pdf;
+        if (cleanHref.endsWith(".zip")) return STATUS_LABEL.zip;
+        return STATUS_LABEL.view;
+      };
+
+      const getFileKindText = (href = "") => {
+        const match = href.split("?")[0].split("#")[0].match(/\.([a-z0-9]+)$/i);
+        if (!match) return "문서 파일";
+        const ext = match[1].toUpperCase();
+        if (ext === "PDF") return "PDF 문서";
+        if (ext === "ZIP") return "압축 파일";
+        if (ext === "DOCX") return "Word 문서";
+        if (ext === "XLSX") return "Excel 문서";
+        if (ext === "SVG") return "SVG 자료";
+        return `${ext} 파일`;
+      };
+
       const setActiveTab = (projectId) => {
         document.querySelectorAll("#documents [data-filter]").forEach((tab) => {
           const active = Boolean(projectId) && tab.dataset.filter === projectId;
@@ -921,11 +1004,27 @@
       const normalizeGeneratedDocumentCards = () => {
         document.querySelectorAll(".portfolio-file").forEach((item) => {
           const meta = item.querySelector("span");
-          if (!meta || meta.dataset.cleaned === "true") return;
-          const raw = meta.textContent || "";
-          const ext = raw.split("·")[0]?.trim() || "FILE";
-          meta.textContent = `${ext} 파일 · 새 창에서 열람`;
-          meta.dataset.cleaned = "true";
+          const link = item.querySelector(".file-link");
+          const href = link?.getAttribute("href") || "";
+
+          if (meta) {
+            meta.textContent = `${getFileKindText(href)} · 새 창에서 열람`;
+          }
+
+          if (link) {
+            const label = getFileActionLabel(href);
+            link.textContent = label;
+            link.dataset.status = label;
+            link.classList.toggle("is-disabled", label === STATUS_LABEL.pending);
+            if (label === STATUS_LABEL.pending) {
+              link.setAttribute("aria-disabled", "true");
+              link.removeAttribute("target");
+              link.removeAttribute("rel");
+            } else {
+              link.setAttribute("target", "_blank");
+              link.setAttribute("rel", "noopener");
+            }
+          }
         });
       };
 
@@ -964,14 +1063,17 @@
           const fileCards = section.items.map((item, index) => {
             const href = getFilePath(project, section, item);
             const visibleTitle = `${project.name} · ${item.title}`;
+            const actionLabel = getFileActionLabel(href);
+            const kindText = getFileKindText(href);
+            const isPending = actionLabel === STATUS_LABEL.pending;
             return `
               <article class="portfolio-set-file-card">
                 <span class="portfolio-set-file-order">${String(index + 1).padStart(2, "0")}</span>
                 <div class="portfolio-set-file-body">
                   <strong>${visibleTitle}</strong>
-                  <span>${item.ext.toUpperCase()} 파일 · ${section.title}</span>
+                  <span>${kindText} · ${section.title}</span>
                 </div>
-                <a class="file-link" href="${href}" target="_blank" rel="noopener">열기</a>
+                <a class="file-link${isPending ? " is-disabled" : ""}" href="${isPending ? "#" : href}" ${isPending ? 'aria-disabled="true"' : 'target="_blank" rel="noopener"'} data-status="${actionLabel}">${actionLabel}</a>
               </article>
             `;
           }).join("");
@@ -991,14 +1093,94 @@
 
         detail.innerHTML = `
           <div class="project-detail-shell portfolio-file-set-page" aria-label="${project.name} Portfolio File Set Page">
-            <p class="portfolio-file-set-intro">
-              ${project.name} 프로젝트의 사전 기획, 콘셉트 기획, 시스템 기획 포트폴리오 파일 세트입니다. 각 파일의 <strong>열기</strong> 버튼을 누르면 연결된 문서를 새 창으로 확인할 수 있습니다.
-            </p>
+            <div class="portfolio-file-set-head">
+              <p class="portfolio-file-set-intro">
+                ${project.name} 프로젝트의 사전 기획, 콘셉트 기획, 시스템 기획 포트폴리오 파일 세트입니다. 각 파일은 <strong>보기</strong>, <strong>PDF 열기</strong>, <strong>ZIP 다운로드</strong>, <strong>준비 중</strong> 상태로 구분합니다.
+              </p>
+              <a class="btn btn-ghost portfolio-zip-link is-disabled" href="#" aria-disabled="true" data-status="${STATUS_LABEL.pending}">${STATUS_LABEL.zip} · ${STATUS_LABEL.pending}</a>
+            </div>
             <div class="portfolio-set-layout">
               ${sections}
             </div>
           </div>
         `;
+      };
+
+      const renderNovelIpClassification = () => {
+        const grid = document.querySelector("[data-novel-grid]");
+        if (!grid) return;
+
+        const data = getData();
+        const sourceItems = [
+          ...(data.novelIPs ?? []).map((novel) => ({
+            ...novel,
+            classification: "원작 웹소설 IP 기반",
+            description: `${novel.project}는 원작 웹소설 IP를 기반으로 게임화 방향을 확장하는 프로젝트입니다.`,
+          })),
+          {
+            id: "anomaly-record-original",
+            project: "Anomaly Record",
+            label: "아노말리 레코드(Anomaly Record)",
+            title: "오리지널 게임 기획",
+            titlePrefix: "원작 웹소설 IP 없음",
+            classification: "오리지널 게임 기획",
+            description: "별도 원작 웹소설 IP를 전제로 하지 않고, 현대 오컬트 어반 판타지의 괴이 사건 대응 구조와 케이스 수렴 구조를 중심으로 설계한 게임 기획 프로젝트입니다.",
+            platforms: [],
+          },
+        ];
+
+        grid.innerHTML = sourceItems.map((novel) => {
+          const platforms = (novel.platforms ?? []).length > 0
+            ? novel.platforms.map((platform) => {
+                const hasUrl = platform.url && platform.url.trim().length > 0;
+                return `
+                  <li class="novel-platform">
+                    <div>
+                      <strong>${platform.name}</strong>
+                      <span>${hasUrl ? "연재 페이지 연결 완료" : "연재 페이지 준비 중"}</span>
+                    </div>
+                    <a class="file-link ${hasUrl ? "" : "is-disabled"}" href="${hasUrl ? platform.url : "#"}" ${hasUrl ? 'target="_blank" rel="noopener"' : 'aria-disabled="true"'}>${hasUrl ? STATUS_LABEL.view : STATUS_LABEL.pending}</a>
+                  </li>
+                `;
+              }).join("")
+            : `
+              <li class="novel-platform novel-platform-static">
+                <div>
+                  <strong>기획 구분</strong>
+                  <span>원작 연재 페이지가 아닌 오리지널 게임 기획 항목으로 관리</span>
+                </div>
+                <span class="file-link is-static" aria-label="오리지널 게임 기획">보기</span>
+              </li>
+            `;
+
+          return `
+            <article class="novel-card ${novel.id === "anomaly-record-original" ? "is-original-game" : "is-novel-origin"}">
+              <span class="badge">${novel.project}</span>
+              <span class="badge novel-origin-type">${novel.classification}</span>
+              <h3>
+                <span class="novel-label-line">${novel.label}</span>
+                <span class="novel-title-line">${novel.titlePrefix || "원작 웹소설 IP"} - 『${novel.title}』</span>
+              </h3>
+              <p class="novel-origin-desc">${novel.description}</p>
+              <ul class="novel-platform-list">${platforms}</ul>
+            </article>
+          `;
+        }).join("");
+      };
+
+      const bindProjectDetailTabs = () => {
+        document.querySelectorAll("#documents [data-filter]").forEach((tab) => {
+          const filter = tab.dataset.filter;
+          tab.setAttribute("href", projectDetailUrl(filter));
+          tab.setAttribute("role", "tab");
+          tab.setAttribute("aria-controls", "project-file-detail");
+          tab.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            history.pushState(null, "", projectDetailUrl(filter));
+            applyProjectView(filter, true);
+          }, true);
+        });
       };
 
       const applyProjectView = (projectId, shouldScroll = false) => {
@@ -1038,32 +1220,18 @@
         }
       };
 
-      const setProjectUrl = (projectId) => {
-        history.pushState(null, "", projectDetailUrl(projectId));
-      };
-
-      const bindProjectDetailTabs = () => {
-        document.querySelectorAll("#documents [data-filter]").forEach((tab) => {
-          const filter = tab.dataset.filter;
-          tab.setAttribute("href", projectDetailUrl(filter));
-          tab.setAttribute("role", "tab");
-          tab.setAttribute("aria-controls", "project-file-detail");
-          tab.addEventListener("click", (event) => {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            setProjectUrl(filter);
-            applyProjectView(filter, true);
-          }, true);
-        });
-      };
-
       const bindProjectImageNavigation = () => {
         document.addEventListener("click", (event) => {
           const link = event.target.closest("[data-project-image-link]");
+          const disabledLink = event.target.closest("a.is-disabled");
+          if (disabledLink) {
+            event.preventDefault();
+            return;
+          }
           if (!link) return;
           const projectId = link.dataset.projectImageLink;
           event.preventDefault();
-          setProjectUrl(projectId);
+          history.pushState(null, "", projectDetailUrl(projectId));
           applyProjectView(projectId, true);
         });
       };
@@ -1073,6 +1241,7 @@
         bindProjectDetailTabs();
         bindProjectImageNavigation();
         normalizeGeneratedDocumentCards();
+        renderNovelIpClassification();
         applyProjectView(getProjectFromUrl(), window.location.hash === "#project-file-detail");
       });
 
