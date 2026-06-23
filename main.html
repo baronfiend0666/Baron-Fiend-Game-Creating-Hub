@@ -737,6 +737,13 @@
       white-space: nowrap;
     }
 
+    .gallery-group-description {
+      margin: -6px 0 14px;
+      color: var(--muted, #b8c2d8);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
     .gallery-image-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -1072,6 +1079,45 @@
         },
       ];
 
+      const PATRIS_REGIONAL_VILLAIN_PARENT = "04-지역별 빌런 집단";
+      const PATRIS_REGIONAL_VILLAIN_GROUPS = [
+        {
+          order: "04-01",
+          folderIncludes: "오벨루스 서클",
+          title: "04-지역별 빌런 집단 · 오벨루스 서클(Obelus Circle)",
+          description: "네오 판데모니움 연방국의 역내 빌런 집단",
+          memberNames: ["뮤리엘 베일크로프트", "크리스틴 노크턴", "낸시 바이어몬트", "메를 크로스펠", "피니어스 모르그렌", "월터 더스크레인"],
+        },
+        {
+          order: "04-02",
+          folderIncludes: "블랙 코븐",
+          title: "04-지역별 빌런 집단 · 블랙 코븐(Black Coven)",
+          description: "스키엔티아 연방 아카데미의 역내 빌런 집단",
+          memberNames: ["제이드 케일윅", "앨버트 웨이크필드", "그레고리 크레이븐", "라티파 펜로즈", "마르셀라 랭포드", "페러그린 엘드리지", "르우벤 아크라이트"],
+        },
+        {
+          order: "04-03",
+          folderIncludes: "이블리스 템플",
+          title: "04-지역별 빌런 집단 · 이블리스 템플(Eblis Temple)",
+          description: "신성황국 데오테스의 역내 빌런 집단",
+          memberNames: ["암브로스 발렌크로스", "베네딕트 몽클레어", "기드온 에버가르드", "피츠로이 카스텔란", "콜레트 하일브론", "라비니아 벨라포르트", "마리아 아우렐포드", "나타샤 칼드베인", "힐렐 오르벨", "오티스 엘더크래스트"],
+        },
+        {
+          order: "04-04A",
+          folderIncludes: "케닛지 칼레브",
+          title: "04-지역별 빌런 집단 · 케닛지 칼레브(Kenizzi Kaleb)",
+          description: "기술 제국 에피그노시스의 역내 빌런 집단 1",
+          memberNames: ["애브너 브래독", "카시안 그레이브스", "도미니크 워릭", "가네트 하크니스", "니콜 레드포드", "셰릴린 루크펠드", "토렌 스톤리치"],
+        },
+        {
+          order: "04-04B",
+          folderIncludes: "13인의 평의회",
+          title: "04-지역별 빌런 집단 · 13인의 평의회(C13, Council of Thirteen)",
+          description: "기술 제국 에피그노시스의 역내 빌런 집단 2",
+          memberNames: ["클레온 베르다인", "디미트리 벨카리온", "아르카 베나 로보티카", "판도라 루멘타르", "유스터스 메리디온", "제시카 옵시디안", "라리사 발크하임", "페르디타 아스트라벨", "볼프강 모르덴트", "크리스토퍼 세베루스", "데스몬드 칼드리온", "어니스트 오르디안", "글렌 노바렌"],
+        },
+      ];
+
       const GITHUB_TREE_API = "https://api.github.com/repos/baronfiend0666/Baron-Fiend-Game-Creating-Hub/git/trees/main?recursive=1";
       const GITHUB_RAW_ROOT = "https://raw.githubusercontent.com/baronfiend0666/Baron-Fiend-Game-Creating-Hub/main/";
       const IMAGE_FILE_RE = /\.(png|jpe?g|webp|gif|svg)$/i;
@@ -1120,6 +1166,36 @@
         return githubTreePromise;
       };
 
+      const getPatrisRegionalVillainGroup = (parts, fileName) => {
+        if (parts[0] !== PATRIS_REGIONAL_VILLAIN_PARENT) return null;
+        const folderName = parts.length > 2 ? parts[1] : "";
+        return PATRIS_REGIONAL_VILLAIN_GROUPS.find((group) =>
+          folderName.includes(group.folderIncludes) || group.memberNames.some((memberName) => fileName.includes(memberName))
+        ) || null;
+      };
+
+      const resolveGalleryGroup = (gallery, parts, fileName) => {
+        if (gallery.id === "character-concept-art") {
+          const regionalVillainGroup = getPatrisRegionalVillainGroup(parts, fileName);
+          if (regionalVillainGroup) {
+            return {
+              key: `${PATRIS_REGIONAL_VILLAIN_PARENT}/${regionalVillainGroup.order}`,
+              title: regionalVillainGroup.title,
+              description: regionalVillainGroup.description,
+              sortOrder: regionalVillainGroup.order,
+            };
+          }
+        }
+
+        const title = parts.length > 1 ? parts[0] : "이미지";
+        return {
+          key: parts.length > 1 ? parts[0] : "_root",
+          title,
+          description: "",
+          sortOrder: title,
+        };
+      };
+
       const getGalleryImageGroups = async (gallery) => {
         const basePath = gallery.basePath.replace(/\/$/, "");
         const tree = await getGithubTree();
@@ -1130,19 +1206,20 @@
           .forEach((entry) => {
             const relativePath = entry.path.slice(basePath.length + 1);
             const parts = relativePath.split("/").filter(Boolean);
-            const groupName = parts.length > 1 ? parts[0] : "이미지";
-            const groupKey = parts.length > 1 ? parts[0] : "_root";
             const fileName = parts[parts.length - 1] || relativePath;
+            const groupInfo = resolveGalleryGroup(gallery, parts, fileName);
 
-            if (!groups.has(groupKey)) {
-              groups.set(groupKey, {
-                key: groupKey,
-                title: groupName,
+            if (!groups.has(groupInfo.key)) {
+              groups.set(groupInfo.key, {
+                key: groupInfo.key,
+                title: groupInfo.title,
+                description: groupInfo.description,
+                sortOrder: groupInfo.sortOrder,
                 images: [],
               });
             }
 
-            groups.get(groupKey).images.push({
+            groups.get(groupInfo.key).images.push({
               name: fileName,
               displayName: stripImageExtension(fileName),
               path: entry.path,
@@ -1155,7 +1232,7 @@
             ...group,
             images: group.images.sort((a, b) => collator.compare(a.path, b.path)),
           }))
-          .sort((a, b) => collator.compare(a.title, b.title));
+          .sort((a, b) => collator.compare(a.sortOrder || a.title, b.sortOrder || b.title));
       };
 
       const getRouteFromUrl = () => {
@@ -1364,6 +1441,7 @@
                 <h4>${escapeHtml(group.title)}</h4>
                 <span>${group.images.length}개 이미지</span>
               </div>
+              ${group.description ? `<p class="gallery-group-description">${escapeHtml(group.description)}</p>` : ""}
               <div class="gallery-image-grid">
                 ${group.images.map((image) => `
                   <article class="gallery-image-card">
