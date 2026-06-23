@@ -100,20 +100,17 @@
       transform: translateY(0);
     }
 
-    .project-detail-page,
-    .file-set-detail-page {
+    .project-detail-page {
       margin: 28px 0 32px;
       scroll-margin-top: calc(var(--header-height) + 18px);
       animation: projectDetailFadeIn 260ms ease both;
     }
 
-    .project-detail-page[hidden],
-    .file-set-detail-page[hidden] {
+    .project-detail-page[hidden] {
       display: none !important;
     }
 
-    .project-detail-shell,
-    .file-set-detail-shell {
+    .project-detail-shell {
       position: relative;
       overflow: hidden;
       border: 1px solid rgba(170, 190, 255, 0.26);
@@ -126,8 +123,7 @@
       padding: clamp(22px, 3vw, 34px);
     }
 
-    .project-detail-shell::before,
-    .file-set-detail-shell::before {
+    .project-detail-shell::before {
       content: "";
       position: absolute;
       inset: 0;
@@ -137,14 +133,12 @@
       pointer-events: none;
     }
 
-    .project-detail-shell > *,
-    .file-set-detail-shell > * {
+    .project-detail-shell > * {
       position: relative;
       z-index: 1;
     }
 
-    .project-detail-top,
-    .file-set-detail-top {
+    .project-detail-top {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 22px;
@@ -153,13 +147,11 @@
       border-bottom: 1px solid var(--line);
     }
 
-    .project-detail-title-wrap,
-    .file-set-detail-title-wrap {
+    .project-detail-title-wrap {
       min-width: 0;
     }
 
-    .project-detail-label,
-    .file-set-detail-label {
+    .project-detail-label {
       display: inline-flex;
       margin-bottom: 12px;
       color: var(--primary);
@@ -169,28 +161,24 @@
       text-transform: uppercase;
     }
 
-    .project-detail-title-wrap h3,
-    .file-set-detail-title-wrap h3 {
+    .project-detail-title-wrap h3 h3 {
       font-size: clamp(1.8rem, 4vw, 3rem);
     }
 
-    .project-detail-title-wrap p,
-    .file-set-detail-title-wrap p {
+    .project-detail-title-wrap p p {
       max-width: 860px;
       margin: 12px 0 0;
       color: var(--muted);
     }
 
-    .project-detail-actions,
-    .file-set-detail-actions {
+    .project-detail-actions {
       display: flex;
       flex-wrap: wrap;
       justify-content: flex-end;
       gap: 10px;
     }
 
-    .project-detail-actions .btn,
-    .file-set-detail-actions .btn {
+    .project-detail-actions .btn .btn {
       white-space: nowrap;
     }
 
@@ -344,26 +332,6 @@
       font-size: 0.88rem;
     }
 
-    .portfolio-file span code {
-      display: none !important;
-    }
-
-    .portfolio-file span,
-    .novel-platform span {
-      overflow-wrap: break-word;
-    }
-
-    body.is-project-detail-mode .document-grid {
-      display: none !important;
-    }
-
-    body.is-project-detail-mode .project-document-block:not(.is-hidden) {
-      animation: projectDetailFadeIn 260ms ease both;
-    }
-
-    body.is-file-set-detail-mode .document-grid {
-      display: none !important;
-    }
 
 
     /* Project detail page: remove the large project-name/banner block and keep only uniform file-set menus. */
@@ -1039,9 +1007,6 @@
         </div>
 
         <section id="project-file-detail" class="project-detail-page" data-project-detail-page hidden aria-live="polite"></section>
-        <section id="portfolio-file-set-detail" class="file-set-detail-page" data-file-set-detail-page hidden aria-live="polite"></section>
-
-        <div class="document-grid" data-document-grid></div>
       </div>
     </section>
 
@@ -1277,17 +1242,6 @@
         });
       };
 
-      const normalizeGeneratedDocumentCards = () => {
-        document.querySelectorAll(".portfolio-file").forEach((item) => {
-          const meta = item.querySelector("span");
-          if (!meta || meta.dataset.cleaned === "true") return;
-          const raw = meta.textContent || "";
-          const ext = raw.split("·")[0]?.trim() || "FILE";
-          meta.textContent = `${ext} 파일 · 새 창에서 열람`;
-          meta.dataset.cleaned = "true";
-        });
-      };
-
       const bindProjectImageLinks = () => {
         const data = getData();
         const cards = [...document.querySelectorAll("[data-project-grid] .project-card")];
@@ -1362,14 +1316,9 @@
 
       const renderProjectFileSetPage = (projectId, setId) => {
         const detail = document.querySelector("[data-project-detail-page]");
-        const fileSetDetail = document.querySelector("[data-file-set-detail-page]");
         const project = getProject(projectId);
         if (!detail || !project) return;
 
-        if (fileSetDetail) {
-          fileSetDetail.hidden = true;
-          fileSetDetail.innerHTML = "";
-        }
 
         const fileSets = getProjectFileSets(projectId);
         const activeSet = fileSets.find((fileSet) => fileSet.id === setId) ?? fileSets[0];
@@ -1413,26 +1362,17 @@
 
       const applyProjectView = (projectId, setId = null, shouldScroll = false) => {
         const detail = document.querySelector("[data-project-detail-page]");
-        const fileSetDetail = document.querySelector("[data-file-set-detail-page]");
-        const cards = document.querySelectorAll(".project-document-block");
         const project = getProject(projectId);
 
-        normalizeGeneratedDocumentCards();
         setActiveProjectTab(projectId);
         document.body.classList.toggle("is-project-detail-mode", Boolean(project));
-        document.body.classList.remove("is-file-set-detail-mode");
 
-        if (fileSetDetail) {
-          fileSetDetail.hidden = true;
-          fileSetDetail.innerHTML = "";
-        }
 
         if (!project) {
           if (detail) {
             detail.hidden = true;
             detail.innerHTML = "";
           }
-          cards.forEach((card) => card.classList.remove("is-hidden"));
           return;
         }
 
@@ -1443,9 +1383,6 @@
         renderProjectFileSetPage(project.id, resolvedSetId);
         if (detail) detail.hidden = false;
 
-        cards.forEach((card) => {
-          card.classList.toggle("is-hidden", card.dataset.project !== project.id);
-        });
 
         if (shouldScroll) {
           const target = document.getElementById("project-file-detail") || document.getElementById("documents");
@@ -1502,7 +1439,6 @@
         bindProjectDetailTabs();
         bindProjectImageNavigation();
         bindFileSetNavigation();
-        normalizeGeneratedDocumentCards();
         const route = getRouteFromUrl();
         applyProjectView(route.projectId, route.setId, window.location.hash === "#project-file-detail");
       });
