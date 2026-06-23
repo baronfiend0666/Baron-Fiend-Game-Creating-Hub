@@ -932,6 +932,32 @@
     }
 
 
+    /* Project file-set detail menu refinement */
+    .portfolio-set-menu {
+      margin: 0 0 20px;
+      padding: clamp(14px, 1.8vw, 18px);
+      border: 1px solid rgba(170, 190, 255, 0.22);
+      border-radius: var(--radius-md);
+      background: rgba(13, 18, 32, 0.70);
+      backdrop-filter: blur(14px);
+    }
+
+    .portfolio-set-menu .tab {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+
+    .portfolio-set-description {
+      margin: -4px 0 16px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+      line-height: 1.62;
+      word-break: keep-all;
+    }
+
   </style>
 
 </head>
@@ -1094,11 +1120,10 @@
   </footer>
   <script>
     /*
-      Project document routing enhancement
-      - Project images and project buttons open the Portfolio File Set Page directly.
-      - The selected project's files are shown immediately with visible Open buttons.
-      - No raw asset URL/path is printed in the card body.
-      - Does not require changes to assets/js/main.js or data/projects.js.
+      Project file-set routing enhancement
+      - 1차 메뉴: Patris / Crimson Frequency / Anomaly Record
+      - 2차 메뉴: 선택 프로젝트별 파일 세트 상세 메뉴
+      - 선택된 파일 세트의 파일 카드만 개별 열람하도록 렌더링합니다.
     */
     (() => {
       const PROJECT_FOLDER_MAP = {
@@ -1107,32 +1132,144 @@
         "anomaly-record": "anomaly-record",
       };
 
-      const SECTION_FOLDER_MAP = {
-        "pre-production": "01_pre_production_portfolio",
-        "concept": "02_concept_planning_portfolio",
-        "system": "03_system_planning_portfolio",
-      };
-
       const BASE_PAGE = "main.html";
 
-      const getData = () => window.PORTFOLIO_DATA ?? { projects: [], portfolioSections: [] };
-      const getProjectPrefix = (project) => project.name.replaceAll(" ", "_");
-      const getFilePath = (project, section, item) => {
-        const projectFolder = PROJECT_FOLDER_MAP[project.id];
-        const sectionFolder = SECTION_FOLDER_MAP[section.id];
-        return `assets/docs/${projectFolder}/${sectionFolder}/${getProjectPrefix(project)}_${item.slug}.${item.ext}`;
+      const COMMON_FILE_SETS = {
+        "pre-production": {
+          order: "01",
+          title: "사전 기획 포트폴리오",
+          menuLabel: "사전 기획",
+          folder: "01_pre_production_portfolio",
+          description: "개발 방향, 콘텐츠 범위, 핵심 제안 구조를 확인하는 사전 기획 파일 세트입니다.",
+          items: [
+            { title: "개발 제안서", ext: "docx", slug: "Development_Proposal" },
+            { title: "콘텐츠맵", ext: "svg", slug: "Content_Map" },
+            { title: "게임 소개서", ext: "docx", slug: "Game_Introduction_Document" },
+            { title: "GDD", ext: "docx", slug: "GDD" },
+          ],
+        },
+        "concept": {
+          order: "02",
+          title: "콘셉트 기획 포트폴리오",
+          menuLabel: "콘셉트 기획",
+          folder: "02_concept_planning_portfolio",
+          description: "스토리, 시나리오, 스토리보드, 캐릭터와 배경 콘셉트를 확인하는 파일 세트입니다.",
+          items: [
+            { title: "게임 스토리", ext: "docx", slug: "Game_Story" },
+            { title: "게임 시나리오", ext: "docx", slug: "Game_Scenario" },
+            { title: "스토리 보드", ext: "docx", slug: "Storyboard" },
+            { title: "캐릭터 컨셉 기획서", ext: "docx", slug: "Character_Concept_Document" },
+            { title: "배경 컨셉 기획서", ext: "docx", slug: "Background_Concept_Document" },
+          ],
+        },
+        "system": {
+          order: "03",
+          title: "시스템 기획 포트폴리오",
+          menuLabel: "시스템 기획",
+          folder: "03_system_planning_portfolio",
+          description: "게임 메커닉스, 플로우, ERD, 데이터 스키마와 프로젝트별 데이터 테이블을 확인하는 파일 세트입니다.",
+          items: [
+            { title: "게임 메커닉스", ext: "docx", slug: "Game_Mechanics" },
+            { title: "프로세스 플로우", ext: "svg", slug: "Process_Flow" },
+            { title: "ERD", ext: "svg", slug: "ERD" },
+            { title: "데이터 스키마", ext: "docx", slug: "Data_Schema" },
+            { title: "통합 데이터 테이블", ext: "docx", slug: "Integrated_Data_Table" },
+            { title: "캐릭터 테이블", ext: "xlsx", slug: "Character_Table" },
+            { title: "아이템 테이블", ext: "xlsx", slug: "Item_Table" },
+            { title: "스킬 테이블", ext: "xlsx", slug: "Skill_Table" },
+            { title: "다이얼로그 테이블", ext: "xlsx", slug: "Dialogue_Table" },
+            { title: "퀘스트 테이블", ext: "xlsx", slug: "Quest_Table" },
+            { title: "시나리오 테이블", ext: "xlsx", slug: "Scenario_Table" },
+          ],
+        },
+        "level": {
+          order: "04",
+          title: "레벨 기획 포트폴리오",
+          menuLabel: "레벨 기획",
+          folder: "04_level_planning_portfolio",
+          description: "레벨 콘셉트, 레벨 디자인, 테스트 시나리오, 분석 보고서를 확인하는 파일 세트입니다.",
+          items: [
+            { title: "레벨 컨셉 문서", ext: "docx", slug: "Level_Concept_Document" },
+            { title: "레벨 디자인 문서", ext: "docx", slug: "Level_Design_Document" },
+            { title: "테스트 시나리오", ext: "docx", slug: "Test_Scenario" },
+            { title: "분석 보고서", ext: "docx", slug: "Analysis_Report" },
+          ],
+        },
+        "original-ip": {
+          order: "05",
+          title: "원작 웹소설 IP",
+          menuLabel: "원작 IP",
+          description: "프로젝트와 연결되는 원작 웹소설 IP 정보를 확인하는 세트입니다.",
+          isOriginalIp: true,
+          items: [],
+        },
       };
 
-      const getProjectFromUrl = () => {
-        const data = getData();
+      const PROJECT_FILE_SET_ORDER = {
+        "patris": ["pre-production", "concept", "system", "level", "original-ip"],
+        "crimson-frequency": ["pre-production", "concept", "system", "level", "original-ip"],
+        "anomaly-record": ["pre-production", "concept", "system", "level"],
+      };
+
+      const PROJECT_SPECIFIC_SYSTEM_ITEMS = {
+        "patris": [
+          { title: "몬스터 & 오포넌트 테이블", ext: "xlsx", slug: "Monster_And_Opponent_Table" },
+          { title: "월드맵 DB", ext: "xlsx", slug: "World_Map_DB" },
+        ],
+        "crimson-frequency": [
+          { title: "몬스터 테이블", ext: "xlsx", slug: "Monster_Table" },
+        ],
+        "anomaly-record": [
+          { title: "괴이 테이블", ext: "xlsx", slug: "Kaii_Table" },
+        ],
+      };
+
+      const getData = () => window.PORTFOLIO_DATA ?? { projects: [], novelIPs: [] };
+      const getProjectPrefix = (project) => project.name.replaceAll(" ", "_");
+      const cloneSet = (fileSet) => ({ ...fileSet, items: [...(fileSet.items ?? [])] });
+
+      const getProjectFileSets = (projectId) => {
+        const order = PROJECT_FILE_SET_ORDER[projectId] ?? [];
+        return order.map((setId) => {
+          const fileSet = cloneSet(COMMON_FILE_SETS[setId]);
+          if (setId === "system") {
+            fileSet.items = [...fileSet.items, ...(PROJECT_SPECIFIC_SYSTEM_ITEMS[projectId] ?? [])];
+          }
+          return { id: setId, ...fileSet };
+        });
+      };
+
+      const getProject = (projectId) => getData().projects.find((project) => project.id === projectId) ?? null;
+      const getDefaultSetId = (projectId) => getProjectFileSets(projectId)[0]?.id ?? null;
+
+      const getFilePath = (project, fileSet, item) => {
+        const projectFolder = PROJECT_FOLDER_MAP[project.id];
+        const fileName = `${getProjectPrefix(project)}_${item.slug}.${item.ext}`;
+        return `assets/docs/${projectFolder}/${fileSet.folder}/${fileName}`;
+      };
+
+      const projectDetailUrl = (projectId, setId = null) => {
+        const params = new URLSearchParams({ project: projectId });
+        if (setId) params.set("set", setId);
+        return `${BASE_PAGE}?${params.toString()}#project-file-detail`;
+      };
+
+      const getRouteFromUrl = () => {
         const params = new URLSearchParams(window.location.search);
         const projectId = params.get("project");
-        return data.projects.some((project) => project.id === projectId) ? projectId : null;
+        const project = getProject(projectId);
+        if (!project) return { projectId: null, setId: null };
+
+        const requestedSetId = params.get("set");
+        const sets = getProjectFileSets(projectId);
+        const setId = sets.some((fileSet) => fileSet.id === requestedSetId)
+          ? requestedSetId
+          : getDefaultSetId(projectId);
+
+        return { projectId, setId };
       };
 
-      const projectDetailUrl = (projectId) => `${BASE_PAGE}?project=${projectId}#project-file-detail`;
-
-      const setActiveTab = (projectId) => {
+      const setActiveProjectTab = (projectId) => {
         document.querySelectorAll("#documents [data-filter]").forEach((tab) => {
           const active = Boolean(projectId) && tab.dataset.filter === projectId;
           tab.classList.toggle("is-active", active);
@@ -1159,22 +1296,74 @@
           const visualWrap = card.querySelector(".project-visual-wrap");
           if (!project || !visualWrap || visualWrap.querySelector(".project-visual-link")) return;
 
+          const defaultSetId = getDefaultSetId(project.id);
           card.dataset.project = project.id;
           const originalContent = visualWrap.innerHTML;
           visualWrap.innerHTML = `
-            <a class="project-visual-link" href="${projectDetailUrl(project.id)}" data-project-image-link="${project.id}" aria-label="${project.name} Portfolio File Set Page 열기">
+            <a class="project-visual-link" href="${projectDetailUrl(project.id, defaultSetId)}" data-project-image-link="${project.id}" aria-label="${project.name} 파일 세트 상세 메뉴 열기">
               ${originalContent}
-              <span class="project-visual-cta">Portfolio File Set Page 열기</span>
+              <span class="project-visual-cta">파일 세트 상세 메뉴 열기</span>
             </a>
           `;
         });
       };
 
-      const renderProjectFileSetPage = (projectId) => {
-        const data = getData();
+      const getProjectOriginalIps = (project) => {
+        const projectName = project.name;
+        return (getData().novelIPs ?? []).filter((novel) => novel.project === projectName);
+      };
+
+      const renderFileCards = (project, fileSet) => {
+        if (fileSet.isOriginalIp) {
+          const novels = getProjectOriginalIps(project);
+          if (novels.length === 0) {
+            return `
+              <article class="portfolio-set-file-card">
+                <span class="portfolio-set-file-order">--</span>
+                <div class="portfolio-set-file-body">
+                  <strong>${project.name} · 원작 웹소설 IP</strong>
+                  <span>현재 등록된 원작 웹소설 IP 정보가 없습니다.</span>
+                </div>
+                <a class="file-link is-disabled" href="#" aria-disabled="true">대기</a>
+              </article>
+            `;
+          }
+
+          return novels.map((novel, index) => {
+            const urlReadyCount = (novel.platforms ?? []).filter((platform) => platform.url && platform.url.trim().length > 0).length;
+            const platformCount = (novel.platforms ?? []).length;
+            return `
+              <article class="portfolio-set-file-card">
+                <span class="portfolio-set-file-order">${String(index + 1).padStart(2, "0")}</span>
+                <div class="portfolio-set-file-body">
+                  <strong>${novel.label} · 『${novel.title}』</strong>
+                  <span>원작 웹소설 IP · 연재 URL ${urlReadyCount}/${platformCount}개 등록</span>
+                </div>
+                <a class="file-link" href="#novel-ip">정보 보기</a>
+              </article>
+            `;
+          }).join("");
+        }
+
+        return fileSet.items.map((item, index) => {
+          const href = getFilePath(project, fileSet, item);
+          return `
+            <article class="portfolio-set-file-card">
+              <span class="portfolio-set-file-order">${String(index + 1).padStart(2, "0")}</span>
+              <div class="portfolio-set-file-body">
+                <strong>${project.name} · ${item.title}</strong>
+                <span>${item.ext.toUpperCase()} 파일 · ${fileSet.title}</span>
+              </div>
+              <a class="file-link" href="${href}" target="_blank" rel="noopener">열기</a>
+            </article>
+          `;
+        }).join("");
+      };
+
+      const renderProjectFileSetPage = (projectId, setId) => {
         const detail = document.querySelector("[data-project-detail-page]");
         const fileSetDetail = document.querySelector("[data-file-set-detail-page]");
-        const project = data.projects.find((item) => item.id === projectId);
+        const project = getProject(projectId);
         if (!detail || !project) return;
 
         if (fileSetDetail) {
@@ -1182,55 +1371,55 @@
           fileSetDetail.innerHTML = "";
         }
 
-        const sections = data.portfolioSections.map((section) => {
-          const fileCards = section.items.map((item, index) => {
-            const href = getFilePath(project, section, item);
-            const visibleTitle = `${project.name} · ${item.title}`;
-            return `
-              <article class="portfolio-set-file-card">
-                <span class="portfolio-set-file-order">${String(index + 1).padStart(2, "0")}</span>
-                <div class="portfolio-set-file-body">
-                  <strong>${visibleTitle}</strong>
-                  <span>${item.ext.toUpperCase()} 파일 · ${section.title}</span>
-                </div>
-                <a class="file-link" href="${href}" target="_blank" rel="noopener">열기</a>
-              </article>
-            `;
-          }).join("");
-
+        const fileSets = getProjectFileSets(projectId);
+        const activeSet = fileSets.find((fileSet) => fileSet.id === setId) ?? fileSets[0];
+        const menu = fileSets.map((fileSet) => {
+          const active = fileSet.id === activeSet.id;
           return `
-            <section class="portfolio-set-panel" aria-label="${project.name} ${section.title} 파일 목록">
-              <div class="portfolio-set-panel-head">
-                <span class="portfolio-set-title-pill">${section.order}. ${section.title}</span>
-                <span class="portfolio-set-count">${section.items.length}개 파일</span>
-              </div>
-              <div class="portfolio-set-file-grid">
-                ${fileCards}
-              </div>
-            </section>
+            <a class="tab ${active ? "is-active" : ""}" href="${projectDetailUrl(project.id, fileSet.id)}" data-file-set-link="${fileSet.id}" data-project-id="${project.id}" role="tab" aria-selected="${String(active)}">
+              ${fileSet.menuLabel}
+            </a>
           `;
         }).join("");
 
+        const fileCards = renderFileCards(project, activeSet);
+        const fileCount = activeSet.isOriginalIp ? getProjectOriginalIps(project).length : activeSet.items.length;
+
         detail.innerHTML = `
-          <div class="project-detail-shell portfolio-file-set-page" aria-label="${project.name} Portfolio File Set Page">
+          <div class="project-detail-shell portfolio-file-set-page" aria-label="${project.name} 파일 세트 상세 메뉴">
             <p class="portfolio-file-set-intro">
-              ${project.name} 프로젝트의 사전 기획, 콘셉트 기획, 시스템 기획 포트폴리오 파일 세트입니다. 각 파일의 <strong>열기</strong> 버튼을 누르면 연결된 문서를 새 창으로 확인할 수 있습니다.
+              <strong>${project.videoTitle || project.name}</strong> 프로젝트의 파일 세트를 개별 열람할 수 있습니다. 아래 상세 메뉴에서 사전 기획, 콘셉트 기획, 시스템 기획, 레벨 기획${project.id === "anomaly-record" ? "" : ", 원작 IP"} 중 하나를 선택하십시오.
             </p>
+
+            <div class="filter-tabs portfolio-set-menu" role="tablist" aria-label="${project.name} 파일 세트 상세 메뉴">
+              ${menu}
+            </div>
+
             <div class="portfolio-set-layout">
-              ${sections}
+              <section class="portfolio-set-panel" aria-label="${project.name} ${activeSet.title} 파일 목록">
+                <div class="portfolio-set-panel-head">
+                  <span class="portfolio-set-title-pill">${activeSet.order}. ${activeSet.title}</span>
+                  <span class="portfolio-set-count">${fileCount}개 항목</span>
+                </div>
+                <p class="portfolio-set-description">${activeSet.description}</p>
+                <div class="portfolio-set-file-grid">
+                  ${fileCards}
+                </div>
+              </section>
             </div>
           </div>
         `;
       };
 
-      const applyProjectView = (projectId, shouldScroll = false) => {
+      const applyProjectView = (projectId, setId = null, shouldScroll = false) => {
         const detail = document.querySelector("[data-project-detail-page]");
         const fileSetDetail = document.querySelector("[data-file-set-detail-page]");
         const cards = document.querySelectorAll(".project-document-block");
+        const project = getProject(projectId);
 
         normalizeGeneratedDocumentCards();
-        setActiveTab(projectId);
-        document.body.classList.toggle("is-project-detail-mode", Boolean(projectId));
+        setActiveProjectTab(projectId);
+        document.body.classList.toggle("is-project-detail-mode", Boolean(project));
         document.body.classList.remove("is-file-set-detail-mode");
 
         if (fileSetDetail) {
@@ -1238,7 +1427,7 @@
           fileSetDetail.innerHTML = "";
         }
 
-        if (!projectId) {
+        if (!project) {
           if (detail) {
             detail.hidden = true;
             detail.innerHTML = "";
@@ -1247,11 +1436,15 @@
           return;
         }
 
-        renderProjectFileSetPage(projectId);
+        const resolvedSetId = getProjectFileSets(project.id).some((fileSet) => fileSet.id === setId)
+          ? setId
+          : getDefaultSetId(project.id);
+
+        renderProjectFileSetPage(project.id, resolvedSetId);
         if (detail) detail.hidden = false;
 
         cards.forEach((card) => {
-          card.classList.toggle("is-hidden", card.dataset.project !== projectId);
+          card.classList.toggle("is-hidden", card.dataset.project !== project.id);
         });
 
         if (shouldScroll) {
@@ -1260,21 +1453,22 @@
         }
       };
 
-      const setProjectUrl = (projectId) => {
-        history.pushState(null, "", projectDetailUrl(projectId));
+      const setProjectUrl = (projectId, setId = null) => {
+        history.pushState(null, "", projectDetailUrl(projectId, setId ?? getDefaultSetId(projectId)));
       };
 
       const bindProjectDetailTabs = () => {
         document.querySelectorAll("#documents [data-filter]").forEach((tab) => {
-          const filter = tab.dataset.filter;
-          tab.setAttribute("href", projectDetailUrl(filter));
+          const projectId = tab.dataset.filter;
+          const defaultSetId = getDefaultSetId(projectId);
+          tab.setAttribute("href", projectDetailUrl(projectId, defaultSetId));
           tab.setAttribute("role", "tab");
           tab.setAttribute("aria-controls", "project-file-detail");
           tab.addEventListener("click", (event) => {
             event.preventDefault();
             event.stopImmediatePropagation();
-            setProjectUrl(filter);
-            applyProjectView(filter, true);
+            setProjectUrl(projectId, defaultSetId);
+            applyProjectView(projectId, defaultSetId, true);
           }, true);
         });
       };
@@ -1284,25 +1478,42 @@
           const link = event.target.closest("[data-project-image-link]");
           if (!link) return;
           const projectId = link.dataset.projectImageLink;
+          const defaultSetId = getDefaultSetId(projectId);
           event.preventDefault();
-          setProjectUrl(projectId);
-          applyProjectView(projectId, true);
+          setProjectUrl(projectId, defaultSetId);
+          applyProjectView(projectId, defaultSetId, true);
         });
+      };
+
+      const bindFileSetNavigation = () => {
+        document.addEventListener("click", (event) => {
+          const link = event.target.closest("[data-file-set-link]");
+          if (!link) return;
+          const projectId = link.dataset.projectId;
+          const setId = link.dataset.fileSetLink;
+          event.preventDefault();
+          setProjectUrl(projectId, setId);
+          applyProjectView(projectId, setId, false);
+        }, true);
       };
 
       window.addEventListener("DOMContentLoaded", () => {
         bindProjectImageLinks();
         bindProjectDetailTabs();
         bindProjectImageNavigation();
+        bindFileSetNavigation();
         normalizeGeneratedDocumentCards();
-        applyProjectView(getProjectFromUrl(), window.location.hash === "#project-file-detail");
+        const route = getRouteFromUrl();
+        applyProjectView(route.projectId, route.setId, window.location.hash === "#project-file-detail");
       });
 
       window.addEventListener("popstate", () => {
-        applyProjectView(getProjectFromUrl(), false);
+        const route = getRouteFromUrl();
+        applyProjectView(route.projectId, route.setId, false);
       });
     })();
   </script>
+
 
 
   <script>
