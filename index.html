@@ -903,7 +903,7 @@
         <div class="section-head">
           <p class="eyebrow">Original Web Novel IP</p>
           <h2>원작 웹소설 연재 정보</h2>
-          <p>Patris와 Crimson Frequency는 원작 웹소설 IP 기반 게임화 기획으로, Anomaly Record는 별도 원작 웹소설 IP를 전제로 하지 않는 오리지널 게임 기획으로 구분합니다.</p>
+          <p>세 개의 프로젝트 중 Patris와 Crimson Frequency는 원작 웹소설 IP 기반 게임화로 기획되었으며, Anomaly Record의 경우 오리지널 게임 기획임을 밝힙니다.</p>
         </div>
         <div class="novel-grid" data-novel-grid></div>
       </div>
@@ -1111,23 +1111,11 @@
         if (!grid) return;
 
         const data = getData();
-        const sourceItems = [
-          ...(data.novelIPs ?? []).map((novel) => ({
-            ...novel,
-            classification: "원작 웹소설 IP 기반",
-            description: `${novel.project}는 원작 웹소설 IP를 기반으로 게임화 방향을 확장하는 프로젝트입니다.`,
-          })),
-          {
-            id: "anomaly-record-original",
-            project: "Anomaly Record",
-            label: "아노말리 레코드(Anomaly Record)",
-            title: "오리지널 게임 기획",
-            titlePrefix: "원작 웹소설 IP 없음",
-            classification: "오리지널 게임 기획",
-            description: "별도 원작 웹소설 IP를 전제로 하지 않고, 현대 오컬트 어반 판타지의 괴이 사건 대응 구조와 케이스 수렴 구조를 중심으로 설계한 게임 기획 프로젝트입니다.",
-            platforms: [],
-          },
-        ];
+        const sourceItems = (data.novelIPs ?? []).map((novel) => ({
+          ...novel,
+          classification: "원작 웹소설 IP 기반",
+          description: `${novel.project}는 원작 웹소설 IP를 기반으로 게임화 방향을 확장하는 프로젝트입니다.`,
+        }));
 
         grid.innerHTML = sourceItems.map((novel) => {
           const platforms = (novel.platforms ?? []).length > 0
@@ -1146,15 +1134,15 @@
             : `
               <li class="novel-platform novel-platform-static">
                 <div>
-                  <strong>기획 구분</strong>
-                  <span>원작 연재 페이지가 아닌 오리지널 게임 기획 항목으로 관리</span>
+                  <strong>연재 정보</strong>
+                  <span>연재 페이지 정보 준비 중</span>
                 </div>
-                <span class="file-link is-static" aria-label="오리지널 게임 기획">보기</span>
+                <span class="file-link is-disabled" aria-disabled="true">준비 중</span>
               </li>
             `;
 
           return `
-            <article class="novel-card ${novel.id === "anomaly-record-original" ? "is-original-game" : "is-novel-origin"}">
+            <article class="novel-card is-novel-origin">
               <span class="badge">${novel.project}</span>
               <span class="badge novel-origin-type">${novel.classification}</span>
               <h3>
