@@ -415,6 +415,35 @@
       margin-top: auto;
     }
 
+
+    /* Original web novel IP keyword badges: Patris part 1. */
+    .novel-keyword-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 0 16px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .novel-keyword {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 7px 12px;
+      border: 1px solid rgba(170, 190, 255, 0.28);
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(12, 21, 43, 0.96), rgba(18, 42, 82, 0.92));
+      color: #f5f8ff;
+      font-size: 0.84rem;
+      font-weight: 900;
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      white-space: nowrap;
+    }
+
     @keyframes projectDetailFadeIn {
       from {
         opacity: 0;
@@ -1008,6 +1037,37 @@
       window.addEventListener("popstate", () => {
         applyProjectView(getProjectFromUrl(), false);
       });
+    })();
+  </script>
+
+
+  <script>
+    (() => {
+      const PATRIS_PART_1_KEYWORDS = ["판타지", "퓨전", "게임시스템", "빙의", "네크로맨서", "망나니", "먼치킨"];
+
+      const renderPatrisPart1Keywords = () => {
+        const novelCards = [...document.querySelectorAll(".novel-card")];
+        const targetCard = novelCards.find((card) => {
+          const text = card.textContent || "";
+          return text.includes("파트리스(Patris) (1부)") && text.includes("강령명가의 악질분자로 살아남기");
+        });
+
+        if (!targetCard || targetCard.querySelector(".novel-keyword-list")) return;
+
+        const titleBlock = targetCard.querySelector("h3");
+        if (!titleBlock) return;
+
+        const keywordList = document.createElement("ul");
+        keywordList.className = "novel-keyword-list";
+        keywordList.setAttribute("aria-label", "강령명가의 악질분자로 살아남기 키워드");
+        keywordList.innerHTML = PATRIS_PART_1_KEYWORDS
+          .map((keyword) => `<li class="novel-keyword">${keyword}</li>`)
+          .join("");
+
+        titleBlock.insertAdjacentElement("afterend", keywordList);
+      };
+
+      window.addEventListener("DOMContentLoaded", renderPatrisPart1Keywords);
     })();
   </script>
 
