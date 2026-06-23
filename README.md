@@ -370,3 +370,19 @@ URL은 `data/projects.js`의 `novelIPs` 항목에서 입력합니다.
   - Crimson Frequency
   - Anomaly Record
 - 백그라운드 이미지 위에서도 텍스트가 묻히지 않도록 텍스트 섀도우 제거, 테두리, 그림자, 폰트 굵기를 보강했습니다.
+
+
+## About Creator 섹션 반영
+
+현재 상태의 각 파일 요소를 삭제하지 않고, 기존 Contact 섹션을 `About Creator` 섹션으로 변경했습니다.
+
+- 상단 메뉴의 `Contact` 항목을 `About Creator`로 변경했습니다.
+- 기존 `contact` 섹션을 `about-creator` 섹션으로 변경했습니다.
+- 숨김 처리되어 있던 Contact 섹션 표시 제한을 제거했습니다.
+- 제작자 정보 항목을 아래 내용으로 반영했습니다.
+  - 이름: 박정호(Park Jeong-ho)
+  - 필명: 바론핀드(Baron Fiend)
+  - 핵심 역량: 게임 스토리, 시나리오, 시스템 기획 및 데이터 테이블 설계
+  - 포트폴리오 범위: Patris / Crimson Frequency / Anomaly Record
+  - 연락처: jeonghopark2026@gmail.com
+  - 한 줄 소개: 공백 처리
