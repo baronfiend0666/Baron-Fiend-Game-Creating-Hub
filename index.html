@@ -1336,6 +1336,37 @@
   </script>
 
 
+
+  <script>
+    (() => {
+      const CRIMSON_FREQUENCY_KEYWORDS = ["복수", "사이다", "시스템", "인터넷방송", "헌터", "고인물", "먼치킨", "상태창", "스트리머"];
+
+      const renderCrimsonFrequencyKeywords = () => {
+        const novelCards = [...document.querySelectorAll(".novel-card")];
+        const targetCard = novelCards.find((card) => {
+          const text = card.textContent || "";
+          return text.includes("크림슨 프리퀀시(Crimson Frequency)") && text.includes("미스터 헬 하운드의 스트리밍");
+        });
+
+        if (!targetCard || targetCard.querySelector(".novel-keyword-list")) return;
+
+        const titleBlock = targetCard.querySelector("h3");
+        if (!titleBlock) return;
+
+        const keywordList = document.createElement("ul");
+        keywordList.className = "novel-keyword-list";
+        keywordList.setAttribute("aria-label", "미스터 헬 하운드의 스트리밍 키워드");
+        keywordList.innerHTML = CRIMSON_FREQUENCY_KEYWORDS
+          .map((keyword) => `<li class="novel-keyword">${keyword}</li>`)
+          .join("");
+
+        titleBlock.insertAdjacentElement("afterend", keywordList);
+      };
+
+      window.addEventListener("DOMContentLoaded", renderCrimsonFrequencyKeywords);
+    })();
+  </script>
+
   <script>
     (() => {
       const PATRIS_PART_1_RELEASE_TEXT = "(2026.07~)";
