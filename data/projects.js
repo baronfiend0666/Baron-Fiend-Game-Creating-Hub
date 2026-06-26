@@ -1,7 +1,4 @@
 window.PORTFOLIO_DATA = (() => {
-  const params = new URLSearchParams(window.location.search);
-  const activeProjectId = params.get("project");
-
   const data = {
     projects: [
       {
@@ -19,6 +16,30 @@ window.PORTFOLIO_DATA = (() => {
         videoTitle: "파트리스(Patris)",
         videoDescription: "AniFlow 사이트와 각 프로젝트의 스토리보드 문서를 기반으로 제작한 AI 애니메이션의 1화 영상 유튜브 URL입니다.",
         projectDisplayLine: "파트리스 · 3인칭 오픈월드 캐릭터 수집형 액션 RPG",
+        appIcons: [
+          {
+            label: "Isadora",
+            src: "assets/images/patris/app-icons/patris-app-icon-isadora.png",
+            fallbacks: [
+              "assets/images/app-icons/patris-app-icon-isadora.png",
+              "assets/images/patris-app-icon-isadora.png",
+              "assets/images/patris/app-icons/patris-app-icon.png",
+              "assets/images/app-icons/patris-app-icon.png",
+              "assets/images/patris-app-icon.png"
+            ],
+          },
+          {
+            label: "Iris",
+            src: "assets/images/patris/app-icons/patris-app-icon-iris.png",
+            fallbacks: [
+              "assets/images/app-icons/patris-app-icon-iris.png",
+              "assets/images/patris-app-icon-iris.png",
+              "assets/images/patris/app-icons/patris-app-icon.png",
+              "assets/images/app-icons/patris-app-icon.png",
+              "assets/images/patris-app-icon.png"
+            ],
+          },
+        ],
       },
       {
         id: "crimson-frequency",
@@ -35,6 +56,17 @@ window.PORTFOLIO_DATA = (() => {
         videoTitle: "크림슨 프리퀀시(Crimson Frequency)",
         videoDescription: "AniFlow 사이트와 각 프로젝트의 스토리보드 문서를 기반으로 제작한 AI 애니메이션의 1화 영상 유튜브 URL입니다.",
         projectDisplayLine: "크림슨 프리퀀시 · 3인칭 현대 로그라이트 액션 RPG",
+        appIcons: [
+          {
+            label: "Crimson Frequency",
+            src: "assets/images/app-icons/crimson-frequency-app-icon.png",
+            fallbacks: [
+              "assets/images/crimson-frequency/app-icons/crimson-frequency-app-icon.png",
+              "assets/images/crimson_frequency/app-icons/crimson-frequency-app-icon.png",
+              "assets/images/crimson-frequency-app-icon.png"
+            ],
+          },
+        ],
       },
       {
         id: "anomaly-record",
@@ -51,6 +83,17 @@ window.PORTFOLIO_DATA = (() => {
         videoTitle: "아노말리 레코드(Anomaly Record)",
         videoDescription: "AniFlow 사이트와 각 프로젝트의 스토리보드 문서를 기반으로 제작한 AI 애니메이션의 1화 영상 유튜브 URL입니다.",
         projectDisplayLine: "아노말리 레코드 · 3인칭 오컬트 어반 판타지 RPG",
+        appIcons: [
+          {
+            label: "Anomaly Record",
+            src: "assets/images/app-icons/anomaly-record-app-icon.png",
+            fallbacks: [
+              "assets/images/anomaly-record/app-icons/anomaly-record-app-icon.png",
+              "assets/images/anomaly_record/app-icons/anomaly-record-app-icon.png",
+              "assets/images/anomaly-record-app-icon.png"
+            ],
+          },
+        ],
       },
     ],
 
@@ -140,85 +183,5 @@ window.PORTFOLIO_DATA = (() => {
     ],
   };
 
-  const patrisAppIconSection = {
-    id: "app-icons",
-    order: "04",
-    title: "앱 아이콘 이미지",
-    folder: "assets/images/patris/app-icons",
-    description: "Patris 앱 아이콘 버전 교체 및 비교용 PNG 이미지입니다.",
-    items: [
-      {
-        title: "App Icon - Isadora",
-        ext: "png",
-        fileName: "Patris_App_Icon_Isadora.png",
-        path: "assets/images/patris/app-icons/patris-app-icon-isadora.png",
-        thumbnail: "assets/images/patris/app-icons/patris-app-icon-isadora.png",
-      },
-      {
-        title: "App Icon - Iris",
-        ext: "png",
-        fileName: "Patris_App_Icon_Iris.png",
-        path: "assets/images/patris/app-icons/patris-app-icon-iris.png",
-        thumbnail: "assets/images/patris/app-icons/patris-app-icon-iris.png",
-      },
-    ],
-  };
-
-  // Patris 메뉴에서만 앱 아이콘 이미지 섹션이 보이도록 제한합니다.
-  if (activeProjectId === "patris") {
-    data.portfolioSections = [...data.portfolioSections, patrisAppIconSection];
-  }
-
   return data;
-})();
-
-(() => {
-  const APP_ICON_PATH_PREFIX = "assets/images/patris/app-icons/";
-
-  const enhancePatrisAppIconCards = () => {
-    document.querySelectorAll(`a.file-link[href*="${APP_ICON_PATH_PREFIX}"]`).forEach((link) => {
-      const card = link.closest(".file-set-card");
-      if (!card || card.dataset.appIconPreviewEnhanced === "true") return;
-
-      const href = link.getAttribute("href") || "";
-      const title = card.querySelector(".file-set-card-body strong")?.textContent?.trim() || "Patris App Icon";
-      const body = card.querySelector(".file-set-card-body");
-      const preview = document.createElement("img");
-
-      preview.src = href;
-      preview.alt = `${title} 미리보기`;
-      preview.loading = "lazy";
-      preview.decoding = "async";
-      preview.style.width = "96px";
-      preview.style.height = "96px";
-      preview.style.flex = "0 0 96px";
-      preview.style.objectFit = "cover";
-      preview.style.borderRadius = "24px";
-      preview.style.boxShadow = "0 14px 32px rgba(0, 0, 0, 0.28)";
-      preview.style.border = "1px solid rgba(255, 255, 255, 0.22)";
-
-      if (body) {
-        card.insertBefore(preview, body);
-      } else {
-        card.prepend(preview);
-      }
-
-      card.dataset.appIconPreviewEnhanced = "true";
-      card.style.alignItems = "center";
-      card.style.gap = "16px";
-    });
-  };
-
-  const startEnhancer = () => {
-    enhancePatrisAppIconCards();
-
-    const observer = new MutationObserver(enhancePatrisAppIconCards);
-    observer.observe(document.body, { childList: true, subtree: true });
-  };
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", startEnhancer, { once: true });
-  } else {
-    startEnhancer();
-  }
 })();
