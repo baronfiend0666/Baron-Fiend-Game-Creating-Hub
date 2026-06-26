@@ -214,27 +214,35 @@ window.PORTFOLIO_DATA = {
       }
 
       .project-file-detail-app-icons.is-single .project-file-detail-app-icon-img {
-        width: 88px;
-        height: 88px;
-        border-radius: 26px;
+        width: 112px !important;
+        height: 112px !important;
+        border-radius: 28px !important;
       }
 
       .project-file-detail-app-icons.is-multiple .project-file-detail-app-icon-img {
-        width: 72px;
-        height: 72px;
-        border-radius: 22px;
+        width: 96px !important;
+        height: 96px !important;
+        border-radius: 24px !important;
       }
 
       .project-file-detail-app-icon-img,
       .project-detail-app-icon.project-file-detail-app-icon-img {
-        display: block;
-        object-fit: cover;
+        display: block !important;
+        box-sizing: border-box !important;
+        flex: 0 0 auto !important;
+        max-width: none !important;
+        max-height: none !important;
+        aspect-ratio: 1 / 1 !important;
+        object-fit: contain !important;
+        object-position: center center !important;
+        image-rendering: auto !important;
         background: rgba(7, 10, 22, 0.60);
-        border: 1px solid rgba(255, 255, 255, 0.34);
+        border: 1px solid rgba(255, 255, 255, 0.30);
         box-shadow:
-          0 16px 36px rgba(0, 0, 0, 0.38),
-          0 0 0 1px rgba(122, 162, 255, 0.14),
-          inset 0 1px 0 rgba(255, 255, 255, 0.12);
+          0 14px 30px rgba(0, 0, 0, 0.32),
+          0 0 0 1px rgba(122, 162, 255, 0.10);
+        transform: translateZ(0);
+        backface-visibility: hidden;
       }
 
       .project-file-detail-app-icon-img.is-missing {
@@ -253,15 +261,15 @@ window.PORTFOLIO_DATA = {
         }
 
         .project-file-detail-app-icons.is-single .project-file-detail-app-icon-img {
-          width: 72px;
-          height: 72px;
-          border-radius: 22px;
+          width: 88px !important;
+          height: 88px !important;
+          border-radius: 22px !important;
         }
 
         .project-file-detail-app-icons.is-multiple .project-file-detail-app-icon-img {
-          width: 58px;
-          height: 58px;
-          border-radius: 18px;
+          width: 76px !important;
+          height: 76px !important;
+          border-radius: 20px !important;
         }
       }
     `;
@@ -335,8 +343,10 @@ window.PORTFOLIO_DATA = {
 
       img.src = iconPaths[0] || "";
       img.alt = item.title || `${project.nameKo || project.name} 앱 아이콘 ${index + 1}`;
-      img.loading = "lazy";
+      img.loading = "eager";
       img.decoding = "async";
+      img.width = icons.length > 1 ? 96 : 112;
+      img.height = icons.length > 1 ? 96 : 112;
       img.dataset.iconPathIndex = "0";
 
       img.addEventListener("error", () => {
