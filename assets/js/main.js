@@ -263,7 +263,15 @@ function injectProjectAppIconStyles() {
       padding: clamp(22px, 3vw, 34px);
     }
 
-    .project-detail-top,
+    .project-detail-top {
+      display: grid;
+      grid-template-columns: minmax(180px, 280px) minmax(0, 1fr);
+      gap: clamp(22px, 3.4vw, 42px);
+      align-items: stretch;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--line, rgba(255, 255, 255, 0.14));
+    }
+
     .file-set-detail-top {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
@@ -271,6 +279,36 @@ function injectProjectAppIconStyles() {
       align-items: start;
       padding-bottom: 22px;
       border-bottom: 1px solid var(--line, rgba(255, 255, 255, 0.14));
+    }
+
+    .project-detail-visual-panel {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    .project-detail-visual-panel .project-representative-image-frame {
+      display: flex;
+      width: 100%;
+      min-height: clamp(300px, 34vw, 440px);
+      height: 100%;
+      border-radius: 28px;
+      box-shadow: 0 24px 58px rgba(0, 0, 0, 0.34);
+    }
+
+    .project-detail-visual-panel .project-representative-image-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    .project-detail-title-wrap {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .project-heading-media {
@@ -532,6 +570,15 @@ function injectProjectAppIconStyles() {
       .file-set-grid,
       .portfolio-set-layout {
         grid-template-columns: 1fr;
+      }
+
+      .project-detail-visual-panel {
+        justify-content: flex-start;
+      }
+
+      .project-detail-visual-panel .project-representative-image-frame {
+        width: min(100%, 360px);
+        min-height: 420px;
       }
 
       .project-detail-actions,
@@ -827,10 +874,13 @@ function renderProjectDetail(projectId) {
   detail.innerHTML = `
     <div class="project-detail-shell" aria-label="${escapeHtml(project.name)} Project File Detail Page">
       <div class="project-detail-top">
+        <div class="project-detail-visual-panel" aria-label="${escapeHtml(project.name)} 프로젝트 대표 이미지">
+          ${renderProjectRepresentativeImage(project)}
+        </div>
         <div class="project-detail-title-wrap">
           <span class="project-detail-label">${escapeHtml(project.order || "Project")} · Project File Detail Page</span>
           <div class="project-detail-heading-row">
-            ${renderProjectHeadingMedia(project)}
+            ${renderAppIcons(project)}
             <h3>${escapeHtml(project.name)}</h3>
           </div>
           <p>${escapeHtml(project.projectDisplayLine || `${project.nameKo || project.name} · ${project.genre || "Game Planning Portfolio"}`)}</p>
@@ -839,10 +889,9 @@ function renderProjectDetail(projectId) {
             ${createBadge(project.engine)}
             ${tags}
           </div>
-        </div>
-        <div class="project-detail-actions">
-          <a class="btn btn-primary" href="#documents">프로젝트 버튼으로 이동</a>
-          <a class="btn btn-ghost" href="${project.background || project.cardImage || "#"}" target="_blank" rel="noopener">대표 이미지 열기</a>
+          <div class="project-detail-actions">
+            <a class="btn btn-primary" href="#documents">프로젝트 버튼으로 이동</a>
+          </div>
         </div>
       </div>
       <div class="project-detail-index" aria-label="${escapeHtml(project.name)} 포트폴리오 세부 섹션 바로가기">
