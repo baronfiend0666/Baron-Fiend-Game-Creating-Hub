@@ -9,115 +9,6 @@ const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)]
 
 const data = window.PORTFOLIO_DATA ?? { projects: [], portfolioSections: [], novelIPs: [] };
 
-const escapeAttribute = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
-  "&": "&amp;",
-  "<": "&lt;",
-  ">": "&gt;",
-  '"': "&quot;",
-  "'": "&#39;",
-}[char]));
-
-function injectProjectAppIconStyles() {
-  if (document.querySelector("[data-project-app-icon-style]")) return;
-
-  const style = document.createElement("style");
-  style.dataset.projectAppIconStyle = "true";
-  style.textContent = `
-    .project-detail-heading-wrap {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      margin: 8px 0 10px;
-    }
-
-    .project-detail-heading-wrap h3 {
-      margin: 0;
-    }
-
-    .project-detail-app-icon {
-      width: 92px;
-      height: 92px;
-      flex: 0 0 92px;
-      border-radius: 28px;
-      object-fit: cover;
-      border: 1px solid rgba(255, 255, 255, 0.44);
-      background: rgba(7, 10, 22, 0.60);
-      box-shadow:
-        0 18px 42px rgba(0, 0, 0, 0.42),
-        0 0 0 1px rgba(122, 162, 255, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.16);
-    }
-
-    @media (max-width: 720px) {
-      .project-detail-heading-wrap {
-        align-items: flex-start;
-        gap: 14px;
-      }
-
-      .project-detail-app-icon {
-        width: 72px;
-        height: 72px;
-        flex-basis: 72px;
-        border-radius: 22px;
-      }
-    }
-  `;
-  document.head.appendChild(style);
-}
-
-function getCurrentProjectFromUrl() {
-  const params = new URLSearchParams(window.location.search);
-  const projectId = params.get("project") || document.querySelector("#documents .tab.is-active")?.dataset.filter;
-  return data.projects.find((project) => project.id === projectId) || null;
-}
-
-function enhanceProjectDetailAppIcon() {
-  const detail = document.querySelector("[data-project-detail-page]");
-  const project = getCurrentProjectFromUrl();
-  if (!detail || detail.hidden || !project?.appIcon) return;
-  if (detail.querySelector(".project-detail-app-icon")) return;
-
-  const title = detail.querySelector(".project-detail-copy h3");
-  if (!title) return;
-
-  const titleWrap = document.createElement("div");
-  titleWrap.className = "project-detail-heading-wrap";
-
-  const icon = document.createElement("img");
-  icon.className = "project-detail-app-icon";
-  icon.src = project.appIcon;
-  icon.alt = `${project.nameKo || project.name} 앱 아이콘`;
-  icon.loading = "lazy";
-
-  title.parentNode.insertBefore(titleWrap, title);
-  titleWrap.append(icon, title);
-}
-
-function bindProjectDetailAppIconObserver() {
-  const detail = document.querySelector("[data-project-detail-page]");
-  if (!detail) return;
-
-  let frameId = 0;
-  const scheduleEnhancement = () => {
-    cancelAnimationFrame(frameId);
-    frameId = requestAnimationFrame(enhanceProjectDetailAppIcon);
-  };
-
-  new MutationObserver(scheduleEnhancement).observe(detail, {
-    childList: true,
-    subtree: true,
-  });
-
-  window.addEventListener("popstate", scheduleEnhancement);
-  document.addEventListener("click", (event) => {
-    if (event.target.closest("[data-project-image-link], [data-project-back-detail], [data-project-section-jump], #documents [data-filter]")) {
-      scheduleEnhancement();
-    }
-  });
-
-  scheduleEnhancement();
-}
-
 function createBadge(text) {
   return `<span class="badge">${text}</span>`;
 }
@@ -129,6 +20,7 @@ function renderProjects() {
   grid.innerHTML = data.projects.map((project) => {
     const tags = project.tags.map(createBadge).join("");
     const projectImage = project.cardImage || project.background;
+
     return `
       <article class="project-card visible-project-card">
         <div class="project-visual-wrap">
@@ -191,6 +83,7 @@ function renderNovelIPs() {
 
   grid.innerHTML = (data.novelIPs ?? []).map((novel) => {
     const serialPeriod = novel.serialPeriod ? ` (${novel.serialPeriod})` : "";
+    const extraNote = novel.extraNote ? `<p class="novel-extra-note">${novel.extraNote}</p>` : "";
     const platforms = novel.platforms.map((platform) => {
       const hasUrl = platform.url && platform.url.trim().length > 0;
       const href = hasUrl ? platform.url : "#";
@@ -213,6 +106,7 @@ function renderNovelIPs() {
           <span class="novel-label-line">${novel.label}</span>
           <span class="novel-title-line">${novel.titlePrefix || "원작 웹소설 IP"} - 『${novel.title}』${serialPeriod}</span>
         </h3>
+        ${extraNote}
         <ul class="novel-platform-list">${platforms}</ul>
       </article>
     `;
@@ -260,7 +154,6 @@ function setCurrentYear() {
   if (year) year.textContent = new Date().getFullYear();
 }
 
-injectProjectAppIconStyles();
 renderProjects();
 renderVideos();
 renderNovelIPs();
@@ -268,9 +161,3 @@ bindDisabledLinks();
 bindMobileNavigation();
 bindHeaderState();
 setCurrentYear();
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", bindProjectDetailAppIconObserver);
-} else {
-  bindProjectDetailAppIconObserver();
-}
