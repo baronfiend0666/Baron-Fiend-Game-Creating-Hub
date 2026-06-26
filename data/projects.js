@@ -17,6 +17,7 @@ window.PORTFOLIO_DATA = {
       "summary": "플레이어는 데미안 오펠 포네로스가 되어 파트리스의 5개 지역을 탐험하고, 동료 캐릭터들과 성장하며 세계를 위협하는 적들과 대립한다.",
       "youtube": "",
       "cardImage": "assets/images/patris-project-visual.png",
+      "appIcon": "assets/images/app-icons/patris-app-icon.png",
       "videoTitle": "파트리스(Patris)",
       "videoDescription": "AniFlow 사이트와 각 프로젝트의 스토리보드 문서를 기반으로 제작한 AI 애니메이션의 1화 영상 유튜브 URL입니다.",
       "projectDisplayLine": "파트리스 · 3인칭 오픈월드 캐릭터 수집형 액션 RPG"
@@ -38,6 +39,7 @@ window.PORTFOLIO_DATA = {
       "summary": "플레이어는 정체를 숨긴 먼치킨 스트리머 헬 하운드가 되어 서울 한복판에 나타난 탑을 등반하고 자신을 죽이려 한 자들을 추적해 복수한다.",
       "youtube": "",
       "cardImage": "assets/images/crimson-frequency-project-visual.png",
+      "appIcon": "assets/images/app-icons/crimson-frequency-app-icon.png",
       "videoTitle": "크림슨 프리퀀시(Crimson Frequency)",
       "videoDescription": "AniFlow 사이트와 각 프로젝트의 스토리보드 문서를 기반으로 제작한 AI 애니메이션의 1화 영상 유튜브 URL입니다.",
       "projectDisplayLine": "크림슨 프리퀀시 · 3인칭 현대 로그라이트 액션 RPG"
@@ -59,6 +61,7 @@ window.PORTFOLIO_DATA = {
       "summary": "플레이어는 한시우 또는 류세린을 선택해 괴이대응청 현장분석국 분석관으로서 서울 곳곳에 출현하는 괴이 사건을 해결한다.",
       "youtube": "",
       "cardImage": "assets/images/anomaly-record-project-visual.png",
+      "appIcon": "assets/images/app-icons/anomaly-record-app-icon.png",
       "videoTitle": "아노말리 레코드(Anomaly Record)",
       "videoDescription": "AniFlow 사이트와 각 프로젝트의 스토리보드 문서를 기반으로 제작한 AI 애니메이션의 1화 영상 유튜브 URL입니다.",
       "projectDisplayLine": "아노말리 레코드 · 3인칭 오컬트 어반 판타지 RPG"
