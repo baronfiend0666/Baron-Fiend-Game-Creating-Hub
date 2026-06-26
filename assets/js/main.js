@@ -1,7 +1,7 @@
 /* =========================================================
    Game Planning Portfolio Site
    - data/projects.js의 프로젝트/문서/영상/원작 웹소설 데이터를 렌더링합니다.
-   - 프로젝트 분류에 따른 개별 파일 모음과 Project File Detail Page에 앱 아이콘 이미지를 출력합니다.
+   - 프로젝트 분류에 따른 개별 파일 모음과 Project File Detail Page에 대표 이미지와 앱 아이콘 이미지를 출력합니다.
    ========================================================= */
 
 const $ = (selector, scope = document) => scope.querySelector(selector);
@@ -273,6 +273,48 @@ function injectProjectAppIconStyles() {
       border-bottom: 1px solid var(--line, rgba(255, 255, 255, 0.14));
     }
 
+    .project-heading-media {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .project-representative-image-frame {
+      display: inline-flex;
+      width: clamp(64px, 8vw, 112px);
+      height: clamp(48px, 6vw, 84px);
+      flex: 0 0 auto;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
+    }
+
+    .project-representative-image-img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .project-document-title-row .project-representative-image-frame {
+      width: 64px;
+      height: 48px;
+      border-radius: 14px;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+    }
+
+    .portfolio-file-set-title-row .project-representative-image-frame {
+      width: clamp(64px, 7vw, 96px);
+      height: clamp(48px, 5vw, 72px);
+      border-radius: 16px;
+    }
+
     .project-app-icon-set {
       display: inline-flex;
       flex: 0 0 auto;
@@ -497,6 +539,16 @@ function injectProjectAppIconStyles() {
         justify-content: flex-start;
       }
 
+      .project-document-title-row,
+      .project-detail-heading-row,
+      .portfolio-file-set-title-row {
+        align-items: flex-start;
+      }
+
+      .project-heading-media {
+        gap: 8px;
+      }
+
       .file-set-card,
       .portfolio-set-file-card {
         grid-template-columns: auto minmax(0, 1fr);
@@ -537,6 +589,39 @@ function renderAppIcons(project) {
   }).join("");
 
   return `<span class="project-app-icon-set" aria-label="${escapeHtml(project.name)} 앱 아이콘 이미지">${iconMarkup}</span>`;
+}
+
+
+function renderProjectRepresentativeImage(project) {
+  const src = project.cardImage || project.background;
+  if (!src) return "";
+
+  const alt = `${project.name} 프로젝트 대표 이미지`;
+  return `
+    <span class="project-representative-image-frame" title="${escapeHtml(alt)}">
+      <img
+        class="project-representative-image-img"
+        src="${escapeHtml(src)}"
+        alt="${escapeHtml(alt)}"
+        loading="lazy"
+        decoding="async"
+      />
+    </span>
+  `;
+}
+
+function renderProjectHeadingMedia(project) {
+  const representativeImage = renderProjectRepresentativeImage(project);
+  const appIcons = renderAppIcons(project);
+
+  if (!representativeImage && !appIcons) return "";
+
+  return `
+    <span class="project-heading-media" aria-label="${escapeHtml(project.name)} 대표 이미지 및 앱 아이콘 이미지">
+      ${representativeImage}
+      ${appIcons}
+    </span>
+  `;
 }
 
 function activateImageFallbacks(scope = document) {
@@ -615,7 +700,7 @@ function renderDocuments() {
         <div class="portfolio-block-head">
           <span class="badge">${escapeHtml(project.name)}</span>
           <div class="project-document-title-row">
-            ${renderAppIcons(project)}
+            ${renderProjectHeadingMedia(project)}
             <h3>${escapeHtml(project.nameKo || project.name)}</h3>
           </div>
           <p>${escapeHtml(project.projectDisplayLine || project.genre || "Game Planning Portfolio")}</p>
@@ -745,7 +830,7 @@ function renderProjectDetail(projectId) {
         <div class="project-detail-title-wrap">
           <span class="project-detail-label">${escapeHtml(project.order || "Project")} · Project File Detail Page</span>
           <div class="project-detail-heading-row">
-            ${renderAppIcons(project)}
+            ${renderProjectHeadingMedia(project)}
             <h3>${escapeHtml(project.name)}</h3>
           </div>
           <p>${escapeHtml(project.projectDisplayLine || `${project.nameKo || project.name} · ${project.genre || "Game Planning Portfolio"}`)}</p>
@@ -805,7 +890,7 @@ function renderFileSetDetail(projectId, sectionId) {
         <div class="file-set-detail-title-wrap">
           <span class="file-set-detail-label">Portfolio File Set Page</span>
           <div class="portfolio-file-set-title-row">
-            ${renderAppIcons(project)}
+            ${renderProjectHeadingMedia(project)}
             <h3>${escapeHtml(project.name)}_${escapeHtml(section.title || section.name)}</h3>
           </div>
           <p>${escapeHtml(project.nameKo || project.name)} 프로젝트의 ${escapeHtml(section.title || section.name)} 파일만 분리해서 확인하는 세부 열람 섹션입니다.</p>
