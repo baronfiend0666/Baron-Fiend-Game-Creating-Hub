@@ -9,6 +9,162 @@ const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)]
 
 const data = window.PORTFOLIO_DATA ?? { projects: [], portfolioSections: [], novelIPs: [] };
 
+const escapeAttribute = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;",
+}[char]));
+
+function injectProjectAppIconStyles() {
+  if (document.querySelector("[data-project-app-icon-style]")) return;
+
+  const style = document.createElement("style");
+  style.dataset.projectAppIconStyle = "true";
+  style.textContent = `
+    .project-visual-wrap {
+      position: relative;
+    }
+
+    .project-app-icon-badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 3;
+      width: 72px;
+      height: 72px;
+      border-radius: 22px;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      background: rgba(7, 10, 22, 0.58);
+      box-shadow:
+        0 16px 36px rgba(0, 0, 0, 0.40),
+        0 0 0 1px rgba(122, 162, 255, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    }
+
+    .project-visual-link .project-app-icon-badge {
+      transition: transform 220ms ease, filter 220ms ease;
+    }
+
+    .project-visual-link:hover .project-app-icon-badge,
+    .project-visual-link:focus-visible .project-app-icon-badge {
+      transform: translateY(-2px) scale(1.04);
+      filter: brightness(1.08) contrast(1.04);
+    }
+
+    .project-detail-heading-wrap {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin: 8px 0 10px;
+    }
+
+    .project-detail-heading-wrap h3 {
+      margin: 0;
+    }
+
+    .project-detail-app-icon {
+      width: 92px;
+      height: 92px;
+      flex: 0 0 92px;
+      border-radius: 28px;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, 0.44);
+      background: rgba(7, 10, 22, 0.60);
+      box-shadow:
+        0 18px 42px rgba(0, 0, 0, 0.42),
+        0 0 0 1px rgba(122, 162, 255, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    }
+
+    @media (max-width: 720px) {
+      .project-app-icon-badge {
+        top: 12px;
+        left: 12px;
+        width: 58px;
+        height: 58px;
+        border-radius: 18px;
+      }
+
+      .project-detail-heading-wrap {
+        align-items: flex-start;
+        gap: 14px;
+      }
+
+      .project-detail-app-icon {
+        width: 72px;
+        height: 72px;
+        flex-basis: 72px;
+        border-radius: 22px;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+function createProjectCardAppIcon(project) {
+  if (!project?.appIcon) return "";
+
+  const src = escapeAttribute(project.appIcon);
+  const alt = escapeAttribute(`${project.nameKo || project.name} 앱 아이콘`);
+  return `<img class="project-app-icon-badge" src="${src}" alt="${alt}" loading="lazy" />`;
+}
+
+function getCurrentProjectFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const projectId = params.get("project") || document.querySelector("#documents .tab.is-active")?.dataset.filter;
+  return data.projects.find((project) => project.id === projectId) || null;
+}
+
+function enhanceProjectDetailAppIcon() {
+  const detail = document.querySelector("[data-project-detail-page]");
+  const project = getCurrentProjectFromUrl();
+  if (!detail || detail.hidden || !project?.appIcon) return;
+  if (detail.querySelector(".project-detail-app-icon")) return;
+
+  const title = detail.querySelector(".project-detail-copy h3");
+  if (!title) return;
+
+  const titleWrap = document.createElement("div");
+  titleWrap.className = "project-detail-heading-wrap";
+
+  const icon = document.createElement("img");
+  icon.className = "project-detail-app-icon";
+  icon.src = project.appIcon;
+  icon.alt = `${project.nameKo || project.name} 앱 아이콘`;
+  icon.loading = "lazy";
+
+  title.parentNode.insertBefore(titleWrap, title);
+  titleWrap.append(icon, title);
+}
+
+function bindProjectDetailAppIconObserver() {
+  const detail = document.querySelector("[data-project-detail-page]");
+  if (!detail) return;
+
+  let frameId = 0;
+  const scheduleEnhancement = () => {
+    cancelAnimationFrame(frameId);
+    frameId = requestAnimationFrame(enhanceProjectDetailAppIcon);
+  };
+
+  new MutationObserver(scheduleEnhancement).observe(detail, {
+    childList: true,
+    subtree: true,
+  });
+
+  window.addEventListener("popstate", scheduleEnhancement);
+  document.addEventListener("click", (event) => {
+    if (event.target.closest("[data-project-image-link], [data-project-back-detail], [data-project-section-jump], #documents [data-filter]")) {
+      scheduleEnhancement();
+    }
+  });
+
+  scheduleEnhancement();
+}
+
 function createBadge(text) {
   return `<span class="badge">${text}</span>`;
 }
@@ -20,11 +176,13 @@ function renderProjects() {
   grid.innerHTML = data.projects.map((project) => {
     const tags = project.tags.map(createBadge).join("");
     const projectImage = project.cardImage || project.background;
+    const appIconBadge = createProjectCardAppIcon(project);
 
     return `
       <article class="project-card visible-project-card">
         <div class="project-visual-wrap">
           <img class="project-visual" src="${projectImage}" alt="${project.name} 프로젝트 대표 이미지" loading="lazy" />
+          ${appIconBadge}
         </div>
         <div class="project-content">
           <span class="project-order">${project.order}</span>
@@ -152,6 +310,7 @@ function setCurrentYear() {
   if (year) year.textContent = new Date().getFullYear();
 }
 
+injectProjectAppIconStyles();
 renderProjects();
 renderVideos();
 renderNovelIPs();
@@ -159,3 +318,9 @@ bindDisabledLinks();
 bindMobileNavigation();
 bindHeaderState();
 setCurrentYear();
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", bindProjectDetailAppIconObserver);
+} else {
+  bindProjectDetailAppIconObserver();
+}
