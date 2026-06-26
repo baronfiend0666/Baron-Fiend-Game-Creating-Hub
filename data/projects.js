@@ -139,85 +139,253 @@ window.PORTFOLIO_DATA = (() => {
     ],
   };
 
-  const patrisAppIconSection = {
-    id: "app-icons",
-    order: "04",
-    title: "앱 아이콘 이미지",
-    folder: "assets/images/patris/app-icons",
-    description: "Patris 앱 아이콘 버전 교체 및 비교용 PNG 이미지입니다.",
-    items: [
-      {
-        title: "App Icon - Isadora",
-        ext: "png",
-        fileName: "Patris_App_Icon_Isadora.png",
-        path: "assets/images/patris/app-icons/patris-app-icon-isadora.png",
-        thumbnail: "assets/images/patris/app-icons/patris-app-icon-isadora.png",
-      },
-      {
-        title: "App Icon - Iris",
-        ext: "png",
-        fileName: "Patris_App_Icon_Iris.png",
-        path: "assets/images/patris/app-icons/patris-app-icon-iris.png",
-        thumbnail: "assets/images/patris/app-icons/patris-app-icon-iris.png",
-      },
-    ],
-  };
 
-  // Patris 메뉴에서만 앱 아이콘 이미지 섹션이 보이도록 제한합니다.
-  if (activeProjectId === "patris") {
-    data.portfolioSections = [...data.portfolioSections, patrisAppIconSection];
-  }
+  data.appIconGroups = {
+    "patris": {
+      title: "Patris 앱 아이콘 이미지",
+      description: "Patris 앱 아이콘 버전 교체 및 비교용 PNG 이미지입니다.",
+      items: [
+        {
+          title: "App Icon - Isadora",
+          label: "Isadora",
+          path: "assets/images/patris/app-icons/patris-app-icon-isadora.png",
+        },
+        {
+          title: "App Icon - Iris",
+          label: "Iris",
+          path: "assets/images/patris/app-icons/patris-app-icon-iris.png",
+        },
+      ],
+    },
+    "crimson-frequency": {
+      title: "Crimson Frequency 앱 아이콘 이미지",
+      description: "Crimson Frequency 앱 아이콘 PNG 이미지입니다.",
+      items: [
+        {
+          title: "App Icon - Crimson Frequency",
+          label: "Crimson Frequency",
+          path: "assets/images/crimson-frequency/app-icons/crimson-frequency-app-icon.png",
+        },
+      ],
+    },
+    "anomaly-record": {
+      title: "Anomaly Record 앱 아이콘 이미지",
+      description: "Anomaly Record 앱 아이콘 PNG 이미지입니다.",
+      items: [
+        {
+          title: "App Icon - Anomaly Record",
+          label: "Anomaly Record",
+          path: "assets/images/anomaly-record/app-icons/anomaly-record-app-icon.png",
+        },
+      ],
+    },
+  };
 
   return data;
 })();
 
 (() => {
-  const APP_ICON_PATH_PREFIX = "assets/images/patris/app-icons/";
+  const STYLE_ID = "project-app-icon-panel-style";
+  const PANEL_SELECTOR = "[data-project-app-icon-panel]";
 
-  const enhancePatrisAppIconCards = () => {
-    document.querySelectorAll(`a.file-link[href*="${APP_ICON_PATH_PREFIX}"]`).forEach((link) => {
-      const card = link.closest(".file-set-card");
-      if (!card || card.dataset.appIconPreviewEnhanced === "true") return;
+  const getData = () => window.PORTFOLIO_DATA ?? {};
+  const getAppIconGroups = () => getData().appIconGroups ?? {};
 
-      const href = link.getAttribute("href") || "";
-      const title = card.querySelector(".file-set-card-body strong")?.textContent?.trim() || "Patris App Icon";
-      const body = card.querySelector(".file-set-card-body");
-      const preview = document.createElement("img");
+  const getCurrentProjectId = () => {
+    const params = new URLSearchParams(window.location.search);
+    const fromUrl = params.get("project");
+    if (fromUrl) return fromUrl;
 
-      preview.src = href;
-      preview.alt = `${title} 미리보기`;
-      preview.loading = "lazy";
-      preview.decoding = "async";
-      preview.style.width = "96px";
-      preview.style.height = "96px";
-      preview.style.flex = "0 0 96px";
-      preview.style.objectFit = "cover";
-      preview.style.borderRadius = "24px";
-      preview.style.boxShadow = "0 14px 32px rgba(0, 0, 0, 0.28)";
-      preview.style.border = "1px solid rgba(255, 255, 255, 0.22)";
+    const activeTab = document.querySelector('#documents [data-filter].is-active, #documents [aria-selected="true"][data-filter]');
+    const fromTab = activeTab?.dataset?.filter;
+    return fromTab && fromTab !== "all" ? fromTab : "";
+  };
 
-      if (body) {
-        card.insertBefore(preview, body);
-      } else {
-        card.prepend(preview);
+  const ensureStyle = () => {
+    if (document.getElementById(STYLE_ID)) return;
+
+    const style = document.createElement("style");
+    style.id = STYLE_ID;
+    style.textContent = `
+      .project-app-icon-panel {
+        margin-top: 22px;
+        padding: clamp(18px, 2.2vw, 24px);
+        border: 1px solid var(--line, rgba(255, 255, 255, 0.14));
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.045);
       }
 
-      card.dataset.appIconPreviewEnhanced = "true";
-      card.style.alignItems = "center";
-      card.style.gap = "16px";
+      .project-app-icon-panel-head {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 16px;
+      }
+
+      .project-app-icon-panel-head strong {
+        color: var(--text, #fff);
+        font-size: 1.05rem;
+        line-height: 1.35;
+      }
+
+      .project-app-icon-panel-head span {
+        color: var(--muted, rgba(255, 255, 255, 0.72));
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      .project-app-icon-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 14px;
+      }
+
+      .project-app-icon-card {
+        display: grid;
+        grid-template-columns: 96px minmax(0, 1fr);
+        align-items: center;
+        gap: 14px;
+        min-height: 128px;
+        padding: 16px;
+        border: 1px solid var(--line, rgba(255, 255, 255, 0.14));
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.045);
+        color: inherit;
+        text-decoration: none;
+        transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+      }
+
+      .project-app-icon-card:hover,
+      .project-app-icon-card:focus-visible {
+        transform: translateY(-2px);
+        border-color: rgba(255, 255, 255, 0.34);
+        background: rgba(255, 255, 255, 0.065);
+      }
+
+      .project-app-icon-card:focus-visible {
+        outline: 2px solid var(--primary, #7aa2ff);
+        outline-offset: 3px;
+      }
+
+      .project-app-icon-thumb {
+        width: 96px;
+        height: 96px;
+        object-fit: cover;
+        border-radius: 24px;
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      .project-app-icon-card-body {
+        min-width: 0;
+      }
+
+      .project-app-icon-card-body strong {
+        display: block;
+        color: var(--text, #fff);
+        font-size: 0.98rem;
+        line-height: 1.38;
+        overflow-wrap: break-word;
+      }
+
+      .project-app-icon-card-body span {
+        display: block;
+        margin-top: 6px;
+        color: var(--muted, rgba(255, 255, 255, 0.72));
+        font-size: 0.86rem;
+      }
+
+      @media (max-width: 560px) {
+        .project-app-icon-card {
+          grid-template-columns: 80px minmax(0, 1fr);
+        }
+
+        .project-app-icon-thumb {
+          width: 80px;
+          height: 80px;
+          border-radius: 20px;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  };
+
+  const createPanel = (projectId, group) => {
+    const itemsHtml = group.items.map((item) => `
+      <a class="project-app-icon-card" href="${item.path}" target="_blank" rel="noopener" aria-label="${item.title} 열기">
+        <img class="project-app-icon-thumb" src="${item.path}" alt="${item.title} 미리보기" loading="lazy" decoding="async">
+        <span class="project-app-icon-card-body">
+          <strong>${item.title}</strong>
+          <span>PNG 이미지 · 새 창에서 열람</span>
+        </span>
+      </a>
+    `).join("");
+
+    const panel = document.createElement("section");
+    panel.className = "project-app-icon-panel";
+    panel.dataset.projectAppIconPanel = projectId;
+    panel.innerHTML = `
+      <div class="project-app-icon-panel-head">
+        <strong>${group.title}</strong>
+        <span>${group.description}</span>
+      </div>
+      <div class="project-app-icon-grid">
+        ${itemsHtml}
+      </div>
+    `;
+    return panel;
+  };
+
+  const removeExistingPanels = () => {
+    document.querySelectorAll(PANEL_SELECTOR).forEach((panel) => panel.remove());
+  };
+
+  const injectAppIconPanel = () => {
+    const projectId = getCurrentProjectId();
+    const group = getAppIconGroups()[projectId];
+
+    removeExistingPanels();
+    if (!group || !Array.isArray(group.items) || group.items.length === 0) return;
+
+    const projectDetail = document.querySelector("[data-project-detail-page]:not([hidden])");
+    if (!projectDetail) return;
+
+    const insertionTarget = projectDetail.querySelector(".project-detail-index") ?? projectDetail.querySelector(".project-detail-shell") ?? projectDetail;
+    if (!insertionTarget) return;
+
+    ensureStyle();
+    insertionTarget.insertAdjacentElement("afterend", createPanel(projectId, group));
+  };
+
+  const scheduleInject = () => {
+    window.requestAnimationFrame(() => {
+      injectAppIconPanel();
+      window.setTimeout(injectAppIconPanel, 120);
     });
   };
 
-  const startEnhancer = () => {
-    enhancePatrisAppIconCards();
+  const start = () => {
+    scheduleInject();
 
-    const observer = new MutationObserver(enhancePatrisAppIconCards);
+    window.addEventListener("popstate", scheduleInject);
+    window.addEventListener("hashchange", scheduleInject);
+
+    document.addEventListener("click", (event) => {
+      const target = event.target instanceof Element ? event.target : null;
+      if (!target) return;
+      if (target.closest("#documents [data-filter], [data-project-image-link], .project-detail-index-card")) {
+        window.setTimeout(scheduleInject, 80);
+      }
+    });
+
+    const observer = new MutationObserver(scheduleInject);
     observer.observe(document.body, { childList: true, subtree: true });
   };
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", startEnhancer, { once: true });
+    document.addEventListener("DOMContentLoaded", start, { once: true });
   } else {
-    startEnhancer();
+    start();
   }
 })();
