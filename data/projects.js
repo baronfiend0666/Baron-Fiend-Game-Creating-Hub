@@ -188,7 +188,7 @@ window.PORTFOLIO_DATA = {
       "project": "Patris",
       "label": "파트리스(Patris) (1부)",
       "title": "강령명가의 악질분자로 살아남기",
-      "serialPeriod": "2026.07~",
+      "serialPeriod": "2026.07.10~",
       "platforms": [
         {
           "name": "문피아(Munpia)",
@@ -210,6 +210,7 @@ window.PORTFOLIO_DATA = {
       "project": "Patris",
       "label": "파트리스(Patris) (2부)",
       "title": "합법적 성물 도둑",
+      "serialPeriod": "시기 미정",
       "platforms": [
         {
           "name": "문피아(Munpia)",
