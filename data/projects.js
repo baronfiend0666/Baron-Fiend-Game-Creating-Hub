@@ -18,11 +18,19 @@ window.PORTFOLIO_DATA = {
           label: "Isadora",
           title: "Patris App Icon - Isadora",
           path: "assets/images/patris/app-icons/patris-app-icon-isadora.png",
+          fallbackPaths: [
+            "assets/images/app-icons/patris-app-icon-isadora.png",
+            "assets/images/patris-app-icon-isadora.png",
+          ],
         },
         {
           label: "Iris",
           title: "Patris App Icon - Iris",
           path: "assets/images/patris/app-icons/patris-app-icon-iris.png",
+          fallbackPaths: [
+            "assets/images/app-icons/patris-app-icon-iris.png",
+            "assets/images/patris-app-icon-iris.png",
+          ],
         },
       ],
       videoTitle: "파트리스(Patris)",
@@ -41,13 +49,16 @@ window.PORTFOLIO_DATA = {
       summary: "플레이어는 정체를 숨긴 먼치킨 스트리머 헬 하운드가 되어 서울 한복판에 나타난 탑을 등반하고 자신을 죽이려 한 자들을 추적해 복수한다.",
       youtube: "",
       cardImage: "assets/images/crimson-frequency-project-visual.png",
-      appIcon: "assets/images/app-icons/crimson-frequency-app-icon.png",
+      appIcon: "assets/images/crimson-frequency/app-icons/crimson-frequency-app-icon.png",
       appIcons: [
         {
           label: "Crimson Frequency",
           title: "Crimson Frequency App Icon",
-          path: "assets/images/app-icons/crimson-frequency-app-icon.png",
-          fallbackPath: "assets/images/crimson-frequency/app-icons/crimson-frequency-app-icon.png",
+          path: "assets/images/crimson-frequency/app-icons/crimson-frequency-app-icon.png",
+          fallbackPaths: [
+            "assets/images/app-icons/crimson-frequency-app-icon.png",
+            "assets/images/crimson-frequency-app-icon.png",
+          ],
         },
       ],
       videoTitle: "크림슨 프리퀀시(Crimson Frequency)",
@@ -66,13 +77,16 @@ window.PORTFOLIO_DATA = {
       summary: "플레이어는 한시우 또는 류세린을 선택해 괴이대응청 현장분석국 분석관으로서 서울 곳곳에 출현하는 괴이 사건을 해결한다.",
       youtube: "",
       cardImage: "assets/images/anomaly-record-project-visual.png",
-      appIcon: "assets/images/app-icons/anomaly-record-app-icon.png",
+      appIcon: "assets/images/anomaly-record/app-icons/anomaly-record-app-icon.png",
       appIcons: [
         {
           label: "Anomaly Record",
           title: "Anomaly Record App Icon",
-          path: "assets/images/app-icons/anomaly-record-app-icon.png",
-          fallbackPath: "assets/images/anomaly-record/app-icons/anomaly-record-app-icon.png",
+          path: "assets/images/anomaly-record/app-icons/anomaly-record-app-icon.png",
+          fallbackPaths: [
+            "assets/images/app-icons/anomaly-record-app-icon.png",
+            "assets/images/anomaly-record-app-icon.png",
+          ],
         },
       ],
       videoTitle: "아노말리 레코드(Anomaly Record)",
@@ -223,6 +237,10 @@ window.PORTFOLIO_DATA = {
           inset 0 1px 0 rgba(255, 255, 255, 0.12);
       }
 
+      .project-file-detail-app-icon-img.is-missing {
+        opacity: 0.42;
+      }
+
       @media (max-width: 720px) {
         .project-file-detail-title-row,
         .project-detail-heading-wrap.project-file-detail-title-row {
@@ -309,18 +327,28 @@ window.PORTFOLIO_DATA = {
     icons.forEach((item, index) => {
       const img = document.createElement("img");
       img.className = "project-detail-app-icon project-file-detail-app-icon-img";
-      img.src = item.path;
+      const iconPaths = [
+        item.path,
+        ...(Array.isArray(item.fallbackPaths) ? item.fallbackPaths : []),
+        item.fallbackPath,
+      ].filter(Boolean).filter((path, pathIndex, array) => array.indexOf(path) === pathIndex);
+
+      img.src = iconPaths[0] || "";
       img.alt = item.title || `${project.nameKo || project.name} 앱 아이콘 ${index + 1}`;
       img.loading = "lazy";
       img.decoding = "async";
+      img.dataset.iconPathIndex = "0";
 
-      if (item.fallbackPath) {
-        img.addEventListener("error", () => {
-          if (img.dataset.fallbackApplied === "true") return;
-          img.dataset.fallbackApplied = "true";
-          img.src = item.fallbackPath;
-        });
-      }
+      img.addEventListener("error", () => {
+        const nextIndex = Number(img.dataset.iconPathIndex || "0") + 1;
+        if (nextIndex < iconPaths.length) {
+          img.dataset.iconPathIndex = String(nextIndex);
+          img.src = iconPaths[nextIndex];
+          return;
+        }
+        img.classList.add("is-missing");
+        img.title = `${img.alt} 이미지 경로를 확인해야 합니다.`;
+      });
 
       strip.appendChild(img);
     });
