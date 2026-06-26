@@ -73,22 +73,26 @@ window.PORTFOLIO_DATA = {
         {
           "title": "개발 제안서",
           "ext": "docx",
-          "slug": "Development_Proposal"
+          "slug": "Development_Proposal",
+          "path": "assets/docs/common/coming-soon"
         },
         {
           "title": "콘텐츠맵",
           "ext": "svg",
-          "slug": "Content_Map"
+          "slug": "Content_Map",
+          "path": "assets/docs/common/coming-soon"
         },
         {
           "title": "게임 소개서",
           "ext": "docx",
-          "slug": "Game_Introduction_Document"
+          "slug": "Game_Introduction_Document",
+          "path": "assets/docs/common/coming-soon"
         },
         {
           "title": "GDD",
           "ext": "docx",
-          "slug": "GDD"
+          "slug": "GDD",
+          "path": "assets/docs/common/coming-soon"
         }
       ]
     },
@@ -100,52 +104,62 @@ window.PORTFOLIO_DATA = {
         {
           "title": "게임 스토리",
           "ext": "docx",
-          "slug": "Game_Story"
+          "slug": "Game_Story",
+          "path": "assets/docs/common/coming-soon"
         },
         {
           "title": "게임 시나리오",
           "ext": "docx",
-          "slug": "Game_Scenario"
+          "slug": "Game_Scenario",
+          "path": "assets/docs/common/coming-soon"
         },
         {
           "title": "스토리 보드",
           "ext": "docx",
-          "slug": "Storyboard"
+          "slug": "Storyboard",
+          "path": "assets/docs/common/coming-soon"
         },
         {
           "title": "캐릭터 컨셉 기획서",
           "ext": "docx",
-          "slug": "Character_Concept_Document"
+          "slug": "Character_Concept_Document",
+          "path": "assets/docs/common/coming-soon"
         },
         {
           "title": "배경 컨셉 기획서",
           "ext": "docx",
-          "slug": "Background_Concept_Document"
+          "slug": "Background_Concept_Document",
+          "path": "assets/docs/common/coming-soon"
         },
         {
           "title": "캐릭터 테이블",
           "ext": "xlsx",
-          "slug": "Character_Table"
+          "slug": "Character_Table",
+          "path": "assets/docs/common/coming-soon"
         },
         {
           "title": "아이템 테이블",
           "ext": "xlsx",
-          "slug": "Item_Table"
+          "slug": "Item_Table",
+          "path": "assets/docs/common/coming-soon"
         },
         {
           "title": "퀘스트 테이블",
           "ext": "xlsx",
-          "slug": "Quest_Table"
+          "slug": "Quest_Table",
+          "path": "assets/docs/common/coming-soon"
         },
         {
           "title": "다이얼로그 테이블",
           "ext": "xlsx",
-          "slug": "Dialogue_Table"
+          "slug": "Dialogue_Table",
+          "path": "assets/docs/common/coming-soon"
         },
         {
           "title": "시나리오 테이블",
           "ext": "xlsx",
-          "slug": "Scenario_Table"
+          "slug": "Scenario_Table",
+          "path": "assets/docs/common/coming-soon"
         }
       ]
     },
@@ -157,27 +171,32 @@ window.PORTFOLIO_DATA = {
         {
           "title": "게임 메커닉스",
           "ext": "docx",
-          "slug": "Game_Mechanics"
+          "slug": "Game_Mechanics",
+          "path": "assets/docs/common/coming-soon"
         },
         {
           "title": "프로세스 플로우",
           "ext": "svg",
-          "slug": "Process_Flow"
+          "slug": "Process_Flow",
+          "path": "assets/docs/common/coming-soon"
         },
         {
           "title": "ERD",
           "ext": "svg",
-          "slug": "ERD"
+          "slug": "ERD",
+          "path": "assets/docs/common/coming-soon"
         },
         {
           "title": "데이터 스키마",
           "ext": "docx",
-          "slug": "Data_Schema"
+          "slug": "Data_Schema",
+          "path": "assets/docs/common/coming-soon"
         },
         {
           "title": "통합 데이터 테이블",
           "ext": "docx",
-          "slug": "Integrated_Data_Table"
+          "slug": "Integrated_Data_Table",
+          "path": "assets/docs/common/coming-soon"
         }
       ]
     }
