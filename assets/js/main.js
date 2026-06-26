@@ -23,37 +23,6 @@ function injectProjectAppIconStyles() {
   const style = document.createElement("style");
   style.dataset.projectAppIconStyle = "true";
   style.textContent = `
-    .project-visual-wrap {
-      position: relative;
-    }
-
-    .project-app-icon-badge {
-      position: absolute;
-      top: 16px;
-      left: 16px;
-      z-index: 3;
-      width: 72px;
-      height: 72px;
-      border-radius: 22px;
-      object-fit: cover;
-      border: 1px solid rgba(255, 255, 255, 0.42);
-      background: rgba(7, 10, 22, 0.58);
-      box-shadow:
-        0 16px 36px rgba(0, 0, 0, 0.40),
-        0 0 0 1px rgba(122, 162, 255, 0.16),
-        inset 0 1px 0 rgba(255, 255, 255, 0.16);
-    }
-
-    .project-visual-link .project-app-icon-badge {
-      transition: transform 220ms ease, filter 220ms ease;
-    }
-
-    .project-visual-link:hover .project-app-icon-badge,
-    .project-visual-link:focus-visible .project-app-icon-badge {
-      transform: translateY(-2px) scale(1.04);
-      filter: brightness(1.08) contrast(1.04);
-    }
-
     .project-detail-heading-wrap {
       display: flex;
       align-items: center;
@@ -80,14 +49,6 @@ function injectProjectAppIconStyles() {
     }
 
     @media (max-width: 720px) {
-      .project-app-icon-badge {
-        top: 12px;
-        left: 12px;
-        width: 58px;
-        height: 58px;
-        border-radius: 18px;
-      }
-
       .project-detail-heading-wrap {
         align-items: flex-start;
         gap: 14px;
@@ -102,14 +63,6 @@ function injectProjectAppIconStyles() {
     }
   `;
   document.head.appendChild(style);
-}
-
-function createProjectCardAppIcon(project) {
-  if (!project?.appIcon) return "";
-
-  const src = escapeAttribute(project.appIcon);
-  const alt = escapeAttribute(`${project.nameKo || project.name} 앱 아이콘`);
-  return `<img class="project-app-icon-badge" src="${src}" alt="${alt}" loading="lazy" />`;
 }
 
 function getCurrentProjectFromUrl() {
@@ -176,13 +129,10 @@ function renderProjects() {
   grid.innerHTML = data.projects.map((project) => {
     const tags = project.tags.map(createBadge).join("");
     const projectImage = project.cardImage || project.background;
-    const appIconBadge = createProjectCardAppIcon(project);
-
     return `
       <article class="project-card visible-project-card">
         <div class="project-visual-wrap">
           <img class="project-visual" src="${projectImage}" alt="${project.name} 프로젝트 대표 이미지" loading="lazy" />
-          ${appIconBadge}
         </div>
         <div class="project-content">
           <span class="project-order">${project.order}</span>
