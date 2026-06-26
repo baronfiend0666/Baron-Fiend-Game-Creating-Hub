@@ -1,7 +1,7 @@
 /* =========================================================
    Game Planning Portfolio Site
    - data/projects.js의 프로젝트/문서/영상/원작 웹소설 데이터를 렌더링합니다.
-   - Project File Detail Page에서 프로젝트명 왼편에 앱 아이콘 이미지를 출력합니다.
+   - 프로젝트 분류에 따른 개별 파일 모음과 Project File Detail Page에 앱 아이콘 이미지를 출력합니다.
    ========================================================= */
 
 const $ = (selector, scope = document) => scope.querySelector(selector);
@@ -21,7 +21,81 @@ const SECTION_FOLDER_MAP = {
   "system": "03_system_planning_portfolio",
 };
 
-const BASE_PAGE = "main.html";
+const DEFAULT_APP_ICONS = {
+  "patris": [
+    {
+      label: "Isadora",
+      paths: [
+        "assets/images/patris/app-icons/patris-app-icon-isadora.png",
+        "assets/images/patris/app-icons/patris-app-icon-isadora",
+        "assets/images/app-icons/patris-app-icon-isadora.png",
+        "assets/images/app-icons/patris-app-icon-isadora",
+        "assets/images/patris-app-icon-isadora.png",
+        "assets/images/patris-app-icon-isadora",
+        "assets/images/patris/app-icons/patris-app-icon.png",
+        "assets/images/patris/app-icons/patris-app-icon",
+        "assets/images/app-icons/patris-app-icon.png",
+        "assets/images/app-icons/patris-app-icon",
+        "assets/images/patris-app-icon.png",
+        "assets/images/patris-app-icon"
+      ],
+    },
+    {
+      label: "Iris",
+      paths: [
+        "assets/images/patris/app-icons/patris-app-icon-iris.png",
+        "assets/images/patris/app-icons/patris-app-icon-iris",
+        "assets/images/app-icons/patris-app-icon-iris.png",
+        "assets/images/app-icons/patris-app-icon-iris",
+        "assets/images/patris-app-icon-iris.png",
+        "assets/images/patris-app-icon-iris",
+        "assets/images/patris/app-icons/patris-app-icon.png",
+        "assets/images/patris/app-icons/patris-app-icon",
+        "assets/images/app-icons/patris-app-icon.png",
+        "assets/images/app-icons/patris-app-icon",
+        "assets/images/patris-app-icon.png",
+        "assets/images/patris-app-icon"
+      ],
+    },
+  ],
+  "crimson-frequency": [
+    {
+      label: "Crimson Frequency",
+      paths: [
+        "assets/images/app-icons/crimson-frequency-app-icon.png",
+        "assets/images/app-icons/crimson-frequency-app-icon",
+        "assets/images/crimson-frequency/app-icons/crimson-frequency-app-icon.png",
+        "assets/images/crimson-frequency/app-icons/crimson-frequency-app-icon",
+        "assets/images/crimson_frequency/app-icons/crimson-frequency-app-icon.png",
+        "assets/images/crimson_frequency/app-icons/crimson-frequency-app-icon",
+        "assets/images/crimson-frequency-app-icon.png",
+        "assets/images/crimson-frequency-app-icon"
+      ],
+    },
+  ],
+  "anomaly-record": [
+    {
+      label: "Anomaly Record",
+      paths: [
+        "assets/images/app-icons/anomaly-record-app-icon.png",
+        "assets/images/app-icons/anomaly-record-app-icon",
+        "assets/images/anomaly-record/app-icons/anomaly-record-app-icon.png",
+        "assets/images/anomaly-record/app-icons/anomaly-record-app-icon",
+        "assets/images/anomaly_record/app-icons/anomaly-record-app-icon.png",
+        "assets/images/anomaly_record/app-icons/anomaly-record-app-icon",
+        "assets/images/anomaly-record-app-icon.png",
+        "assets/images/anomaly-record-app-icon"
+      ],
+    },
+  ],
+};
+
+function getBasePage() {
+  const path = window.location.pathname || "main.html";
+  return path.endsWith("/") ? path : path;
+}
+
+const BASE_PAGE = getBasePage();
 
 function escapeHtml(value = "") {
   return String(value)
@@ -41,7 +115,7 @@ function getProject(projectId) {
 }
 
 function getProjectPrefix(project) {
-  return project.name.replaceAll(" ", "_");
+  return (project.name || "Project").replaceAll(" ", "_");
 }
 
 function getFilePath(project, section, item) {
@@ -65,6 +139,24 @@ function getRouteFromUrl() {
   const projectId = params.get("project");
   const sectionId = params.get("section");
   return { projectId, sectionId };
+}
+
+function getProjectIconData(project) {
+  const explicitIcons = Array.isArray(project.appIcons)
+    ? project.appIcons.map((icon) => {
+        const paths = [icon.src, ...(Array.isArray(icon.fallbacks) ? icon.fallbacks : [])].filter(Boolean);
+        return { label: icon.label || project.name, paths };
+      })
+    : [];
+
+  const defaultIcons = DEFAULT_APP_ICONS[project.id] ?? [];
+  const merged = explicitIcons.length ? explicitIcons : defaultIcons;
+
+  return merged.map((icon) => {
+    const defaultForLabel = defaultIcons.find((item) => item.label === icon.label)?.paths ?? [];
+    const paths = [...new Set([...(icon.paths ?? []), ...defaultForLabel].filter(Boolean))];
+    return { label: icon.label, paths };
+  }).filter((icon) => icon.paths.length > 0);
 }
 
 function injectProjectAppIconStyles() {
@@ -126,6 +218,26 @@ function injectProjectAppIconStyles() {
       transform: translateY(0);
     }
 
+    .project-document-title-row,
+    .project-detail-heading-row,
+    .portfolio-file-set-title-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .project-document-title-row {
+      margin: 8px 0 6px;
+    }
+
+    .project-document-title-row h3,
+    .project-detail-heading-row h3,
+    .portfolio-file-set-title-row h3 {
+      margin: 0;
+      min-width: 0;
+    }
+
     .project-detail-page,
     .file-set-detail-page {
       margin: 28px 0 32px;
@@ -161,14 +273,6 @@ function injectProjectAppIconStyles() {
       border-bottom: 1px solid var(--line, rgba(255, 255, 255, 0.14));
     }
 
-    .project-detail-heading-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      min-width: 0;
-      margin: 0 0 10px;
-    }
-
     .project-app-icon-set {
       display: inline-flex;
       flex: 0 0 auto;
@@ -178,8 +282,8 @@ function injectProjectAppIconStyles() {
 
     .project-app-icon-frame {
       display: inline-flex;
-      width: clamp(54px, 6vw, 78px);
-      height: clamp(54px, 6vw, 78px);
+      width: clamp(48px, 5.4vw, 76px);
+      height: clamp(48px, 5.4vw, 76px);
       align-items: center;
       justify-content: center;
       overflow: hidden;
@@ -187,6 +291,12 @@ function injectProjectAppIconStyles() {
       border-radius: 24%;
       background: rgba(255, 255, 255, 0.08);
       box-shadow: 0 14px 34px rgba(0, 0, 0, 0.32);
+    }
+
+    .project-document-title-row .project-app-icon-frame {
+      width: 44px;
+      height: 44px;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.24);
     }
 
     .project-app-icon-frame.is-hidden {
@@ -208,7 +318,8 @@ function injectProjectAppIconStyles() {
     }
 
     .project-detail-title-wrap p,
-    .file-set-detail-title-wrap p {
+    .file-set-detail-title-wrap p,
+    .portfolio-file-set-intro {
       max-width: 860px;
       margin: 12px 0 0;
       color: var(--muted, #cbd5e1);
@@ -241,7 +352,8 @@ function injectProjectAppIconStyles() {
     }
 
     .project-detail-index,
-    .file-set-grid {
+    .file-set-grid,
+    .portfolio-set-layout {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
@@ -253,7 +365,8 @@ function injectProjectAppIconStyles() {
     }
 
     .project-detail-index-card,
-    .file-set-card {
+    .file-set-card,
+    .portfolio-set-panel {
       border: 1px solid var(--line, rgba(255, 255, 255, 0.14));
       border-radius: 18px;
       background: rgba(255, 255, 255, 0.045);
@@ -311,7 +424,8 @@ function injectProjectAppIconStyles() {
       font-weight: 900;
     }
 
-    .file-set-card {
+    .file-set-card,
+    .portfolio-set-file-card {
       display: grid;
       grid-template-columns: auto minmax(0, 1fr) auto;
       align-items: center;
@@ -319,7 +433,8 @@ function injectProjectAppIconStyles() {
       padding: 16px;
     }
 
-    .file-set-card-order {
+    .file-set-card-order,
+    .portfolio-set-file-order {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -333,12 +448,15 @@ function injectProjectAppIconStyles() {
     }
 
     .file-set-card-body strong,
-    .file-set-card-body span {
+    .file-set-card-body span,
+    .portfolio-set-file-body strong,
+    .portfolio-set-file-body span {
       display: block;
       overflow-wrap: break-word;
     }
 
-    .file-set-card-body span {
+    .file-set-card-body span,
+    .portfolio-set-file-body span {
       margin-top: 4px;
       color: var(--muted, #cbd5e1);
       font-size: 0.88rem;
@@ -353,10 +471,7 @@ function injectProjectAppIconStyles() {
       box-shadow: 0 12px 26px rgba(0, 0, 0, 0.28);
     }
 
-    body.is-project-detail-mode .document-grid {
-      display: none !important;
-    }
-
+    body.is-project-detail-mode .document-grid,
     body.is-file-set-detail-mode .document-grid {
       display: none !important;
     }
@@ -372,7 +487,8 @@ function injectProjectAppIconStyles() {
       .project-detail-top,
       .file-set-detail-top,
       .project-detail-index,
-      .file-set-grid {
+      .file-set-grid,
+      .portfolio-set-layout {
         grid-template-columns: 1fr;
       }
 
@@ -381,11 +497,13 @@ function injectProjectAppIconStyles() {
         justify-content: flex-start;
       }
 
-      .file-set-card {
+      .file-set-card,
+      .portfolio-set-file-card {
         grid-template-columns: auto minmax(0, 1fr);
       }
 
-      .file-set-card .file-link {
+      .file-set-card .file-link,
+      .portfolio-set-file-card .file-link {
         grid-column: 1 / -1;
         justify-self: start;
       }
@@ -395,11 +513,11 @@ function injectProjectAppIconStyles() {
 }
 
 function renderAppIcons(project) {
-  const icons = Array.isArray(project.appIcons) ? project.appIcons : [];
+  const icons = getProjectIconData(project);
   if (!icons.length) return "";
 
   const iconMarkup = icons.map((icon) => {
-    const fallbacks = Array.isArray(icon.fallbacks) ? icon.fallbacks : [];
+    const [src, ...fallbacks] = icon.paths;
     const fallbackAttr = escapeHtml(JSON.stringify(fallbacks));
     const alt = `${project.name} 앱 아이콘${icon.label ? ` - ${icon.label}` : ""}`;
 
@@ -407,7 +525,7 @@ function renderAppIcons(project) {
       <span class="project-app-icon-frame" title="${escapeHtml(alt)}">
         <img
           class="project-app-icon-img"
-          src="${escapeHtml(icon.src)}"
+          src="${escapeHtml(src)}"
           alt="${escapeHtml(alt)}"
           loading="lazy"
           decoding="async"
@@ -496,7 +614,10 @@ function renderDocuments() {
       <article class="portfolio-block project-document-block" id="portfolio-${escapeHtml(project.id)}" data-project-block="${escapeHtml(project.id)}">
         <div class="portfolio-block-head">
           <span class="badge">${escapeHtml(project.name)}</span>
-          <h3>${escapeHtml(project.nameKo || project.name)}</h3>
+          <div class="project-document-title-row">
+            ${renderAppIcons(project)}
+            <h3>${escapeHtml(project.nameKo || project.name)}</h3>
+          </div>
           <p>${escapeHtml(project.projectDisplayLine || project.genre || "Game Planning Portfolio")}</p>
         </div>
         <div class="portfolio-file-list">
@@ -505,6 +626,8 @@ function renderDocuments() {
       </article>
     `;
   }).join("");
+
+  activateImageFallbacks(grid);
 }
 
 function renderVideos() {
@@ -550,6 +673,9 @@ function renderNovelIPs() {
   grid.innerHTML = (data.novelIPs ?? []).map((novel) => {
     const serialPeriod = novel.serialPeriod ? ` (${novel.serialPeriod})` : "";
     const extraNote = novel.extraNote ? `<p class="novel-extra-note">${escapeHtml(novel.extraNote)}</p>` : "";
+    const keywordList = Array.isArray(novel.keywords) && novel.keywords.length
+      ? `<ul class="novel-keyword-list">${novel.keywords.map((keyword) => `<li class="novel-keyword">${escapeHtml(keyword)}</li>`).join("")}</ul>`
+      : "";
     const platforms = (novel.platforms ?? []).map((platform) => {
       const hasUrl = platform.url && platform.url.trim().length > 0;
       const href = hasUrl ? platform.url : "#";
@@ -573,6 +699,7 @@ function renderNovelIPs() {
           <span class="novel-title-line">${escapeHtml(novel.titlePrefix || "원작 웹소설 IP")} - 『${escapeHtml(novel.title)}』${escapeHtml(serialPeriod)}</span>
         </h3>
         ${extraNote}
+        ${keywordList}
         <ul class="novel-platform-list">${platforms}</ul>
       </article>
     `;
@@ -653,7 +780,8 @@ function renderFileSetDetail(projectId, sectionId) {
   const fileCards = items.map((item, index) => {
     const path = getFilePath(project, section, item);
     const title = item.title || item.fileName || "Portfolio File";
-    const ext = item.ext || path.split(".").pop()?.toUpperCase() || "FILE";
+    const isPdfPreview = String(path).toLowerCase().endsWith(".pdf");
+    const ext = isPdfPreview ? "PDF" : (item.ext || path.split(".").pop()?.toUpperCase() || "FILE");
     const thumbnail = item.thumbnail || "";
     const thumbMarkup = thumbnail
       ? `<img class="file-set-thumb" src="${escapeHtml(thumbnail)}" alt="${escapeHtml(title)} 미리보기" loading="lazy" decoding="async" />`
@@ -664,7 +792,7 @@ function renderFileSetDetail(projectId, sectionId) {
         ${thumbMarkup}
         <div class="file-set-card-body">
           <strong>${escapeHtml(title)}</strong>
-          <span>${escapeHtml(ext).toUpperCase()} 파일 · 새 창에서 열람</span>
+          <span>${escapeHtml(ext).toUpperCase()} 파일 · 새 창에서 바로 열람</span>
         </div>
         <a class="file-link" href="${escapeHtml(path)}" target="_blank" rel="noopener">열기</a>
       </article>
@@ -676,7 +804,10 @@ function renderFileSetDetail(projectId, sectionId) {
       <div class="file-set-detail-top">
         <div class="file-set-detail-title-wrap">
           <span class="file-set-detail-label">Portfolio File Set Page</span>
-          <h3>${escapeHtml(project.name)}_${escapeHtml(section.title || section.name)}</h3>
+          <div class="portfolio-file-set-title-row">
+            ${renderAppIcons(project)}
+            <h3>${escapeHtml(project.name)}_${escapeHtml(section.title || section.name)}</h3>
+          </div>
           <p>${escapeHtml(project.nameKo || project.name)} 프로젝트의 ${escapeHtml(section.title || section.name)} 파일만 분리해서 확인하는 세부 열람 섹션입니다.</p>
         </div>
         <div class="file-set-detail-actions">
@@ -692,6 +823,7 @@ function renderFileSetDetail(projectId, sectionId) {
   `;
 
   detail.hidden = false;
+  activateImageFallbacks(detail);
 }
 
 function applyProjectView(projectId, sectionId = null, shouldScroll = false) {
@@ -725,62 +857,65 @@ function applyProjectView(projectId, sectionId = null, shouldScroll = false) {
   }
 }
 
+function routeToProject(projectId, sectionId = null, shouldScroll = true) {
+  history.pushState({}, "", projectDetailUrl(projectId, sectionId));
+  applyProjectView(projectId, sectionId, shouldScroll);
+}
+
 function bindDocumentRouting() {
-  $$("#documents [data-filter]").forEach((tab) => {
-    tab.addEventListener("click", (event) => {
+  document.addEventListener("click", (event) => {
+    const tab = event.target.closest("#documents [data-filter]");
+    if (tab) {
       const projectId = tab.dataset.filter;
+      event.preventDefault();
+      event.stopImmediatePropagation();
       if (!projectId || projectId === "all") {
-        event.preventDefault();
-        history.pushState({}, "", `${window.location.pathname}#documents`);
+        history.pushState({}, "", `${BASE_PAGE}#documents`);
         applyProjectView(null, null, true);
         return;
       }
+      routeToProject(projectId, null, true);
+      return;
+    }
 
-      event.preventDefault();
-      history.pushState({}, "", projectDetailUrl(projectId));
-      applyProjectView(projectId, null, true);
-    });
-  });
-
-  document.addEventListener("click", (event) => {
     const directSection = event.target.closest("[data-project-section-direct]");
     if (directSection) {
       event.preventDefault();
+      event.stopImmediatePropagation();
       const [projectId, sectionId] = directSection.dataset.projectSectionDirect.split(":");
-      history.pushState({}, "", projectDetailUrl(projectId, sectionId));
-      applyProjectView(projectId, sectionId, true);
+      routeToProject(projectId, sectionId, true);
       return;
     }
 
     const sectionLink = event.target.closest("[data-project-section-jump]");
     if (sectionLink) {
       event.preventDefault();
+      event.stopImmediatePropagation();
       const { projectId } = getRouteFromUrl();
       const activeProject = projectId || $("#documents .tab.is-active")?.dataset.filter;
       const sectionId = sectionLink.dataset.projectSectionJump;
       if (!activeProject || !sectionId) return;
-      history.pushState({}, "", projectDetailUrl(activeProject, sectionId));
-      applyProjectView(activeProject, sectionId, true);
+      routeToProject(activeProject, sectionId, true);
       return;
     }
 
     const projectImage = event.target.closest("[data-project-image-link]");
     if (projectImage) {
       event.preventDefault();
+      event.stopImmediatePropagation();
       const projectId = projectImage.dataset.projectImageLink;
-      history.pushState({}, "", projectDetailUrl(projectId));
-      applyProjectView(projectId, null, true);
+      routeToProject(projectId, null, true);
       return;
     }
 
     const back = event.target.closest("[data-project-back-detail]");
     if (back) {
       event.preventDefault();
+      event.stopImmediatePropagation();
       const projectId = back.dataset.projectBackDetail;
-      history.pushState({}, "", projectDetailUrl(projectId));
-      applyProjectView(projectId, null, true);
+      routeToProject(projectId, null, true);
     }
-  });
+  }, true);
 
   window.addEventListener("popstate", () => {
     const route = getRouteFromUrl();
@@ -840,6 +975,7 @@ function init() {
   bindMobileNavigation();
   bindHeaderState();
   setCurrentYear();
+  activateImageFallbacks(document);
 
   const route = getRouteFromUrl();
   applyProjectView(route.projectId, route.sectionId, false);
