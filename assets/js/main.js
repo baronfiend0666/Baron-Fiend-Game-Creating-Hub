@@ -564,16 +564,36 @@ function injectProjectAppIconStyles() {
     .file-set-detail-actions {
       display: flex;
       flex-wrap: wrap;
+      align-items: center;
       gap: 10px;
     }
 
     .project-detail-actions {
-      justify-content: flex-end;
+      justify-content: flex-start;
     }
 
     .file-set-detail-actions {
       justify-content: flex-start;
       margin-top: 18px;
+    }
+
+    .project-detail-actions .btn,
+    .file-set-detail-actions .btn {
+      display: inline-flex !important;
+      flex: 0 0 auto !important;
+      width: auto !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      min-height: 42px !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 10px 16px !important;
+      border-radius: 999px !important;
+      font-size: 0.9rem !important;
+      font-weight: 900 !important;
+      line-height: 1.2 !important;
+      text-align: center !important;
+      white-space: nowrap !important;
     }
 
     .project-detail-meta {
@@ -948,6 +968,11 @@ function injectProjectAppIconStyles() {
         justify-content: flex-start;
       }
 
+      .project-detail-actions .btn,
+      .file-set-detail-actions .btn {
+        white-space: normal !important;
+      }
+
       .project-document-title-row,
       .project-detail-heading-row,
       .portfolio-file-set-title-row {
@@ -1261,7 +1286,7 @@ function renderConceptGalleryDetail(projectId, sectionId, galleryId) {
           <p class="gallery-path-note"><code>${escapeHtml(gallery.basePath)}/</code></p>
           <div class="file-set-detail-actions">
             <a class="btn btn-primary" href="${projectDetailUrl(project.id, section.id)}" data-project-section-jump="${escapeHtml(section.id)}">콘셉트 기획 포트폴리오로 돌아가기</a>
-            <a class="btn btn-ghost" href="${projectDetailUrl(project.id)}" data-project-back-detail="${escapeHtml(project.id)}">Project File Detail Page로 돌아가기</a>
+            <a class="btn btn-ghost" href="${projectDetailUrl(project.id)}" data-project-back-detail="${escapeHtml(project.id)}">프로젝트 상세 페이지로 돌아가기</a>
           </div>
         </div>
       </div>
@@ -1468,7 +1493,7 @@ function renderProjectDetail(projectId) {
             ${tags}
           </div>
           <div class="project-detail-actions">
-            <a class="btn btn-primary" href="#documents">프로젝트 버튼으로 이동</a>
+            <a class="btn btn-primary" href="#documents">프로젝트 목록으로 이동</a>
           </div>
         </div>
       </div>
@@ -1532,8 +1557,8 @@ function renderFileSetDetail(projectId, sectionId) {
             ${tags}
           </div>
           <div class="file-set-detail-actions">
-            <a class="btn btn-primary" href="${projectDetailUrl(project.id)}" data-project-back-detail="${escapeHtml(project.id)}">Project File Detail Page로 돌아가기</a>
-            <a class="btn btn-ghost" href="#documents">프로젝트 버튼으로 이동</a>
+            <a class="btn btn-primary" href="${projectDetailUrl(project.id)}" data-project-back-detail="${escapeHtml(project.id)}">프로젝트 상세 페이지로 돌아가기</a>
+            <a class="btn btn-ghost" href="#documents">프로젝트 목록으로 이동</a>
           </div>
         </div>
       </div>
