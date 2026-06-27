@@ -28,6 +28,10 @@ const DEFAULT_APP_ICONS = {
       paths: [
         "assets/images/patris/app-icons/patris-app-icon-isadora.png",
         "assets/images/patris/app-icons/patris-app-icon-isadora",
+        "assets/images/patris/app-icon/patris-app-icon-isadora.png",
+        "assets/images/patris/app-icon/patris-app-icon-isadora",
+        "assets/images/patris/patris-app-icon-isadora.png",
+        "assets/images/patris/patris-app-icon-isadora",
         "assets/images/app-icons/patris-app-icon-isadora.png",
         "assets/images/app-icons/patris-app-icon-isadora",
         "assets/images/patris-app-icon-isadora.png",
@@ -45,6 +49,10 @@ const DEFAULT_APP_ICONS = {
       paths: [
         "assets/images/patris/app-icons/patris-app-icon-iris.png",
         "assets/images/patris/app-icons/patris-app-icon-iris",
+        "assets/images/patris/app-icon/patris-app-icon-iris.png",
+        "assets/images/patris/app-icon/patris-app-icon-iris",
+        "assets/images/patris/patris-app-icon-iris.png",
+        "assets/images/patris/patris-app-icon-iris",
         "assets/images/app-icons/patris-app-icon-iris.png",
         "assets/images/app-icons/patris-app-icon-iris",
         "assets/images/patris-app-icon-iris.png",
@@ -64,6 +72,10 @@ const DEFAULT_APP_ICONS = {
       paths: [
         "assets/images/app-icons/crimson-frequency-app-icon.png",
         "assets/images/app-icons/crimson-frequency-app-icon",
+        "assets/images/crimson-frequency/app-icon/crimson-frequency-app-icon.png",
+        "assets/images/crimson-frequency/app-icon/crimson-frequency-app-icon",
+        "assets/images/crimson_frequency/app-icon/crimson-frequency-app-icon.png",
+        "assets/images/crimson_frequency/app-icon/crimson-frequency-app-icon",
         "assets/images/crimson-frequency/app-icons/crimson-frequency-app-icon.png",
         "assets/images/crimson-frequency/app-icons/crimson-frequency-app-icon",
         "assets/images/crimson_frequency/app-icons/crimson-frequency-app-icon.png",
@@ -79,6 +91,10 @@ const DEFAULT_APP_ICONS = {
       paths: [
         "assets/images/app-icons/anomaly-record-app-icon.png",
         "assets/images/app-icons/anomaly-record-app-icon",
+        "assets/images/anomaly-record/app-icon/anomaly-record-app-icon.png",
+        "assets/images/anomaly-record/app-icon/anomaly-record-app-icon",
+        "assets/images/anomaly_record/app-icon/anomaly-record-app-icon.png",
+        "assets/images/anomaly_record/app-icon/anomaly-record-app-icon",
         "assets/images/anomaly-record/app-icons/anomaly-record-app-icon.png",
         "assets/images/anomaly-record/app-icons/anomaly-record-app-icon",
         "assets/images/anomaly_record/app-icons/anomaly-record-app-icon.png",
@@ -305,6 +321,60 @@ function getProjectIconData(project) {
     const paths = [...new Set([...(icon.paths ?? []), ...defaultForLabel].filter(Boolean))];
     return { label: icon.label, paths };
   }).filter((icon) => icon.paths.length > 0);
+}
+
+function getProjectIconSearchTokens(projectId, label = "") {
+  const normalizedLabel = String(label || "").toLowerCase();
+  const projectTokens = {
+    "patris": ["patris"],
+    "crimson-frequency": ["crimson-frequency", "crimson_frequency", "crimson"],
+    "anomaly-record": ["anomaly-record", "anomaly_record", "anomaly"],
+  }[projectId] || [projectId];
+
+  const labelTokens = [];
+  if (normalizedLabel.includes("isadora")) labelTokens.push("isadora", "이사도라");
+  if (normalizedLabel.includes("iris")) labelTokens.push("iris", "이리스");
+  if (normalizedLabel.includes("crimson")) labelTokens.push("crimson-frequency", "crimson_frequency", "crimson");
+  if (normalizedLabel.includes("anomaly")) labelTokens.push("anomaly-record", "anomaly_record", "anomaly");
+
+  return { projectTokens, labelTokens };
+}
+
+function scoreAppIconPath(path, projectId, label = "") {
+  const lower = String(path || "").toLowerCase();
+  if (!IMAGE_FILE_RE.test(lower)) return -1;
+  if (!(lower.includes("app-icon") || lower.includes("app_icon") || (lower.includes("app") && lower.includes("icon")))) return -1;
+
+  const { projectTokens, labelTokens } = getProjectIconSearchTokens(projectId, label);
+  let score = 0;
+
+  if (lower.includes("assets/images")) score += 4;
+  if (lower.includes("app-icons") || lower.includes("app_icon") || lower.includes("app-icon")) score += 12;
+  if (projectTokens.some((token) => lower.includes(token))) score += 20;
+  if (labelTokens.length && labelTokens.some((token) => lower.includes(token))) score += 30;
+
+  if (projectId === "patris") {
+    if (String(label || "").toLowerCase().includes("isadora") && !lower.includes("isadora") && !lower.includes("이사도라")) score -= 16;
+    if (String(label || "").toLowerCase().includes("iris") && !lower.includes("iris") && !lower.includes("이리스")) score -= 16;
+  }
+
+  return score;
+}
+
+async function resolveAppIconPathFromGithub(projectId, label = "") {
+  try {
+    const tree = await getGithubTree();
+    const candidates = tree
+      .filter((entry) => entry.type === "blob")
+      .map((entry) => ({ path: entry.path, score: scoreAppIconPath(entry.path, projectId, label) }))
+      .filter((entry) => entry.score > 0)
+      .sort((a, b) => b.score - a.score || collator.compare(a.path, b.path));
+
+    if (!candidates.length) return "";
+    return `${GITHUB_RAW_ROOT}${encodePathForUrl(candidates[0].path)}`;
+  } catch {
+    return "";
+  }
 }
 
 function injectProjectAppIconStyles() {
@@ -1037,6 +1107,8 @@ function renderAppIcons(project) {
           decoding="async"
           data-fallback-srcs="${fallbackAttr}"
           data-fallback-index="0"
+          data-project-id="${escapeHtml(project.id)}"
+          data-app-icon-label="${escapeHtml(icon.label || project.name)}"
         />
       </span>
     `;
@@ -1081,7 +1153,7 @@ function activateImageFallbacks(scope = document) {
     if (img.dataset.fallbackBound === "true") return;
     img.dataset.fallbackBound = "true";
 
-    img.addEventListener("error", () => {
+    img.addEventListener("error", async () => {
       let fallbacks = [];
       try {
         fallbacks = JSON.parse(img.dataset.fallbackSrcs || "[]");
@@ -1094,6 +1166,15 @@ function activateImageFallbacks(scope = document) {
         img.dataset.fallbackIndex = String(index + 1);
         img.src = fallbacks[index];
         return;
+      }
+
+      if (img.dataset.githubFallbackTried !== "true") {
+        img.dataset.githubFallbackTried = "true";
+        const githubIcon = await resolveAppIconPathFromGithub(img.dataset.projectId || "", img.dataset.appIconLabel || "");
+        if (githubIcon) {
+          img.src = githubIcon;
+          return;
+        }
       }
 
       const frame = img.closest(".project-app-icon-frame");
