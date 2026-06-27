@@ -125,44 +125,97 @@ function inferCanonicalProjectId(projectOrId) {
   return normalized || raw;
 }
 
+
+function getVerifiedAppIconPrimaryPaths(projectId, label = "") {
+  const id = inferCanonicalProjectId(projectId);
+  const labelKey = String(label || "").toLowerCase();
+
+  if (id === "patris") {
+    if (labelKey.includes("iris") || labelKey.includes("이리스")) {
+      return [
+        "assets/images/app-icons/patris-app-icon-iris.png",
+        "assets/images/app-icons/patris-app-icon",
+        "assets/images/patris-app-icon-iris.png",
+        "assets/images/patris/app-icons/patris-app-icon-iris.png",
+        "https://raw.githubusercontent.com/baronfiend0666/Baron-Fiend-Game-Creating-Hub/main/assets/images/app-icons/patris-app-icon-iris.png",
+      ];
+    }
+
+    return [
+      "assets/images/app-icons/patris-app-icon-isadora.png",
+      "assets/images/app-icons/patris-app-icon",
+      "assets/images/patris-app-icon-isadora.png",
+      "assets/images/patris/app-icons/patris-app-icon-isadora.png",
+      "https://raw.githubusercontent.com/baronfiend0666/Baron-Fiend-Game-Creating-Hub/main/assets/images/app-icons/patris-app-icon-isadora.png",
+    ];
+  }
+
+  if (id === "crimson-frequency") {
+    return [
+      "assets/images/app-icons/crimson-frequency-app-icon.png",
+      "assets/images/app-icons/crimson-frequency-app-icon",
+      "assets/images/crimson-frequency-app-icon.png",
+      "https://raw.githubusercontent.com/baronfiend0666/Baron-Fiend-Game-Creating-Hub/main/assets/images/app-icons/crimson-frequency-app-icon.png",
+    ];
+  }
+
+  if (id === "anomaly-record") {
+    return [
+      "assets/images/app-icons/anomaly-record-app-icon.png",
+      "assets/images/app-icons/anomaly-record-app-icon",
+      "assets/images/anomaly-record-app-icon.png",
+      "https://raw.githubusercontent.com/baronfiend0666/Baron-Fiend-Game-Creating-Hub/main/assets/images/app-icons/anomaly-record-app-icon.png",
+    ];
+  }
+
+  return [];
+}
+
+function normalizeAppIconCandidatePaths(projectId, label = "", paths = []) {
+  return [...new Set([
+    ...getVerifiedAppIconPrimaryPaths(projectId, label),
+    ...(Array.isArray(paths) ? paths : []),
+  ].filter(Boolean))];
+}
+
 function getProjectAppIconPathCandidates(canonicalId, label = "") {
   const id = inferCanonicalProjectId(canonicalId);
   const underscoreId = id.replaceAll("-", "_");
   const labelKey = String(label || "").toLowerCase();
 
-  const buildGeneric = (base) => [
-    `assets/images/app-icons/${base}-app-icon.png`,
-    `assets/images/app-icons/${base}-app-icon.webp`,
-    `assets/images/app-icons/${base}-app-icon.jpg`,
-    `assets/images/app-icons/${base}-app-icon`,
-    `assets/images/${base}-app-icon.png`,
-    `assets/images/${base}-app-icon.webp`,
-    `assets/images/${base}-app-icon.jpg`,
-    `assets/images/${base}-app-icon`,
-    `assets/images/${base}/app-icons/${base}-app-icon.png`,
-    `assets/images/${base}/app-icons/${base}-app-icon.webp`,
-    `assets/images/${base}/app-icons/${base}-app-icon.jpg`,
-    `assets/images/${base}/app-icons/${base}-app-icon`,
-    `assets/images/${base}/app-icon/${base}-app-icon.png`,
-    `assets/images/${base}/app-icon/${base}-app-icon.webp`,
-    `assets/images/${base}/app-icon/${base}-app-icon.jpg`,
-    `assets/images/${base}/app-icon/${base}-app-icon`,
+  const buildProjectCandidates = (projectKey, fileBase) => [
+    `assets/images/app-icons/${fileBase}.png`,
+    `assets/images/app-icons/${fileBase}.webp`,
+    `assets/images/app-icons/${fileBase}.jpg`,
+    `assets/images/app-icons/${fileBase}`,
+    `assets/images/${fileBase}.png`,
+    `assets/images/${fileBase}.webp`,
+    `assets/images/${fileBase}.jpg`,
+    `assets/images/${fileBase}`,
+    `assets/images/${projectKey}/app-icons/${fileBase}.png`,
+    `assets/images/${projectKey}/app-icons/${fileBase}.webp`,
+    `assets/images/${projectKey}/app-icons/${fileBase}.jpg`,
+    `assets/images/${projectKey}/app-icons/${fileBase}`,
+    `assets/images/${projectKey}/app-icon/${fileBase}.png`,
+    `assets/images/${projectKey}/app-icon/${fileBase}.webp`,
+    `assets/images/${projectKey}/app-icon/${fileBase}.jpg`,
+    `assets/images/${projectKey}/app-icon/${fileBase}`,
   ];
 
   if (id === "patris") {
     const character = labelKey.includes("iris") || labelKey.includes("이리스") ? "iris" : "isadora";
     const opposite = character === "iris" ? "isadora" : "iris";
-    return [
-      ...buildGeneric(`patris-app-icon-${character}`),
-      ...buildGeneric(`patris-app-icon-${opposite}`),
-      ...buildGeneric("patris-app-icon"),
-    ];
+    return normalizeAppIconCandidatePaths(id, label, [
+      ...buildProjectCandidates("patris", `patris-app-icon-${character}`),
+      ...buildProjectCandidates("patris", `patris-app-icon-${opposite}`),
+      ...buildProjectCandidates("patris", "patris-app-icon"),
+    ]);
   }
 
-  return [
-    ...buildGeneric(`${id}-app-icon`),
-    ...(underscoreId !== id ? buildGeneric(`${underscoreId}-app-icon`) : []),
-  ];
+  return normalizeAppIconCandidatePaths(id, label, [
+    ...buildProjectCandidates(id, `${id}-app-icon`),
+    ...(underscoreId !== id ? buildProjectCandidates(underscoreId, `${underscoreId}-app-icon`) : []),
+  ]);
 }
 
 const PROJECT_CONCEPT_GALLERIES = {
@@ -382,7 +435,11 @@ function getProjectIconData(project) {
   return merged.map((icon) => {
     const defaultForLabel = defaultIcons.find((item) => item.label === icon.label)?.paths ?? [];
     const generatedForLabel = getProjectAppIconPathCandidates(canonicalId, icon.label || project.name);
-    const paths = [...new Set([...(icon.paths ?? []), ...defaultForLabel, ...generatedForLabel].filter(Boolean))];
+    const paths = normalizeAppIconCandidatePaths(canonicalId, icon.label || project.name, [
+      ...(icon.paths ?? []),
+      ...defaultForLabel,
+      ...generatedForLabel,
+    ]);
     return { label: icon.label || project.name, paths };
   }).filter((icon) => icon.paths.length > 0);
 }
@@ -1191,6 +1248,36 @@ function renderAppIcons(project) {
   return `<span class="project-app-icon-set" aria-label="${escapeHtml(project.name)} 앱 아이콘 이미지">${iconMarkup}</span>`;
 }
 
+function repairAppIconImages(scope = document) {
+  $$("img.project-app-icon-img", scope).forEach((img) => {
+    const projectId = img.dataset.projectId || "";
+    const label = img.dataset.appIconLabel || "";
+    const paths = normalizeAppIconCandidatePaths(projectId, label, []);
+    if (!paths.length) return;
+
+    const frame = img.closest(".project-app-icon-frame");
+    if (frame) frame.classList.remove("is-hidden");
+
+    const [primary, ...fallbacks] = paths;
+    const currentSrc = img.getAttribute("src") || "";
+    const shouldReset =
+      !currentSrc ||
+      currentSrc.includes("/patris/app-icons/") ||
+      currentSrc.includes("/patris/app-icon/") ||
+      currentSrc.endsWith("/patris-app-icon-isadora") ||
+      currentSrc.endsWith("/patris-app-icon-iris") ||
+      (img.complete && img.naturalWidth === 0);
+
+    img.dataset.fallbackSrcs = JSON.stringify(fallbacks);
+    img.dataset.fallbackIndex = "0";
+
+    if (shouldReset && primary && currentSrc !== primary) {
+      img.src = primary;
+    }
+  });
+}
+
+
 
 function renderProjectRepresentativeImage(project) {
   const src = project.cardImage || project.background;
@@ -1269,6 +1356,7 @@ function ensureDocumentListAppIcons(scope = document) {
       titleRow.insertBefore(iconSet, titleNode || titleRow.firstChild);
     }
 
+    repairAppIconImages(iconSet);
     activateImageFallbacks(iconSet);
   });
 }
@@ -1281,7 +1369,10 @@ function bindDocumentListAppIconRepair() {
   let repairTimer = null;
   const scheduleRepair = () => {
     window.clearTimeout(repairTimer);
-    repairTimer = window.setTimeout(() => ensureDocumentListAppIcons(document), 0);
+    repairTimer = window.setTimeout(() => {
+      ensureDocumentListAppIcons(document);
+      repairAppIconImages(document);
+    }, 0);
   };
 
   const observer = new MutationObserver(scheduleRepair);
@@ -1290,9 +1381,9 @@ function bindDocumentListAppIconRepair() {
   document.addEventListener("click", (event) => {
     const link = event.target.closest('a[href="#documents"]');
     if (!link) return;
-    window.setTimeout(() => ensureDocumentListAppIcons(document), 0);
-    window.setTimeout(() => ensureDocumentListAppIcons(document), 160);
-    window.setTimeout(() => ensureDocumentListAppIcons(document), 420);
+    window.setTimeout(() => { ensureDocumentListAppIcons(document); repairAppIconImages(document); }, 0);
+    window.setTimeout(() => { ensureDocumentListAppIcons(document); repairAppIconImages(document); }, 160);
+    window.setTimeout(() => { ensureDocumentListAppIcons(document); repairAppIconImages(document); }, 420);
   });
 }
 
@@ -1323,6 +1414,14 @@ function activateImageFallbacks(scope = document) {
           img.src = githubIcon;
           return;
         }
+      }
+
+      const verifiedPaths = normalizeAppIconCandidatePaths(img.dataset.projectId || "", img.dataset.appIconLabel || "", []);
+      const verifiedIndex = Number(img.dataset.verifiedFallbackIndex || "0");
+      if (verifiedIndex < verifiedPaths.length) {
+        img.dataset.verifiedFallbackIndex = String(verifiedIndex + 1);
+        img.src = verifiedPaths[verifiedIndex];
+        return;
       }
 
       const frame = img.closest(".project-app-icon-frame");
@@ -1600,8 +1699,10 @@ function renderDocuments() {
     `;
   }).join("");
 
+  repairAppIconImages(grid);
   activateImageFallbacks(grid);
   ensureDocumentListAppIcons(grid);
+  repairAppIconImages(grid);
 }
 
 function renderVideos() {
@@ -1743,6 +1844,7 @@ function renderProjectDetail(projectId) {
   `;
 
   detail.hidden = false;
+  repairAppIconImages(detail);
   activateImageFallbacks(detail);
 }
 
@@ -1810,6 +1912,7 @@ function renderFileSetDetail(projectId, sectionId) {
   `;
 
   detail.hidden = false;
+  repairAppIconImages(detail);
   activateImageFallbacks(detail);
 }
 
@@ -1834,12 +1937,14 @@ function applyProjectView(projectId, sectionId = null, galleryId = null, shouldS
       fileSetDetail.innerHTML = "";
     }
     ensureDocumentListAppIcons(document);
+    repairAppIconImages(document);
     return;
   }
 
   renderProjectDetail(projectId);
   if (validGallery) renderConceptGalleryDetail(projectId, sectionId, galleryId);
   else if (validSection) renderFileSetDetail(projectId, sectionId);
+  repairAppIconImages(document);
 
   if (shouldScroll) {
     const target = validSection || validGallery ? fileSetDetail : detail;
@@ -1937,8 +2042,16 @@ function bindDocumentRouting() {
   window.addEventListener("popstate", () => {
     const route = getRouteFromUrl();
     applyProjectView(route.projectId, route.sectionId, route.galleryId, false);
+    window.setTimeout(() => repairAppIconImages(document), 0);
+    window.setTimeout(() => repairAppIconImages(document), 160);
+  });
+
+  window.addEventListener("pageshow", () => {
+    ensureDocumentListAppIcons(document);
+    repairAppIconImages(document);
   });
 }
+
 
 function bindDisabledLinks() {
   document.addEventListener("click", (event) => {
@@ -1987,6 +2100,7 @@ function init() {
   renderDocuments();
   bindDocumentListAppIconRepair();
   ensureDocumentListAppIcons(document);
+  repairAppIconImages(document);
   renderVideos();
   renderNovelIPs();
   bindDisabledLinks();
@@ -1994,10 +2108,12 @@ function init() {
   bindMobileNavigation();
   bindHeaderState();
   setCurrentYear();
+  repairAppIconImages(document);
   activateImageFallbacks(document);
 
   const route = getRouteFromUrl();
   applyProjectView(route.projectId, route.sectionId, route.galleryId, false);
+  repairAppIconImages(document);
 }
 
 if (document.readyState === "loading") {
