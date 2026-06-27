@@ -19,22 +19,22 @@ window.PORTFOLIO_DATA = (() => {
         appIcons: [
           {
             label: "Isadora",
-            src: "assets/images/patris/app-icons/patris-app-icon-isadora.png",
+            src: "assets/images/app-icons/patris-app-icon-isadora.png",
             fallbacks: [
-              "assets/images/app-icons/patris-app-icon-isadora.png",
               "assets/images/patris-app-icon-isadora.png",
-              "assets/images/patris/app-icons/patris-app-icon.png",
+              "assets/images/patris/app-icons/patris-app-icon-isadora.png",
+              "assets/images/app-icons/patris-app-icon",
               "assets/images/app-icons/patris-app-icon.png",
               "assets/images/patris-app-icon.png"
             ],
           },
           {
             label: "Iris",
-            src: "assets/images/patris/app-icons/patris-app-icon-iris.png",
+            src: "assets/images/app-icons/patris-app-icon-iris.png",
             fallbacks: [
-              "assets/images/app-icons/patris-app-icon-iris.png",
               "assets/images/patris-app-icon-iris.png",
-              "assets/images/patris/app-icons/patris-app-icon.png",
+              "assets/images/patris/app-icons/patris-app-icon-iris.png",
+              "assets/images/app-icons/patris-app-icon",
               "assets/images/app-icons/patris-app-icon.png",
               "assets/images/patris-app-icon.png"
             ],
