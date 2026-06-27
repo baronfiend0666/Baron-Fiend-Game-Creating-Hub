@@ -1,7 +1,7 @@
 /* =========================================================
    Game Planning Portfolio Site
    - data/projects.js의 프로젝트/문서/영상/원작 웹소설 데이터를 렌더링합니다.
-   - 프로젝트 분류에 따른 개별 파일 모음과 Project File Detail Page에 대표 이미지와 앱 아이콘 이미지를 출력합니다.
+   - 프로젝트 분류에 따른 개별 파일 모음에는 앱 아이콘만 출력하고, 세부 페이지에는 대표 이미지와 앱 아이콘 이미지를 출력합니다.
    ========================================================= */
 
 const $ = (selector, scope = document) => scope.querySelector(selector);
@@ -200,6 +200,27 @@ function injectProjectAppIconStyles() {
 
     .project-document-title-row {
       margin: 8px 0 6px;
+    }
+
+    .project-document-title-row .project-representative-image-frame {
+      display: none !important;
+    }
+
+    .project-document-block .portfolio-file-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .project-document-block .portfolio-file-list .file-link {
+      display: inline-flex;
+      min-height: 54px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      white-space: normal;
+      line-height: 1.35;
     }
 
     .project-document-title-row h3,
@@ -581,6 +602,17 @@ function injectProjectAppIconStyles() {
         gap: 8px;
       }
 
+      .project-document-block .portfolio-file-list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .project-document-block .portfolio-file-list .file-link {
+        min-height: 50px;
+        padding-left: 8px;
+        padding-right: 8px;
+        font-size: 0.82rem;
+      }
+
       .file-set-card,
       .portfolio-set-file-card {
         grid-template-columns: auto minmax(0, 1fr);
@@ -643,14 +675,12 @@ function renderProjectRepresentativeImage(project) {
 }
 
 function renderProjectHeadingMedia(project) {
-  const representativeImage = renderProjectRepresentativeImage(project);
   const appIcons = renderAppIcons(project);
 
-  if (!representativeImage && !appIcons) return "";
+  if (!appIcons) return "";
 
   return `
-    <span class="project-heading-media" aria-label="${escapeHtml(project.name)} 대표 이미지 및 앱 아이콘 이미지">
-      ${representativeImage}
+    <span class="project-heading-media" aria-label="${escapeHtml(project.name)} 앱 아이콘 이미지">
       ${appIcons}
     </span>
   `;
