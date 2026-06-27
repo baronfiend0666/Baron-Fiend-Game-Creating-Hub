@@ -405,7 +405,8 @@ function getProjectIconSearchTokens(projectId, label = "") {
 }
 function scoreAppIconPath(path, projectId, label = "") {
   const lower = String(path || "").toLowerCase();
-  if (!IMAGE_FILE_RE.test(lower)) return -1;
+  const looksLikeImageFile = IMAGE_FILE_RE.test(lower) || lower.includes("assets/images/");
+  if (!looksLikeImageFile) return -1;
   if (!(lower.includes("app-icon") || lower.includes("app_icon") || (lower.includes("app") && lower.includes("icon")))) return -1;
 
   const { projectTokens, labelTokens } = getProjectIconSearchTokens(projectId, label);
@@ -1254,11 +1255,6 @@ function ensureDocumentListAppIcons(scope = document) {
     if (!iconMarkup) return;
 
     const existingSet = titleRow.querySelector(".project-app-icon-set");
-    if (existingSet && existingSet.dataset.documentListIconEnsured === "true") {
-      existingSet.querySelectorAll(".project-app-icon-frame.is-hidden").forEach((frame) => frame.classList.remove("is-hidden"));
-      activateImageFallbacks(existingSet);
-      return;
-    }
 
     const iconTemplate = document.createElement("template");
     iconTemplate.innerHTML = iconMarkup.trim();
@@ -1296,6 +1292,7 @@ function bindDocumentListAppIconRepair() {
     if (!link) return;
     window.setTimeout(() => ensureDocumentListAppIcons(document), 0);
     window.setTimeout(() => ensureDocumentListAppIcons(document), 160);
+    window.setTimeout(() => ensureDocumentListAppIcons(document), 420);
   });
 }
 
@@ -1857,6 +1854,20 @@ function routeToProject(projectId, sectionId = null, galleryId = null, shouldScr
 
 function bindDocumentRouting() {
   document.addEventListener("click", (event) => {
+    const documentBackButton = event.target.closest(
+      ".project-detail-heading-action a[href='#documents'], .file-set-detail-actions a[href='#documents']"
+    );
+    if (documentBackButton) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      history.pushState({}, "", `${BASE_PAGE}#documents`);
+      applyProjectView(null, null, null, true);
+      $("#documents")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.setTimeout(() => ensureDocumentListAppIcons(document), 0);
+      window.setTimeout(() => ensureDocumentListAppIcons(document), 160);
+      return;
+    }
+
     const tab = event.target.closest("#documents [data-filter]");
     if (tab) {
       const projectId = tab.dataset.filter;
