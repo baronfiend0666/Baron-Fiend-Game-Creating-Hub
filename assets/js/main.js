@@ -1473,15 +1473,38 @@ function resolveGalleryGroup(gallery, parts, fileName) {
   };
 }
 
+function getGalleryBasePaths(gallery) {
+  const basePath = String(gallery.basePath || "").replace(/\/$/, "");
+  const explicitBasePaths = Array.isArray(gallery.basePaths) ? gallery.basePaths : [];
+  const aliases = [
+    basePath,
+    basePath.replace("crimson-frequency", "crimson_frequency"),
+    basePath.replace("anomaly-record", "anomaly_record"),
+    basePath.replace("character-concept-art", "character"),
+    basePath.replace("background-concept-art", "background"),
+    basePath.replace("crimson-frequency", "crimson_frequency").replace("character-concept-art", "character"),
+    basePath.replace("crimson-frequency", "crimson_frequency").replace("background-concept-art", "background"),
+    basePath.replace("anomaly-record", "anomaly_record").replace("character-concept-art", "character"),
+    basePath.replace("anomaly-record", "anomaly_record").replace("background-concept-art", "background"),
+  ];
+
+  return [...new Set([...explicitBasePaths, ...aliases]
+    .filter(Boolean)
+    .map((path) => String(path).replace(/\/$/, "")))];
+}
+
 async function getGalleryImageGroups(gallery) {
-  const basePath = gallery.basePath.replace(/\/$/, "");
+  const basePaths = getGalleryBasePaths(gallery);
   const tree = await getGithubTree();
   const groups = new Map();
 
   tree
-    .filter((entry) => entry.type === "blob" && entry.path?.startsWith(`${basePath}/`) && IMAGE_FILE_RE.test(entry.path))
+    .filter((entry) => entry.type === "blob" && IMAGE_FILE_RE.test(entry.path || ""))
     .forEach((entry) => {
-      const relativePath = entry.path.slice(basePath.length + 1);
+      const matchedBasePath = basePaths.find((basePath) => entry.path?.startsWith(`${basePath}/`));
+      if (!matchedBasePath) return;
+
+      const relativePath = entry.path.slice(matchedBasePath.length + 1);
       const parts = relativePath.split("/").filter(Boolean);
       const fileName = parts[parts.length - 1] || relativePath;
       const groupInfo = resolveGalleryGroup(gallery, parts, fileName);
@@ -1848,6 +1871,21 @@ function renderProjectDetail(projectId) {
   activateImageFallbacks(detail);
 }
 
+function ensureConceptGalleryEntries(projectId, sectionId) {
+  const detail = $(`[data-file-set-detail-page]`);
+  const project = getProject(projectId);
+  const section = data.portfolioSections.find((item) => item.id === sectionId);
+  if (!detail || !project || !section || section.id !== "concept") return;
+  if (detail.querySelector(".concept-gallery-entry-section")) return;
+
+  const galleryEntries = createConceptGalleryEntryCards(project, section);
+  if (!galleryEntries) return;
+
+  const note = detail.querySelector(".file-set-detail-note");
+  if (note) note.insertAdjacentHTML("beforebegin", galleryEntries);
+  else detail.querySelector(".file-set-detail-shell")?.insertAdjacentHTML("beforeend", galleryEntries);
+}
+
 function renderFileSetDetail(projectId, sectionId) {
   const detail = $("[data-file-set-detail-page]");
   const project = getProject(projectId);
@@ -1914,6 +1952,7 @@ function renderFileSetDetail(projectId, sectionId) {
   detail.hidden = false;
   repairAppIconImages(detail);
   activateImageFallbacks(detail);
+  ensureConceptGalleryEntries(projectId, sectionId);
 }
 
 function applyProjectView(projectId, sectionId = null, galleryId = null, shouldScroll = false) {
@@ -1943,7 +1982,10 @@ function applyProjectView(projectId, sectionId = null, galleryId = null, shouldS
 
   renderProjectDetail(projectId);
   if (validGallery) renderConceptGalleryDetail(projectId, sectionId, galleryId);
-  else if (validSection) renderFileSetDetail(projectId, sectionId);
+  else if (validSection) {
+    renderFileSetDetail(projectId, sectionId);
+    ensureConceptGalleryEntries(projectId, sectionId);
+  }
   repairAppIconImages(document);
 
   if (shouldScroll) {
@@ -2047,7 +2089,11 @@ function bindDocumentRouting() {
   });
 
   window.addEventListener("pageshow", () => {
+    const route = getRouteFromUrl();
     ensureDocumentListAppIcons(document);
+    if (route.projectId && route.sectionId === "concept" && !route.galleryId) {
+      ensureConceptGalleryEntries(route.projectId, route.sectionId);
+    }
     repairAppIconImages(document);
   });
 }
