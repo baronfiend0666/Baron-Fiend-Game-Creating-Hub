@@ -106,6 +106,65 @@ const DEFAULT_APP_ICONS = {
   ],
 };
 
+
+function inferCanonicalProjectId(projectOrId) {
+  const raw = typeof projectOrId === "object" && projectOrId
+    ? [
+        projectOrId.id,
+        projectOrId.name,
+        projectOrId.nameKo,
+        projectOrId.videoTitle,
+        projectOrId.projectDisplayLine,
+      ].filter(Boolean).join(" ")
+    : String(projectOrId || "");
+
+  const normalized = raw.toLowerCase().replace(/[\s_]+/g, "-");
+  if (normalized.includes("patris") || raw.includes("파트리스")) return "patris";
+  if (normalized.includes("crimson") || raw.includes("크림슨")) return "crimson-frequency";
+  if (normalized.includes("anomaly") || raw.includes("아노말리")) return "anomaly-record";
+  return normalized || raw;
+}
+
+function getProjectAppIconPathCandidates(canonicalId, label = "") {
+  const id = inferCanonicalProjectId(canonicalId);
+  const underscoreId = id.replaceAll("-", "_");
+  const labelKey = String(label || "").toLowerCase();
+
+  const buildGeneric = (base) => [
+    `assets/images/app-icons/${base}-app-icon.png`,
+    `assets/images/app-icons/${base}-app-icon.webp`,
+    `assets/images/app-icons/${base}-app-icon.jpg`,
+    `assets/images/app-icons/${base}-app-icon`,
+    `assets/images/${base}-app-icon.png`,
+    `assets/images/${base}-app-icon.webp`,
+    `assets/images/${base}-app-icon.jpg`,
+    `assets/images/${base}-app-icon`,
+    `assets/images/${base}/app-icons/${base}-app-icon.png`,
+    `assets/images/${base}/app-icons/${base}-app-icon.webp`,
+    `assets/images/${base}/app-icons/${base}-app-icon.jpg`,
+    `assets/images/${base}/app-icons/${base}-app-icon`,
+    `assets/images/${base}/app-icon/${base}-app-icon.png`,
+    `assets/images/${base}/app-icon/${base}-app-icon.webp`,
+    `assets/images/${base}/app-icon/${base}-app-icon.jpg`,
+    `assets/images/${base}/app-icon/${base}-app-icon`,
+  ];
+
+  if (id === "patris") {
+    const character = labelKey.includes("iris") || labelKey.includes("이리스") ? "iris" : "isadora";
+    const opposite = character === "iris" ? "isadora" : "iris";
+    return [
+      ...buildGeneric(`patris-app-icon-${character}`),
+      ...buildGeneric(`patris-app-icon-${opposite}`),
+      ...buildGeneric("patris-app-icon"),
+    ];
+  }
+
+  return [
+    ...buildGeneric(`${id}-app-icon`),
+    ...(underscoreId !== id ? buildGeneric(`${underscoreId}-app-icon`) : []),
+  ];
+}
+
 const PROJECT_CONCEPT_GALLERIES = {
   "patris": [
     {
@@ -306,6 +365,7 @@ function getRouteFromUrl() {
 }
 
 function getProjectIconData(project) {
+  const canonicalId = inferCanonicalProjectId(project);
   const explicitIcons = Array.isArray(project.appIcons)
     ? project.appIcons.map((icon) => {
         const paths = [icon.src, ...(Array.isArray(icon.fallbacks) ? icon.fallbacks : [])].filter(Boolean);
@@ -313,33 +373,36 @@ function getProjectIconData(project) {
       })
     : [];
 
-  const defaultIcons = DEFAULT_APP_ICONS[project.id] ?? [];
-  const merged = explicitIcons.length ? explicitIcons : defaultIcons;
+  const singularIcon = project.appIcon || project.appIconImage || project.icon || project.iconImage || "";
+  const singularIcons = singularIcon ? [{ label: project.name, paths: [singularIcon] }] : [];
+
+  const defaultIcons = DEFAULT_APP_ICONS[project.id] || DEFAULT_APP_ICONS[canonicalId] || [];
+  const merged = explicitIcons.length ? explicitIcons : (singularIcons.length ? singularIcons : defaultIcons);
 
   return merged.map((icon) => {
     const defaultForLabel = defaultIcons.find((item) => item.label === icon.label)?.paths ?? [];
-    const paths = [...new Set([...(icon.paths ?? []), ...defaultForLabel].filter(Boolean))];
-    return { label: icon.label, paths };
+    const generatedForLabel = getProjectAppIconPathCandidates(canonicalId, icon.label || project.name);
+    const paths = [...new Set([...(icon.paths ?? []), ...defaultForLabel, ...generatedForLabel].filter(Boolean))];
+    return { label: icon.label || project.name, paths };
   }).filter((icon) => icon.paths.length > 0);
 }
-
 function getProjectIconSearchTokens(projectId, label = "") {
   const normalizedLabel = String(label || "").toLowerCase();
+  const canonicalId = inferCanonicalProjectId(projectId);
   const projectTokens = {
-    "patris": ["patris"],
-    "crimson-frequency": ["crimson-frequency", "crimson_frequency", "crimson"],
-    "anomaly-record": ["anomaly-record", "anomaly_record", "anomaly"],
-  }[projectId] || [projectId];
+    "patris": ["patris", "파트리스"],
+    "crimson-frequency": ["crimson-frequency", "crimson_frequency", "crimson", "크림슨"],
+    "anomaly-record": ["anomaly-record", "anomaly_record", "anomaly", "아노말리"],
+  }[canonicalId] || [String(projectId || "").toLowerCase(), canonicalId].filter(Boolean);
 
   const labelTokens = [];
   if (normalizedLabel.includes("isadora")) labelTokens.push("isadora", "이사도라");
   if (normalizedLabel.includes("iris")) labelTokens.push("iris", "이리스");
-  if (normalizedLabel.includes("crimson")) labelTokens.push("crimson-frequency", "crimson_frequency", "crimson");
-  if (normalizedLabel.includes("anomaly")) labelTokens.push("anomaly-record", "anomaly_record", "anomaly");
+  if (normalizedLabel.includes("crimson")) labelTokens.push("crimson-frequency", "crimson_frequency", "crimson", "크림슨");
+  if (normalizedLabel.includes("anomaly")) labelTokens.push("anomaly-record", "anomaly_record", "anomaly", "아노말리");
 
   return { projectTokens, labelTokens };
 }
-
 function scoreAppIconPath(path, projectId, label = "") {
   const lower = String(path || "").toLowerCase();
   if (!IMAGE_FILE_RE.test(lower)) return -1;
@@ -353,7 +416,7 @@ function scoreAppIconPath(path, projectId, label = "") {
   if (projectTokens.some((token) => lower.includes(token))) score += 20;
   if (labelTokens.length && labelTokens.some((token) => lower.includes(token))) score += 30;
 
-  if (projectId === "patris") {
+  if (inferCanonicalProjectId(projectId) === "patris") {
     if (String(label || "").toLowerCase().includes("isadora") && !lower.includes("isadora") && !lower.includes("이사도라")) score -= 16;
     if (String(label || "").toLowerCase().includes("iris") && !lower.includes("iris") && !lower.includes("이리스")) score -= 16;
   }
@@ -431,6 +494,16 @@ function injectProjectAppIconStyles() {
 
     .project-document-title-row .project-representative-image-frame {
       display: none !important;
+    }
+
+    .project-document-title-row .project-app-icon-set {
+      display: inline-flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+
+    .project-document-title-row .project-app-icon-frame:not(.is-hidden) {
+      display: inline-flex !important;
     }
 
     .project-document-block .portfolio-file-list {
@@ -1148,6 +1221,84 @@ function renderProjectHeadingMedia(project) {
   `;
 }
 
+
+function getProjectDocumentBlock(project, scope = document) {
+  const root = scope || document;
+  const safeId = typeof CSS !== "undefined" && CSS.escape ? CSS.escape(project.id || "") : String(project.id || "").replace(/[^a-zA-Z0-9_-]/g, "\\$&");
+  const candidates = [
+    root.querySelector(`[data-project-block="${safeId}"]`),
+    root.querySelector(`#portfolio-${safeId}`),
+  ].filter(Boolean);
+
+  if (candidates.length) return candidates[0];
+
+  const blocks = $$('[data-project-block], .project-document-block, .portfolio-block', root);
+  return blocks.find((block) => {
+    const text = block.textContent || "";
+    return [project.name, project.nameKo, project.videoTitle].filter(Boolean).some((name) => text.includes(name));
+  }) || null;
+}
+
+function ensureDocumentListAppIcons(scope = document) {
+  const grid = $(`[data-document-grid]`, scope) || $(`[data-document-grid]`) || scope;
+  if (!grid) return;
+
+  data.projects.forEach((project) => {
+    const block = getProjectDocumentBlock(project, grid) || getProjectDocumentBlock(project, document);
+    if (!block) return;
+
+    const titleRow = block.querySelector(".project-document-title-row") || block.querySelector(".portfolio-block-head") || block;
+    if (!titleRow) return;
+
+    const iconMarkup = renderAppIcons(project);
+    if (!iconMarkup) return;
+
+    const existingSet = titleRow.querySelector(".project-app-icon-set");
+    if (existingSet && existingSet.dataset.documentListIconEnsured === "true") {
+      existingSet.querySelectorAll(".project-app-icon-frame.is-hidden").forEach((frame) => frame.classList.remove("is-hidden"));
+      activateImageFallbacks(existingSet);
+      return;
+    }
+
+    const iconTemplate = document.createElement("template");
+    iconTemplate.innerHTML = iconMarkup.trim();
+    const iconSet = iconTemplate.content.firstElementChild;
+    if (!iconSet) return;
+    iconSet.dataset.documentListIconEnsured = "true";
+
+    if (existingSet) {
+      existingSet.replaceWith(iconSet);
+    } else {
+      const titleNode = titleRow.querySelector("h1, h2, h3, h4, .project-title, .portfolio-project-title, strong");
+      titleRow.insertBefore(iconSet, titleNode || titleRow.firstChild);
+    }
+
+    activateImageFallbacks(iconSet);
+  });
+}
+
+function bindDocumentListAppIconRepair() {
+  const grid = $(`[data-document-grid]`);
+  if (!grid || grid.dataset.appIconRepairBound === "true") return;
+  grid.dataset.appIconRepairBound = "true";
+
+  let repairTimer = null;
+  const scheduleRepair = () => {
+    window.clearTimeout(repairTimer);
+    repairTimer = window.setTimeout(() => ensureDocumentListAppIcons(document), 0);
+  };
+
+  const observer = new MutationObserver(scheduleRepair);
+  observer.observe(grid, { childList: true, subtree: true });
+
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest('a[href="#documents"]');
+    if (!link) return;
+    window.setTimeout(() => ensureDocumentListAppIcons(document), 0);
+    window.setTimeout(() => ensureDocumentListAppIcons(document), 160);
+  });
+}
+
 function activateImageFallbacks(scope = document) {
   $$("img[data-fallback-srcs]", scope).forEach((img) => {
     if (img.dataset.fallbackBound === "true") return;
@@ -1453,6 +1604,7 @@ function renderDocuments() {
   }).join("");
 
   activateImageFallbacks(grid);
+  ensureDocumentListAppIcons(grid);
 }
 
 function renderVideos() {
@@ -1684,6 +1836,7 @@ function applyProjectView(projectId, sectionId = null, galleryId = null, shouldS
       fileSetDetail.hidden = true;
       fileSetDetail.innerHTML = "";
     }
+    ensureDocumentListAppIcons(document);
     return;
   }
 
@@ -1821,6 +1974,8 @@ function init() {
   injectProjectAppIconStyles();
   renderProjects();
   renderDocuments();
+  bindDocumentListAppIconRepair();
+  ensureDocumentListAppIcons(document);
   renderVideos();
   renderNovelIPs();
   bindDisabledLinks();
