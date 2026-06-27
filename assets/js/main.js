@@ -189,35 +189,6 @@ function injectProjectAppIconStyles() {
       filter: brightness(1.08) contrast(1.03);
     }
 
-    .project-visual-cta {
-      position: absolute;
-      left: 16px;
-      right: 16px;
-      bottom: 16px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 42px;
-      padding: 10px 14px;
-      border: 1px solid rgba(255, 255, 255, 0.28);
-      border-radius: 999px;
-      background: rgba(10, 14, 30, 0.72);
-      color: var(--text, #fff);
-      font-size: 0.86rem;
-      font-weight: 900;
-      letter-spacing: 0.02em;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 180ms ease, transform 180ms ease;
-      backdrop-filter: blur(10px);
-    }
-
-    .project-visual-link:hover .project-visual-cta,
-    .project-visual-link:focus-visible .project-visual-cta {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
     .project-document-title-row,
     .project-detail-heading-row,
     .portfolio-file-set-title-row {
@@ -274,21 +245,23 @@ function injectProjectAppIconStyles() {
 
     .file-set-detail-top {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 22px;
-      align-items: start;
+      grid-template-columns: minmax(180px, 280px) minmax(0, 1fr);
+      gap: clamp(22px, 3.4vw, 42px);
+      align-items: stretch;
       padding-bottom: 22px;
       border-bottom: 1px solid var(--line, rgba(255, 255, 255, 0.14));
     }
 
-    .project-detail-visual-panel {
+    .project-detail-visual-panel,
+    .file-set-detail-visual-panel {
       display: flex;
       align-items: stretch;
       justify-content: center;
       min-width: 0;
     }
 
-    .project-detail-visual-panel .project-representative-image-frame {
+    .project-detail-visual-panel .project-representative-image-frame,
+    .file-set-detail-visual-panel .project-representative-image-frame {
       display: flex;
       width: 100%;
       min-height: clamp(300px, 34vw, 440px);
@@ -297,14 +270,16 @@ function injectProjectAppIconStyles() {
       box-shadow: 0 24px 58px rgba(0, 0, 0, 0.34);
     }
 
-    .project-detail-visual-panel .project-representative-image-img {
+    .project-detail-visual-panel .project-representative-image-img,
+    .file-set-detail-visual-panel .project-representative-image-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       object-position: center top;
     }
 
-    .project-detail-title-wrap {
+    .project-detail-title-wrap,
+    .file-set-detail-title-wrap {
       display: flex;
       min-width: 0;
       flex-direction: column;
@@ -420,8 +395,16 @@ function injectProjectAppIconStyles() {
     .file-set-detail-actions {
       display: flex;
       flex-wrap: wrap;
-      justify-content: flex-end;
       gap: 10px;
+    }
+
+    .project-detail-actions {
+      justify-content: flex-end;
+    }
+
+    .file-set-detail-actions {
+      justify-content: flex-start;
+      margin-top: 18px;
     }
 
     .project-detail-meta {
@@ -572,11 +555,13 @@ function injectProjectAppIconStyles() {
         grid-template-columns: 1fr;
       }
 
-      .project-detail-visual-panel {
+      .project-detail-visual-panel,
+      .file-set-detail-visual-panel {
         justify-content: flex-start;
       }
 
-      .project-detail-visual-panel .project-representative-image-frame {
+      .project-detail-visual-panel .project-representative-image-frame,
+      .file-set-detail-visual-panel .project-representative-image-frame {
         width: min(100%, 360px);
         min-height: 420px;
       }
@@ -710,7 +695,6 @@ function renderProjects() {
         <div class="project-visual-wrap">
           <a class="project-visual-link" href="${projectDetailUrl(project.id)}" data-project-image-link="${escapeHtml(project.id)}" aria-label="${escapeHtml(project.name)} Project File Detail Page 열기">
             <img class="project-visual" src="${escapeHtml(projectImage)}" alt="${escapeHtml(project.name)} 프로젝트 대표 이미지" loading="lazy" />
-            <span class="project-visual-cta">Project File Detail Page 열기</span>
           </a>
         </div>
         <div class="project-content">
@@ -933,20 +917,29 @@ function renderFileSetDetail(projectId, sectionId) {
     `;
   }).join("");
 
+  const tags = (project.tags ?? []).map(createBadge).join("");
+
   detail.innerHTML = `
     <div class="file-set-detail-shell">
       <div class="file-set-detail-top">
+        <div class="file-set-detail-visual-panel" aria-label="${escapeHtml(project.name)} 프로젝트 대표 이미지">
+          ${renderProjectRepresentativeImage(project)}
+        </div>
         <div class="file-set-detail-title-wrap">
           <span class="file-set-detail-label">Portfolio File Set Page</span>
           <div class="portfolio-file-set-title-row">
-            ${renderProjectHeadingMedia(project)}
+            ${renderAppIcons(project)}
             <h3>${escapeHtml(project.name)}_${escapeHtml(section.title || section.name)}</h3>
           </div>
           <p>${escapeHtml(project.nameKo || project.name)} 프로젝트의 ${escapeHtml(section.title || section.name)} 파일만 분리해서 확인하는 세부 열람 섹션입니다.</p>
-        </div>
-        <div class="file-set-detail-actions">
-          <a class="btn btn-primary" href="${projectDetailUrl(project.id)}" data-project-back-detail="${escapeHtml(project.id)}">Project File Detail Page로 돌아가기</a>
-          <a class="btn btn-ghost" href="#documents">프로젝트 버튼으로 이동</a>
+          <div class="project-detail-meta">
+            ${createBadge(project.engine)}
+            ${tags}
+          </div>
+          <div class="file-set-detail-actions">
+            <a class="btn btn-primary" href="${projectDetailUrl(project.id)}" data-project-back-detail="${escapeHtml(project.id)}">Project File Detail Page로 돌아가기</a>
+            <a class="btn btn-ghost" href="#documents">프로젝트 버튼으로 이동</a>
+          </div>
         </div>
       </div>
       <div class="file-set-grid" aria-label="${escapeHtml(project.name)} ${escapeHtml(section.title || section.name)} 파일 목록">
