@@ -346,6 +346,15 @@ function injectProjectAppIconStyles() {
       min-width: 0;
     }
 
+    .project-detail-heading-row {
+      flex-wrap: wrap;
+    }
+
+    .project-detail-heading-row .project-detail-heading-action {
+      flex: 0 0 auto;
+      margin-left: 2px;
+    }
+
     .project-document-title-row {
       margin: 8px 0 6px;
     }
@@ -1485,15 +1494,15 @@ function renderProjectDetail(projectId) {
           <div class="project-detail-heading-row">
             ${renderAppIcons(project)}
             <h3>${escapeHtml(project.name)}</h3>
+            <div class="project-detail-actions project-detail-heading-action">
+              <a class="btn btn-primary" href="#documents">프로젝트 목록으로 이동</a>
+            </div>
           </div>
           <p>${escapeHtml(project.projectDisplayLine || `${project.nameKo || project.name} · ${project.genre || "Game Planning Portfolio"}`)}</p>
           <p>${escapeHtml(project.summary || "프로젝트별 포트폴리오 파일 세트를 세부 섹션 단위로 열람합니다.")}</p>
           <div class="project-detail-meta">
             ${createBadge(project.engine)}
             ${tags}
-          </div>
-          <div class="project-detail-actions">
-            <a class="btn btn-primary" href="#documents">프로젝트 목록으로 이동</a>
           </div>
         </div>
       </div>
