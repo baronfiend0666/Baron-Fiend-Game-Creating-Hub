@@ -420,6 +420,91 @@ const PATRIS_REGIONAL_SUPPORT_GROUPS = [
   },
 ];
 
+const PATRIS_CONTRACT_ENTITY_PARENT = "06-계약 개체(일부 집단 한정)";
+const PATRIS_CONTRACT_ENTITY_GROUPS = [
+  {
+    order: "06-01",
+    folderIncludes: "흑연해",
+    title: "06-계약 개체(일부 집단 한정) · 01-흑연해(黑煙海)",
+    description: "흑연해 소속 캐릭터와 연결된 계약 개체 컨셉 아트",
+    memberNames: [
+      "사마엘",
+      "벨리알",
+      "레비아탄",
+      "다곤",
+      "아볼루온",
+      "포칼로르",
+      "아스모데우스",
+      "자간",
+      "아드라멜렉",
+      "베히모스",
+      "스프레토르",
+      "카인",
+      "아포크테",
+      "에키온",
+      "앵귀스",
+      "엘레나",
+      "호프",
+      "앨리시아",
+      "베로니카 아크리모니아",
+      "라일리 우르티카",
+      "빅터",
+      "덴스",
+      "잭",
+      "랍투스",
+      "프랭크 톰슨",
+    ],
+  },
+  {
+    order: "06-02",
+    folderIncludes: "홀리 그라운드",
+    title: "06-계약 개체(일부 집단 한정) · 02-홀리 그라운드(Holy Ground)",
+    description: "홀리 그라운드 소속 캐릭터와 연결된 계약 개체 컨셉 아트",
+    memberNames: [
+      "이리스",
+      "가브리엘",
+      "데이지",
+      "하니엘",
+      "아서",
+      "미카엘",
+      "메이슨",
+      "메타트론",
+      "이율배반",
+      "안티노미",
+      "유피미아",
+      "이스라펠",
+      "진혼곡",
+      "레퀴엠",
+      "빅토리아",
+      "산달폰",
+      "카밀라",
+      "라지엘",
+      "페넬로페",
+      "오파니엘",
+      "다니엘",
+      "라파엘",
+      "켄드릭",
+      "사라카엘",
+      "에곤",
+      "레미엘",
+      "브렌다",
+      "우리엘",
+    ],
+  },
+  {
+    order: "06-03",
+    folderIncludes: "그 외",
+    title: "06-계약 개체(일부 집단 한정) · 03-그 외",
+    description: "기타 캐릭터와 연결된 계약 개체 컨셉 아트",
+    memberNames: [
+      "가미진",
+      "아르카 베나 로보티카",
+      "타나토스",
+      "아덴 블랙번",
+    ],
+  },
+];
+
 const GITHUB_TREE_API = "https://api.github.com/repos/baronfiend0666/Baron-Fiend-Game-Creating-Hub/git/trees/main?recursive=1";
 const GITHUB_RAW_ROOT = "https://raw.githubusercontent.com/baronfiend0666/Baron-Fiend-Game-Creating-Hub/main/";
 const IMAGE_FILE_RE = /\.(png|jpe?g|webp|gif|svg)$/i;
@@ -1541,6 +1626,14 @@ function getPatrisRegionalSupportGroup(parts, fileName) {
   ) || null;
 }
 
+function getPatrisContractEntityGroup(parts, fileName) {
+  if (parts[0] !== PATRIS_CONTRACT_ENTITY_PARENT) return null;
+  const folderName = parts.length > 2 ? parts[1] : "";
+  return PATRIS_CONTRACT_ENTITY_GROUPS.find((group) =>
+    folderName.includes(group.folderIncludes) || group.memberNames.some((memberName) => fileName.includes(memberName))
+  ) || null;
+}
+
 function resolveGalleryGroup(gallery, parts, fileName) {
   if (gallery.id === "character-concept-art") {
     const regionalVillainGroup = getPatrisRegionalVillainGroup(parts, fileName);
@@ -1560,6 +1653,16 @@ function resolveGalleryGroup(gallery, parts, fileName) {
         title: regionalSupportGroup.title,
         description: regionalSupportGroup.description,
         sortOrder: regionalSupportGroup.order,
+      };
+    }
+
+    const contractEntityGroup = getPatrisContractEntityGroup(parts, fileName);
+    if (contractEntityGroup) {
+      return {
+        key: `${PATRIS_CONTRACT_ENTITY_PARENT}/${contractEntityGroup.order}`,
+        title: contractEntityGroup.title,
+        description: contractEntityGroup.description,
+        sortOrder: contractEntityGroup.order,
       };
     }
   }
