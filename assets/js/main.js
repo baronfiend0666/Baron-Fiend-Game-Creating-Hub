@@ -338,6 +338,88 @@ const PATRIS_REGIONAL_VILLAIN_GROUPS = [
   },
 ];
 
+const PATRIS_REGIONAL_SUPPORT_PARENT = "05-지역별 조력 집단";
+const PATRIS_REGIONAL_SUPPORT_GROUPS = [
+  {
+    order: "05-01",
+    folderIncludes: "애스터리스크",
+    title: "05-지역별 조력 집단 · 01-애스터리스크(Asterisk)(네오 판데모니움 연방국)",
+    description: "네오 판데모니움 연방국의 역내 조력 집단",
+    memberNames: [
+      "일렉트라 디오르토시스 포네로스",
+      "헤이즐 메디카 파르마케이아",
+      "에크하르트 유디키움 엔시스",
+      "벨로나 마르티아 하스타",
+      "사이러스 페라멘 로보티카",
+      "갈렌 사나티오 레메디움",
+    ],
+  },
+  {
+    order: "05-02",
+    folderIncludes: "성천마족 공동체",
+    title: "05-지역별 조력 집단 · 02-성천마족 공동체(Starborn Demons)(스키엔티아 연방 아카데미)",
+    description: "스키엔티아 연방 아카데미의 역내 조력 집단",
+    memberNames: [
+      "리테라 스키엔티아",
+      "트레이시 아키에스",
+      "베르칸 루크마스",
+      "에블린 노벨라크",
+      "라그넬 드라베르",
+      "루체아 네크라벨",
+    ],
+  },
+  {
+    order: "05-03",
+    folderIncludes: "홀리 그라운드",
+    title: "05-지역별 조력 집단 · 03-홀리 그라운드(Holy Ground)(신성황국 데오테스)",
+    description: "신성황국 데오테스의 역내 조력 집단",
+    memberNames: [
+      "이리스 안젤리크 유세베이아",
+      "데이지 알베르틴 유세베이아",
+      "아서 드하트",
+      "메이슨 래섬 케싸프",
+      "유피미아 소노리티",
+      "빅토리아 키르케",
+      "카밀라 아이트라",
+      "페넬로페 에스피날",
+      "다니엘 파이안",
+      "켄드릭 디아노이아",
+      "에곤 마카이라",
+      "브렌다 프라메아",
+    ],
+  },
+  {
+    order: "05-04A",
+    folderIncludes: "흑십자회",
+    title: "05-지역별 조력 집단 · 04A-흑십자회(黑十字會)(기술 제국 에피그노시스)",
+    description: "기술 제국 에피그노시스의 역내 조력 집단 1",
+    memberNames: [
+      "아덴 블랙번",
+      "세라피나 애쉬본",
+      "키어런 나이트폴",
+      "에반젤린 블랙웰",
+      "엘리어스 래스본",
+      "에녹 렐릭",
+      "레오노라 블랙우드",
+    ],
+  },
+  {
+    order: "05-04B",
+    folderIncludes: "카푸트",
+    title: "05-지역별 조력 집단 · 04B-카푸트(Caput)(기술 제국 에피그노시스)",
+    description: "기술 제국 에피그노시스의 역내 조력 집단 2",
+    memberNames: [
+      "레이번 트래스크",
+      "에이다 싱클레어",
+      "한미나",
+      "콘래드 슈탈",
+      "클레어 로랑",
+      "재스퍼 밴스",
+      "데릭 밀러",
+    ],
+  },
+];
+
 const GITHUB_TREE_API = "https://api.github.com/repos/baronfiend0666/Baron-Fiend-Game-Creating-Hub/git/trees/main?recursive=1";
 const GITHUB_RAW_ROOT = "https://raw.githubusercontent.com/baronfiend0666/Baron-Fiend-Game-Creating-Hub/main/";
 const IMAGE_FILE_RE = /\.(png|jpe?g|webp|gif|svg)$/i;
@@ -1451,6 +1533,14 @@ function getPatrisRegionalVillainGroup(parts, fileName) {
   ) || null;
 }
 
+function getPatrisRegionalSupportGroup(parts, fileName) {
+  if (parts[0] !== PATRIS_REGIONAL_SUPPORT_PARENT) return null;
+  const folderName = parts.length > 2 ? parts[1] : "";
+  return PATRIS_REGIONAL_SUPPORT_GROUPS.find((group) =>
+    folderName.includes(group.folderIncludes) || group.memberNames.some((memberName) => fileName.includes(memberName))
+  ) || null;
+}
+
 function resolveGalleryGroup(gallery, parts, fileName) {
   if (gallery.id === "character-concept-art") {
     const regionalVillainGroup = getPatrisRegionalVillainGroup(parts, fileName);
@@ -1460,6 +1550,16 @@ function resolveGalleryGroup(gallery, parts, fileName) {
         title: regionalVillainGroup.title,
         description: regionalVillainGroup.description,
         sortOrder: regionalVillainGroup.order,
+      };
+    }
+
+    const regionalSupportGroup = getPatrisRegionalSupportGroup(parts, fileName);
+    if (regionalSupportGroup) {
+      return {
+        key: `${PATRIS_REGIONAL_SUPPORT_PARENT}/${regionalSupportGroup.order}`,
+        title: regionalSupportGroup.title,
+        description: regionalSupportGroup.description,
+        sortOrder: regionalSupportGroup.order,
       };
     }
   }
