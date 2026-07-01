@@ -420,6 +420,19 @@ const PATRIS_REGIONAL_SUPPORT_GROUPS = [
   },
 ];
 
+const PATRIS_STARBORN_UNIFORM_SKIN_SECTION = {
+  parentOrder: "05-02",
+  key: "starborn-falling-star-observation-uniform-skin",
+  title: "낙성 관측 학파 교복 스킨",
+  description: "성천마족 공동체 소속 캐릭터의 낙성 관측 학파 교복 스킨 컨셉 아트",
+  fileIncludes: [
+    "베르칸 루크마스(낙성 관측 학파)",
+    "에블린 노벨라크(낙성 관측 학파)",
+    "라그넬 드라베르(낙성 관측 학파)",
+    "루체아 네크라벨(낙성 관측 학파)",
+  ],
+};
+
 const PATRIS_CONTRACT_ENTITY_PARENT = "06-계약 개체(일부 집단 한정)";
 const PATRIS_CONTRACT_ENTITY_GROUPS = [
   {
@@ -1307,6 +1320,62 @@ function injectProjectAppIconStyles() {
       font-weight: 800;
     }
 
+
+    .gallery-subsection {
+      margin-top: 18px;
+      padding: 14px;
+      border: 1px solid rgba(170, 190, 255, 0.16);
+      border-radius: 18px;
+      background: rgba(7, 9, 18, 0.28);
+    }
+
+    .gallery-subsection summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .gallery-subsection summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .gallery-subsection summary::after {
+      content: "열기";
+      flex: 0 0 auto;
+      color: var(--accent, #8fb3ff);
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+
+    .gallery-subsection[open] summary {
+      margin-bottom: 12px;
+    }
+
+    .gallery-subsection[open] summary::after {
+      content: "닫기";
+    }
+
+    .gallery-subsection-title,
+    .gallery-subsection-count {
+      display: block;
+      overflow-wrap: anywhere;
+    }
+
+    .gallery-subsection-title {
+      color: var(--text, #f5f8ff);
+      font-size: 0.98rem;
+      font-weight: 900;
+    }
+
+    .gallery-subsection-count {
+      color: var(--muted-2, rgba(216, 226, 255, 0.66));
+      font-size: 0.8rem;
+      font-weight: 900;
+    }
+
     body.is-project-detail-mode .document-grid,
     body.is-file-set-detail-mode .document-grid {
       display: none !important;
@@ -1634,6 +1703,27 @@ function getPatrisContractEntityGroup(parts, fileName) {
   ) || null;
 }
 
+function normalizeGalleryMatchText(value) {
+  return String(value || "")
+    .replace(/\.(png|jpe?g|webp|gif|svg)$/i, "")
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function getPatrisStarbornUniformSkinSection(parts, fileName, regionalSupportGroup) {
+  if (parts[0] !== PATRIS_REGIONAL_SUPPORT_PARENT) return null;
+  if (regionalSupportGroup?.order !== PATRIS_STARBORN_UNIFORM_SKIN_SECTION.parentOrder) return null;
+
+  const normalizedFileName = normalizeGalleryMatchText(fileName);
+  const hasSkinKeyword = normalizedFileName.includes("낙성 관측 학파");
+  const hasTargetCharacter = PATRIS_STARBORN_UNIFORM_SKIN_SECTION.fileIncludes.some((item) =>
+    normalizedFileName.includes(normalizeGalleryMatchText(item))
+  );
+
+  return hasSkinKeyword && hasTargetCharacter ? PATRIS_STARBORN_UNIFORM_SKIN_SECTION : null;
+}
+
 function resolveGalleryGroup(gallery, parts, fileName) {
   if (gallery.id === "character-concept-art") {
     const regionalVillainGroup = getPatrisRegionalVillainGroup(parts, fileName);
@@ -1648,11 +1738,18 @@ function resolveGalleryGroup(gallery, parts, fileName) {
 
     const regionalSupportGroup = getPatrisRegionalSupportGroup(parts, fileName);
     if (regionalSupportGroup) {
+      const starbornUniformSkinSection = getPatrisStarbornUniformSkinSection(parts, fileName, regionalSupportGroup);
       return {
         key: `${PATRIS_REGIONAL_SUPPORT_PARENT}/${regionalSupportGroup.order}`,
         title: regionalSupportGroup.title,
         description: regionalSupportGroup.description,
         sortOrder: regionalSupportGroup.order,
+        subGroup: starbornUniformSkinSection ? {
+          key: `${PATRIS_REGIONAL_SUPPORT_PARENT}/${regionalSupportGroup.order}/${starbornUniformSkinSection.key}`,
+          title: starbornUniformSkinSection.title,
+          description: starbornUniformSkinSection.description,
+          sortOrder: `${regionalSupportGroup.order}-01`,
+        } : null,
       };
     }
 
@@ -1719,21 +1816,47 @@ async function getGalleryImageGroups(gallery) {
           description: groupInfo.description,
           sortOrder: groupInfo.sortOrder,
           images: [],
+          subGroups: [],
         });
       }
 
-      groups.get(groupInfo.key).images.push({
+      const imageItem = {
         name: fileName,
         displayName: stripImageExtension(fileName),
         path: entry.path,
         src: `${GITHUB_RAW_ROOT}${encodePathForUrl(entry.path)}`,
-      });
+      };
+
+      const targetGroup = groups.get(groupInfo.key);
+      if (groupInfo.subGroup) {
+        let targetSubGroup = targetGroup.subGroups.find((subGroup) => subGroup.key === groupInfo.subGroup.key);
+        if (!targetSubGroup) {
+          targetSubGroup = {
+            key: groupInfo.subGroup.key,
+            title: groupInfo.subGroup.title,
+            description: groupInfo.subGroup.description,
+            sortOrder: groupInfo.subGroup.sortOrder,
+            images: [],
+          };
+          targetGroup.subGroups.push(targetSubGroup);
+        }
+        targetSubGroup.images.push(imageItem);
+        return;
+      }
+
+      targetGroup.images.push(imageItem);
     });
 
   return [...groups.values()]
     .map((group) => ({
       ...group,
       images: group.images.sort((a, b) => collator.compare(a.path, b.path)),
+      subGroups: (group.subGroups || [])
+        .map((subGroup) => ({
+          ...subGroup,
+          images: subGroup.images.sort((a, b) => collator.compare(a.path, b.path)),
+        }))
+        .sort((a, b) => collator.compare(a.sortOrder || a.title, b.sortOrder || b.title)),
     }))
     .sort((a, b) => collator.compare(a.sortOrder || a.title, b.sortOrder || b.title));
 }
@@ -1768,8 +1891,41 @@ function createConceptGalleryEntryCards(project, section) {
   `;
 }
 
+function getGalleryGroupImageCount(group) {
+  return group.images.length + (group.subGroups || []).reduce((total, subGroup) => total + subGroup.images.length, 0);
+}
+
+function renderGalleryImageCard(image, groupTitle) {
+  return `
+    <article class="gallery-image-card">
+      <a href="${escapeHtml(image.src)}" target="_blank" rel="noopener" aria-label="${escapeHtml(image.displayName)} 원본 이미지 열기">
+        <img src="${escapeHtml(image.src)}" alt="${escapeHtml(image.displayName)}" loading="lazy" />
+      </a>
+      <strong>${escapeHtml(image.displayName)}</strong>
+      <span>${escapeHtml(groupTitle)}</span>
+    </article>
+  `;
+}
+
+function renderGallerySubGroups(group) {
+  if (!Array.isArray(group.subGroups) || group.subGroups.length < 1) return "";
+
+  return group.subGroups.map((subGroup) => `
+    <details class="gallery-subsection">
+      <summary>
+        <span class="gallery-subsection-title">${escapeHtml(subGroup.title)}</span>
+        <span class="gallery-subsection-count">${subGroup.images.length}개 이미지</span>
+      </summary>
+      ${subGroup.description ? `<p class="gallery-group-description">${escapeHtml(subGroup.description)}</p>` : ""}
+      <div class="gallery-image-grid">
+        ${subGroup.images.map((image) => renderGalleryImageCard(image, subGroup.title)).join("")}
+      </div>
+    </details>
+  `).join("");
+}
+
 function renderGalleryGroups(groups, gallery) {
-  const imageCount = groups.reduce((total, group) => total + group.images.length, 0);
+  const imageCount = groups.reduce((total, group) => total + getGalleryGroupImageCount(group), 0);
   if (imageCount < 1) {
     return `
       <p class="gallery-status">
@@ -1785,20 +1941,15 @@ function renderGalleryGroups(groups, gallery) {
       <section class="gallery-group">
         <div class="gallery-group-head">
           <h4>${escapeHtml(group.title)}</h4>
-          <span>${group.images.length}개 이미지</span>
+          <span>${getGalleryGroupImageCount(group)}개 이미지</span>
         </div>
         ${group.description ? `<p class="gallery-group-description">${escapeHtml(group.description)}</p>` : ""}
-        <div class="gallery-image-grid">
-          ${group.images.map((image) => `
-            <article class="gallery-image-card">
-              <a href="${escapeHtml(image.src)}" target="_blank" rel="noopener" aria-label="${escapeHtml(image.displayName)} 원본 이미지 열기">
-                <img src="${escapeHtml(image.src)}" alt="${escapeHtml(image.displayName)}" loading="lazy" />
-              </a>
-              <strong>${escapeHtml(image.displayName)}</strong>
-              <span>${escapeHtml(group.title)}</span>
-            </article>
-          `).join("")}
-        </div>
+        ${group.images.length > 0 ? `
+          <div class="gallery-image-grid">
+            ${group.images.map((image) => renderGalleryImageCard(image, group.title)).join("")}
+          </div>
+        ` : ""}
+        ${renderGallerySubGroups(group)}
       </section>
     `).join("")}
   `;
